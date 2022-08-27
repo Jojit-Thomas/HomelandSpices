@@ -1,54 +1,53 @@
-<link rel="stylesheet" href="/stylesheets/login.css" />
 {{#with product}}
-
-  <div class="container mt-4">
-    <div class="row d-flex justify-content-center">
+<div class="container mt-4">
+   <div class="row d-flex justify-content-center">
       <form
-        action="/admin/editProduct/{{_id}}?img_ext={{img_ext}}"
-        method="post"
-        enctype="multipart/form-data"
-        class="loginBox col-md-6"
-      >
-        <input
-          type="text"
-          class="w-100 p-2 m-2 form-control"
-          name="title"
-          placeholder="Title"
-          value="{{title}}"
-        />
-        <input
-          type="text"
-          class="w-100 p-2 m-2 form-control"
-          name="description"
-          placeholder="Description"
-          value="{{desc}}"
-        />
-        <input
-          type="text"
-          class="w-100 p-2 m-2 form-control"
-          name="category"
-          placeholder="Category"
-          value="{{category}}"
-        />
-        <input
-          type="number"
-          class="w-100 p-2 m-2 form-control"
-          name="price"
-          placeholder="Price"
-          value="{{price}}"
-        />
-        <input
-          type="number"
-          class="w-100 p-2 m-2 form-control"
-          name="stocks"
-          placeholder="Total Stocks"
-          value="{{stocks}}"
-        />
-        <img src="/product_images/{{_id}}.{{img_ext}}" alt="" width="50px" srcset="">
-        <input type="file" class="w-100 p-2 m-2 form-control" name="image" />
-        <input type="submit" class="btn btn-success p-2 m-2 float-end" />
+         action="/admin/editProduct/{{_id}}?img_ext={{img_ext}}"
+         method="post"
+         enctype="multipart/form-data"
+         id="editProduct"
+         class="loginBox col-md-6"
+         >
+         <input
+            type="text"
+            class="w-100 p-2 m-2 form-control"
+            name="title"
+            placeholder="Title"
+            value="{{title}}"
+            />
+         <input
+            type="text"
+            class="w-100 p-2 m-2 form-control"
+            name="description"
+            placeholder="Description"
+            value="{{desc}}"
+            />
+         <input
+            type="text"
+            class="w-100 p-2 m-2 form-control"
+            name="category"
+            placeholder="Category"
+            value="{{category}}"
+            />
+         <input
+            type="number"
+            class="w-100 p-2 m-2 form-control"
+            name="price"
+            placeholder="Price"
+            value="{{price}}"
+            />
+         <input
+            type="number"
+            class="w-100 p-2 m-2 form-control"
+            name="stocks"
+            placeholder="Total Stocks"
+            value="{{stocks}}"
+            />
+         <img src="/product_images/{{_id}}.{{img_ext}}" alt="" width="50px" srcset="">
+         <input type="file" class="w-100 p-2 m-2 form-control" name="image" />
+         <input type="submit" class="btn btn-success p-2 m-2 float-end" />
       </form>
-    </div>
-  </div>
-
+   </div>
+</div>
 {{/with}}
+{{!-- <script src="/javascripts/admin/edit_product.js"></script> --}}

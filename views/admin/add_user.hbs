@@ -1,0 +1,64 @@
+<link rel="stylesheet" href="/stylesheets/style.css" />
+<link rel="stylesheet" href="/stylesheets/authentication.css" />
+<div class="container-fluid vh-100 d-flex bg-ma-white justify-content-center">
+  <div
+    class="col-11 col-sm-9 col-md-7 col-lg-5 col-xl-3 my-auto bg-white py-4 rounded"
+  >
+    <ul class="nav nav-tabs mb-4">
+      <li class="nav-item w-100">
+        <a class="nav-link text-center nonactive text-dark fs-4" aria-current="page" >Edit User</a>
+      </li>
+    </ul>
+    <div class="col-sm-9 col-9 mx-auto">
+      {{#with user}}
+      <form id="editUser" action="/admin/edituser/{{this._id}}" method="post">
+        <p for="name">Full Name</p>
+        <input
+          class="form-control py-2 px-3 mb-3"
+          placeholder="E.g : John Doe"
+          id="name"
+          type="text"
+          name="name"
+          value="{{name}}"
+        />
+        <p for="email">Email</p>
+        <input
+          class="form-control py-2 px-3 mb-3"
+          placeholder="E.g : Johndoe@gmail.com"
+          id="email"
+          type="email"
+          name="email"
+          value="{{email}}"
+        />
+        <p id="error" class="text-danger"></p>
+        <p for="phone">Phone</p>
+        <input
+          class="form-control py-2 px-3 mb-3"
+          placeholder="E.g : 99XXXXXXXX"
+          id="phone"
+          type="text"
+          name="phone"
+          value="{{phone}}"
+        />
+        <p for="password">Password</p>
+        <input
+          class="form-control py-2 px-3 mb-3"
+          placeholder="E.g : PaSs#1$2&3"
+          id="password"
+          type="password"
+          name="password"
+        />
+        <p for="confirmPassword">Confirm Password</p>
+        <input
+          class="form-control py-2 px-3 mb-3"
+          placeholder="E.g : PaSs#1$2&3"
+          id="confirmPassword"
+          type="password"
+          name="confirmPassword"
+        />
+        <button type="submit" class="btn bg-blurple text-white w-100 mt-4">Sign
+          up</button></form>
+          {{/with}}
+    </div>
+  </div>
+</div>

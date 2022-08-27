@@ -1,3 +1,5 @@
+const fs = require("fs");
+const path = require("path");
 const {
   AddProduct,
   getAllProducts,
@@ -15,13 +17,13 @@ module.exports = {
     res.render("admin/add_product", { admin: true });
   },
   postAddProducts: (req, res) => {
-    const img_ext = req.files.image.name.split(".").pop();
+    const img_ext = req.files.image.name.split(".").pop(); // to get the extension of the file
     AddProduct(req.body, img_ext).then((result) => {
       console.log(result);
       if (result) {
         const image = req.files.image;
         image.mv(
-          `./public/product_images/${result._id}.${result.img_ext}`,
+          `./public/product_images/${result._id}.${result.img_ext}`, // adding image of product to the product images file
           (err, done) => {
             if (!err) res.redirect("/admin/products");
             else console.log(err);
@@ -51,21 +53,44 @@ module.exports = {
     });
   },
   postEditProduct: (req, res) => {
-    console.log(req.query.img_ext);
-    try {
-      fs.unlinkSync();
-
-      console.log("File is deleted.");
-    } catch (error) {
-      console.log(error);
+    // check if the image is changed
+    if (req.files) {
+      try {
+        // if changed delete old image
+        fs.unlinkSync(
+          path.join(
+            __dirname,
+            `../../public/product_images/${req.params.id}.${req.query.img_ext}`
+          )
+        );
+        console.log("File is deleted.");
+      } catch (error) {
+        console.log(error);
+      }
+      var img_ext = req.files.image.name.split(".").pop(); // getting the file extension of the old file
     }
-    const img_ext = req.files.image.name.split(".").pop();
-    updateProduct(req.params.id, img_ext).then((result) => {
+    updateProduct(req.params.id, req.body, img_ext).then((result) => {
+      console.log(result);
       if (result) {
-        res.redirect("/admin/products");
+        // if image is changed add new image to the folder
+        if (req.files) {
+          const image = req.files.image;
+          image.mv(
+            `./public/product_images/${req.params.id}.${img_ext}`,
+            (err, done) => {
+              if (!err) res.redirect("/admin/products");
+              else console.log(err);
+            }
+          );
+        }
+        //if image not changed redirect to products
+        else {
+          res.redirect("/admin/products");
+        }
       } else {
         res.send("Unable to complete your request");
       }
     });
   },
+
 };

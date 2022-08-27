@@ -1,0 +1,56 @@
+<section>
+  <div class="container-fluid">
+    <div class="container-fluid">
+      <div class="row">
+        <a href="/admin/add-user" class="my-4"><div
+            class="float-end btn text-white"
+            style="background-color: var(--blurple);"
+          >Add User</div></a>
+      </div>
+    </div>
+    <div class="container-fluid" style="overflow-x:auto;">
+      <table class="table" id="user-table">
+        <thead>
+          <tr>
+            <th class="" scope="col">#</th>
+            <th class="" scope="col">Name</th>
+            <th class="" scope="col">Email</th>
+            <th class="" scope="col">Phone</th>
+            <th class="" scope="col">Password</th>
+            <th class="" scope="col">Options</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each users}}
+            <tr>
+              <th class="" scope="row">{{inc @index}}</th>
+              <td class="">{{this.name}}</td>
+              <td class="">{{this.email}}</td>
+              <td class="">{{this.phone}}</td>
+              <td class="" style="overflow-x:auto;">{{this.password}}</td>
+              {{! <td class=""><a href="/admin/delete-user"><img src="/images/trash.svg" alt="delete" width="25px" height="25px" ></a></td> }}
+              <td class="" style="white-space: nowrap;">
+                <a
+                  class="btn btn-primary"
+                  href="/admin/editUser/{{this._id}}"
+                >Edit
+                </a>
+                <a  
+                  class="btn btn-danger"
+                  href="/admin/deleteUser/{{this._id}}"
+                  onclick="return confirm('Are you sure you want to delete {{this.name}} product?');"
+                >Delete
+                </a>
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+<link rel="stylesheet" href="/stylesheets/datatable.css" />
+<script>
+  $(document).ready( function () { console.log("loading...");
+  $('#user-table').DataTable(); });
+</script>

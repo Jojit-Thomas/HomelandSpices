@@ -9,6 +9,7 @@ const adminRouter = require("./routes/admin");
 const mongoose = require("mongoose");
 const hbs = require("hbs");
 const fileUpload = require("express-fileupload");
+const { hbs_helpers } = require("./handlebar_helpers");
 // const { connect } = require('./config/connection');
 
 const app = express();
@@ -25,12 +26,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(fileUpload());
+app.use(hbs_helpers);
 
 mongoose.connect(
   "mongodb://localhost:27017/HomelandSpices",
   () => console.log("db connected"),
   () => console.log("db error")
 );
+
 
 app.use("/admin", adminRouter);
 app.use("/", indexRouter);

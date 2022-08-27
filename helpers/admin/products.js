@@ -48,8 +48,10 @@ module.exports = {
         });
     });
   },
-  updateProduct: (productId, img_ext) => {
-    const { title, description, category, price, stocks } = product;
+  updateProduct: (productId, body, img_ext) => {
+    const { title, description, category, price, stocks } = body;
+    console.log(stocks)
+    console.log(Number(stocks))
     return new Promise((resolve, reject) => {
       products_model.updateOne(
         { _id: Types.ObjectId(productId) },
