@@ -1,0 +1,40 @@
+<link rel="stylesheet" href="/stylesheets/login.css" />
+
+<div class="container mt-4">
+  <div class="row d-flex justify-content-center">
+      <form action="/admin/addProduct" method="post" enctype="multipart/form-data" class="loginBox col-md-6">
+        <input
+          type="text"
+          class="w-100 p-2 m-2 form-control"
+          name="title"
+          placeholder="Title"
+        />
+        <input
+          type="text"
+          class="w-100 p-2 m-2 form-control"
+          name="description"
+          placeholder="Description"
+        />
+        <input
+          type="text"
+          class="w-100 p-2 m-2 form-control"
+          name="category"
+          placeholder="Category"
+        />
+        <input
+          type="number"
+          class="w-100 p-2 m-2 form-control"
+          name="price"
+          placeholder="Price"
+        />
+        <input
+          type="number"
+          class="w-100 p-2 m-2 form-control"
+          name="stocks"
+          placeholder="Total Stocks"
+        />
+        <input type="file" class="w-100 p-2 m-2 form-control" name="image" />
+        <input type="submit" class="btn btn-success p-2 m-2 float-end" />
+      </form>
+  </div>
+</div>

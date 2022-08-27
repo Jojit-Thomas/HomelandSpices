@@ -1,0 +1,58 @@
+<section>
+  <div class="container-fluid">
+    <div class="container-fluid">
+      <div class="row">
+        <a href="/admin/add-user" class="my-4"><div
+            class="float-end btn bg-violet"
+          >Add User</div></a>
+      </div>
+    </div>
+    <div class="container-fluid" style="overflow-x:auto;">
+      <table class="table" id="user-table">
+        <thead>
+          <tr>
+            <th class="text-white" scope="col">#</th>
+            <th class="text-white" scope="col">Name</th>
+            <th class="text-white" scope="col">Username</th>
+            <th class="text-white" scope="col">Email</th>
+            <th class="text-white" scope="col">Password</th>
+            <th class="text-white" scope="col">Options</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each users}}
+            <tr>
+              <th class="text-white" scope="row">{{@index}}</th>
+              <td class="text-white">{{this.name}}</td>
+              <td class="text-white">{{this.username}}</td>
+              <td class="text-white">{{this.email}}</td>
+              <td
+                class="text-white"
+                style="overflow-x:auto;"
+              >{{this.password}}</td>
+              {{! <td class="text-white"><a href="/admin/delete-user"><img src="/images/trash.svg" alt="delete" width="25px" height="25px" ></a></td> }}
+              <td class="text-white" style="white-space: nowrap;">
+                <a
+                  class="btn btn-primary"
+                  href="/admin/edit-user/{{this._id}}"
+                >Edit
+                </a>
+                <a
+                  class="btn btn-danger"
+                  href="/admin/delete-user/{{this._id}}"
+                  onclick="return confirm('Are you sure you want to delete {{this.name}} product?');"
+                >Delete
+                </a>
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+<link rel="stylesheet" href="/stylesheets/datatable.css">
+<script>
+  $(document).ready( function () { console.log("loading...");
+  $('#user-table').DataTable(); });
+</script>

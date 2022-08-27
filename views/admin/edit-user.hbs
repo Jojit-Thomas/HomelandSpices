@@ -1,0 +1,75 @@
+<link rel="stylesheet" href="/stylesheets/login.css" />
+
+<div
+  class="w-100 container-fluid d-flex justify-content-center"
+  style="background-color: #0c0c0c3d; height: 100vh;"
+>
+  <div class="loginBox col-9 col-sm-6 col-md-5 col-lg-4 col-xl-3 m-auto p-4 d-flex flex-column" >
+    <img
+      src="https://i.ibb.co/yVGxFPR/2.png"
+      alt="avatar"
+      width="100px"
+      height="100px"
+      class="mx-auto img-fluid"
+    />
+    <h3 class="mx-auto p-2 pink">Sign Up</h3>
+    <form action="/admin/edit-user/{{user._id}}" autocomplete="false" id="signup" method="post">
+      <input
+        type="text"
+        name="name"
+        placeholder="Name"
+        class="w-100 h-25 mt-2 p-3 text-white"
+        value="{{user.name}}"
+      />
+      <input
+        type="text"
+        name="username"
+        placeholder="Username"
+        class="w-100 h-25 mt-2 p-3 text-white"
+        value="{{user.username}}"
+      />
+      <input
+        type="email"
+        name="email"
+        placeholder="Email"
+        class="w-100 h-25 mt-2 p-3 text-white"
+        value="{{user.email}}"
+      />
+      <input
+        type="password"
+        name="password"
+        id="password"
+        placeholder="Password"
+        class="w-100 h-25 mt-2 p-3 text-white"
+      />
+      <input
+        type="password"
+        name="confirmPassword"
+        placeholder="Confirm Password"
+        class="w-100 h-25 mt-2 p-3 text-white"
+      />
+      <button
+        type="submit"
+        class="pink-bg w-100 rounded-pill text-white mt-2"
+      >Signup</button>
+    </form>
+    <span class="mx-auto mt-1" style="font-weight: 500; font-size: medium;">Already have an Account ?</span>
+    <span class=" mx-auto pb-2"><a class="pink" href="/login">Sign-In</a></span>
+    {{#if error}}
+    <label
+      style="color: #ff0000; font-size:smaller;"
+      class="align-self-center mt-1"
+      id="error"
+    >{{error}}</label>
+    {{/if}}
+  </div>
+</div>
+{{!-- <script
+  src="https://code.jquery.com/jquery-3.6.0.js"
+  integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+  crossorigin="anonymous"
+></script>
+<script
+  src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.js"
+></script> 
+<script type="text/javascript" src="/javascripts/validation/user-signup.js"></script> --}}

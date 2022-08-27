@@ -1,0 +1,39 @@
+.active {
+    border:none !important;
+    border-bottom: solid var(--blurple) !important;
+}
+.nav-link {
+    font-weight: 500;
+}
+.nav-link .active {
+    color: black;
+}
+.nonactive{
+    border:none !important;
+    border-bottom: 2px solid var(--inactive) !important;
+}
+.google {
+    color: var(--blurple);
+    font-weight: 500;
+    border: 2px solid var(--blurple);
+}
+.forgot-password {
+    font-size: 0.875rem;
+}
+
+label {
+    font-weight: 500;
+}
+input {
+    border-color: var(--blurple) !important;
+}
+p{
+    margin: 0;
+}
+label {
+    color: #ff0000;
+}
+
+.bg-ma-white {
+    background-color: var(--ma-white);
+}
