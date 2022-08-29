@@ -16,6 +16,10 @@ const userSchema = new mongoose.Schema({
     min: 8,
     max: 50,
   },
+  isAllowed: {
+    required: true,
+    type: Boolean,
+  }
 });
 
 module.exports = mongoose.model("users", userSchema, USER_COLLECTION);

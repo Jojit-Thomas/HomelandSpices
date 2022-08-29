@@ -1,0 +1,54 @@
+<link rel="stylesheet" href="/stylesheets/style.css" />
+<link rel="stylesheet" href="/stylesheets/authentication.css" />
+<div class="container-fluid vh-100 d-flex bg-ma-white justify-content-center">
+  <div
+    class="col-11 col-sm-9 col-md-7 col-lg-5 col-xl-3 my-auto bg-white py-4 rounded"
+  >
+    <ul class="nav nav-tabs mb-4">
+      <li class="nav-item w-50">
+        <a class="nav-link active text-center" aria-current="page" href="#">Send
+          Otp</a>
+      </li>
+      <li class="nav-item w-50">
+        <a class="nav-link text-center text-muted link2" href="#">Verify Otp</a>
+      </li>
+    </ul>
+    <div class="col-sm-9 col-9 mx-auto">
+      <p>Phone</p>
+      <input
+        class="form-control py-2 px-3 mb-3"
+        placeholder="E.g : 99XXXXXXXX"
+        id="phone"
+        type="number"
+        name="phone"
+      />
+      
+      <button
+        id="sendBtn"
+        type="submit"
+        class="btn bg-blurple text-white w-100 mb-5"
+      >Send Otp</button>
+      <p id="maxAge">You'r Otp will be expired in 5 mins</p>
+      {{!-- <p id="timer">a</p> --}}
+      <p>Verify Otp</p>
+      <input
+        class="form-control py-2 px-3 mb-3"
+        placeholder="E.g : 0101"
+        id="otp"
+        type="text"
+        name="otp"
+      />
+      <button
+        type="submit"
+        id="verifyBtn"
+        class="btn bg-blurple text-white w-100"
+      >Verify Otp
+      </button>
+      <label class="text-danger" id="error"></label>
+    </div>
+  </div>
+</div>
+<script
+  src="/javascripts/user/authentication/otp_signin.js"
+  type="text/javascript"
+></script>

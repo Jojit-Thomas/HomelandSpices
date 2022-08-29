@@ -1,4 +1,4 @@
-const { Types } = require("mongoose");
+const { Types, trusted } = require("mongoose");
 const user_model = require("../../model/user_model");
 
 module.exports = {
@@ -50,6 +50,7 @@ module.exports = {
                     email: email,
                     phone: phone,
                     password: password,
+                    isAllowed: true,
                   },
                 }
               )
@@ -73,16 +74,37 @@ module.exports = {
           response.error = "Email already registered";
           resolve(response);
         } else {
-          bcrypt.hash(data.password, 10).then((result) => {
-            data.password = result;
-            delete data.confirmPassword;
-            user_model.create(data).then((result) => {
-              console.log(result);
-              response.result = result.insertedId;
-              response.status = true;
-              resolve(response);
-            });
+          user_model.create(data).then((result) => {
+            console.log(result);
+            response.result = result.insertedId;
+            response.status = true;
+            resolve(response);
           });
+        }
+      });
+    });
+  },
+  blockUnblock: (id) => {
+    return new Promise((resolve, reject) => {
+      user_model.findOne({ _id: Types.ObjectId(id) }).then((result) => {
+        if (result.isAllowed) {
+          user_model
+            .updateOne(
+              { _id: Types.ObjectId(id) },
+              { $set: { isAllowed: false } }
+            )
+            .then((status) => {
+              resolve(status);
+            });
+        } else {
+          user_model
+            .updateOne(
+              { _id: Types.ObjectId(id) },
+              { $set: { isAllowed: true } }
+            )
+            .then((status) => {
+              resolve(status);
+            });
         }
       });
     });

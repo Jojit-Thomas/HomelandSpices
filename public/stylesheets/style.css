@@ -2,9 +2,14 @@
     --blurple: #5541D8;
     --inactive: #DBD7F4;
     --ma-white: #F7F7FC;
+    --icons: #9A9BB0;
+    --purple: #9155FD;
 }
 .bg-blurple {
-    background-color: var(--blurple) ;
+    background-color: var(--blurple) !important;
+}
+.bg-btn {
+    background-color: var(--purple) !important;
 }
 .vh-100 {
     height: 100vh;
@@ -16,6 +21,21 @@
     height: 50vh;
 }
 
+.fs-7{
+    font-size: 0.75rem;
+}
+.p-none{
+    margin: 0px;
+}
+.f-500{
+    font-weight: 500;
+}
+*{
+    font-family: sans-serif;
+}
+.fs-48 {
+    font-size: 3rem;
+}
 @media only screen and (max-width: 270px) {
     a{
         font-size: 0.7rem !important;

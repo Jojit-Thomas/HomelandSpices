@@ -17,8 +17,9 @@
       <div class="container-fluid d-flex flex-column">
       </div>
       --}}
+      {{#unless noHeader}}
       {{#if admin}}
-      {{> adminHeader}}
+      {{> admin_header}}
       <div class="w-100 d-flex">
          <div class="d-none d-sm-block col-lg-2">
             {{> side_bar}}
@@ -28,8 +29,12 @@
          </div>
       </div>
       {{else}}
+      {{> user_header}}
       {{{body}}}
       {{/if}}
+      {{else}}
+      {{{body}}}
+      {{/unless}}
       <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js" integrity="sha512-rstIgDs0xPgmG6RX1Aba4KV5cWJbAMcvRCVmglpam9SoHZiUCyQVDdH2LPlxoHtrv17XWblE/V/PP+Tr04hbtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
    </body>
 </html>

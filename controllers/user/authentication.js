@@ -1,6 +1,13 @@
+const { response } = require("express");
 const jwt = require("jsonwebtoken");
-const { doSignUp, doSignIn } = require("../../helpers/user/authentication");
+const twilio = require("twilio");
 require("dotenv").config();
+const {
+  doSignUp,
+  doSignIn,
+  getUser,
+} = require("../../helpers/user/authentication");
+let OTP = 0;
 module.exports = {
   userAuth: (req, res, next) => {
     const token = req.cookies.token;
@@ -35,11 +42,11 @@ module.exports = {
       next();
     }
   },
-    getSignIn: (req, res) => {
-    res.render("user/authentication/signIn", { title: "User Login" });
+  getSignIn: (req, res) => {
+    res.render("user/authentication/signIn", { title: "User Signin",noHeader: true });
   },
   getSignUp: (req, res) => {
-    res.render("user/authentication/signUp", { title: "User Login" });
+    res.render("user/authentication/signUp", { title: "User Signup",noHeader: true });
   },
   postSignIn: (req, res) => {
     doSignIn(req.body).then((response) => {
@@ -54,8 +61,14 @@ module.exports = {
         res.redirect("/");
       } else {
         console.log(response);
+        if (response.blocked) {
+          console.log("blocked");
+          res.status(404).send({ message: "You are Blocked by the admin" });
+        } else {
+          console.log("notblocked");
+          res.status(404).send({ message: response.error });
+        }
         // req.session.loginErr = "Username or password incorrect";
-        res.status(404).send({ message: response.error });
         // res.redirect("/login");
       }
     });
@@ -70,4 +83,78 @@ module.exports = {
       }
     });
   },
+  getBlocked: (req, res) => {
+    res.render("user/authentication/blocked");
+  },
+  getOtpSigninPage: (req, res) => {
+    res.render("user/authentication/otp_signin",{noHeader: true});
+  },
+  postGetOtp: (req, res) => {
+    const { phone } = req.body;
+    setTimeout(() =>{
+      OTP = generateOTP();
+    }, 300000)
+    OTP = generateOTP();
+    console.log(OTP);
+    const client = new twilio(
+      process.env.TWILIO_ACCOUNT_SID,
+      process.env.TWILIO_AUTH_TOKEN
+    );
+    getUser(phone).then((user) => {
+      if (user) {
+        client.messages
+          .create({
+            body: `Hey Welcome to  your otp for login is : ${OTP}`,
+            to: `+91${phone}`,
+            from: process.env.TWILIO_PHONE,
+          })
+          .then((message) => {
+            console.log(message.sid);
+            res.status(200).send({ message: "Otp send successfully" });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        res.status(404).send({ message: "No user with this phone number" });
+      }
+    });
+  },
+  postVerifyOtp: (req, res) => {
+    const {otp ,phone} = req.body;
+    console.log(phone,"BODY", otp,'PRE', OTP);
+    if(otp == OTP){ 
+      console.log(phone)
+      getUser(phone).then((user) => {
+        if(user) {
+          console.log(user) 
+          const token = jwt.sign(
+            user.toJSON(),
+            process.env.ACCESS_TOKEN_SECRET_KEY,
+            { expiresIn: "7d" }
+          );
+          res.cookie("token", token);
+          res.redirect("/")
+        } else {
+          res.status(401).send({ message: "NO user with this phone number" })
+        }
+      })
+      
+    } else {
+      res.status(401).send({message:"Otp doesn't match"})
+    }
+
+  },
+  getLogout: (req, res) => {
+    res.clearCookie("token");
+    res.redirect("/");
+  },
 };
+function generateOTP() {
+  var digits = "0123456789";
+  let OTP = "";
+  for (let i = 0; i < 4; i++) {
+    OTP += digits[Math.floor(Math.random() * 10)];
+  }
+  return OTP;
+}

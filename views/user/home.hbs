@@ -1,2 +1,60 @@
-<h1>{{title}}</h1>
-<p>Welcome to {{title}}</p>
+<link rel="stylesheet" href="/stylesheets/user/home.css" />
+
+<div class="bannerSec container-fluid vh-100 d-flex">
+  <div class="col-sm-9 col-lg-6 my-auto">
+    <h1 class="fw-bold fs-48">Order Spices to your door</h1>
+    <div class="d-flex" style="height: 3.5rem">
+      <div class="col-sm-7 h-100 ms-2 bg-white">
+        <input
+          type="text"
+          class="form-control h-100 border border-0"
+          placeholder="What you are looking for"
+        />
+      </div>
+      <div class="col-sm-3 ms-2 bg-white">
+        <select
+          class="form-select h-100 border border-0"
+          aria-label="Category Selection"
+        >
+          <option selected>Category</option>
+          <option name="category" value="">Categories 1</option>
+        </select>
+      </div>
+      <div class="col-sm-2 ms-2 bg-white">
+        <a
+          href="/search"
+          class="btn btn-dark w-100 h-100 d-flex justify-content-center"
+        ><p class="m-auto fs-5">
+            Search
+          </p></a>
+      </div>
+    </div>
+    <p class="m-2"><a href="/signin" class="signin">Sign In</a>
+      for your recent orders</p>
+  </div>
+</div>
+
+<section>
+  <div class="container mt-5 vh-100">
+    <div class="row g-3 ">
+      {{! <div class="col d-flex "> }}
+
+      {{#each products}}
+        <div class="card col-10 col-sm-4 col-md-3 col-lg-3 mx-auto ">
+            <a href="/product/{{this._id}}" class="h-75">
+            <img
+            src="/product_images/{{this._id}}.{{this.img_ext}}"
+            alt="product image"
+            class="img-pro h-100"
+          />
+          </a>
+          <p class="pro-text">{{this.title}}</p>
+          <span class="pro-price">From :${{this.price}}</span>
+        </div>
+      {{/each}}
+      {{#unless products}}
+        <h1>No Products are available</h1>
+      {{/unless}}
+    </div>
+  </div>
+</section>
