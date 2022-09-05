@@ -1,4 +1,4 @@
-const { AddCategory, getAllCategories } = require("../../helpers/admin/categories");
+const { AddCategory, getAllCategories, deleteCategory, getCategoryById, editCategory } = require("../../helpers/admin/categories");
 
 module.exports = {
   getCategoriesPage: (req, res) => {
@@ -13,10 +13,26 @@ module.exports = {
     const { name, desc } = req.body;
     AddCategory(name, desc).then((state) => {
       if (state) {
-        res.redirect("/admin/categories");
+        res.redirect("/admin/category");
       } else {
         res.send("Some error occured");
       }
     });
   },
+  getDeleteCategory: (req, res) => {
+    deleteCategory(req.params.id).then(() => {
+      res.redirect("/admin/category");
+    })
+  },
+  getEditCategory: (req, res) => {
+    getCategoryById(req.params.categoryId).then((category) => {
+      console.log(category);
+      res.render("admin/edit_category", { category: category });
+    })
+  },
+  postEditCategory: (req, res) => {
+    editCategory(req.params.categoryId, req.body).then(() => {
+      res.redirect("/admin/category");
+    })
+  }
 };

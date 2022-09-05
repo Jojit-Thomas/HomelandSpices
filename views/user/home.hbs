@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="/stylesheets/user/home.css" />
 
-<div class="bannerSec container-fluid vh-100 d-flex">
+<div class="bannerSec container-fluid vh-100 d-flex" style="background-image:url('/banners/{{banner.img_name}}.{{banner.img_ext}}');">
   <div class="col-sm-9 col-lg-6 my-auto">
     <h1 class="fw-bold fs-48">Order Spices to your door</h1>
     <div class="d-flex" style="height: 3.5rem">
@@ -20,7 +20,7 @@
           <option name="category" value="">Categories 1</option>
         </select>
       </div>
-      <div class="col-sm-2 ms-2 bg-white">
+      <div class="col-sm-2 ms-2 ">
         <a
           href="/search"
           class="btn btn-dark w-100 h-100 d-flex justify-content-center"
@@ -36,11 +36,11 @@
 
 <section>
   <div class="container mt-5 vh-100">
-    <div class="row g-3 ">
+    <div class="row g-3 d-flex">
       {{! <div class="col d-flex "> }}
 
       {{#each products}}
-        <div class="card col-10 col-sm-4 col-md-3 col-lg-3 mx-auto ">
+        <div class="card col-10 col-sm-6 col-md-4 col-lg-3">
             <a href="/product/{{this._id}}" class="h-75">
             <img
             src="/product_images/{{this._id}}.{{this.img_ext}}"
@@ -49,12 +49,15 @@
           />
           </a>
           <p class="pro-text">{{this.title}}</p>
-          <span class="pro-price">From :${{this.price}}</span>
+          <div class="d-flex justify-content-between">
+            <span class="pro-price my-auto">From :${{this.price}}</span>
+            <a href="/wishlist/add/{{this._id}}"><img src="/images/icons/heart.svg" width="20px" height="20px" class="me-3 mb-3" alt=""></a>
+          </div>
         </div>
       {{/each}}
       {{#unless products}}
         <h1>No Products are available</h1>
       {{/unless}}
     </div>
-  </div>
+  </div> 
 </section>

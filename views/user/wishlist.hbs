@@ -1,0 +1,51 @@
+<link rel="stylesheet" href="/stylesheets/user/home.css" />
+
+<section>
+  <div class="container mt-5 vh-100">
+    <div class="row g-3 d-flex">
+      {{! <div class="col d-flex "> }}
+
+      {{#each products}}
+        <div class="card col-10 col-sm-6 col-md-4 col-lg-3">
+            <a href="/product/{{this.wishlist._id}}" class="h-75">
+            <img
+            src="/product_images/{{this.wishlist._id}}.{{this.wishlist.img_ext}}"
+            alt="product image"
+            class="img-pro h-100"
+          />
+          </a>
+          <p class="pro-text">{{this.wishlist.title}}</p>
+          <div class="d-flex justify-content-between">
+            <span class="pro-price my-auto">From :${{this.wishlist.price}}</span>
+            {{!-- <a href="/wishlist/remove/{{this.wishlist._id}}"></a> --}}
+            <img onclick="removeFromWishlist('{{this.wishlist._id}}')" src="/images/icons/remove.svg" width="20px" height="20px" class="me-2 mb-2" alt="">
+          </div>
+        </div>
+      {{/each}}
+      {{#unless products}}
+        <h1>No Products are available</h1>
+      {{/unless}}
+    </div>
+  </div> 
+</section>
+
+
+<script>
+  function removeFromWishlist(productId) {
+    console.log("Removing from wishlist")
+    $.ajax({
+      type: "POST",
+      url: "/wishlist/remove",
+      data: {
+        productId: productId
+      },
+      success: function(data) {
+        console.log(data);
+        window.location.reload();
+      },
+      error: function(data) {
+        console.log(data);
+      }
+    })
+  }
+</script>

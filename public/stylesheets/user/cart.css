@@ -1,0 +1,12 @@
+@media screen and (max-width: 576px) {
+    .carts {
+      padding: 0;
+    }
+    
+  }
+  .bg_purple {
+    background-color: #9155fd;
+  }
+  .purple {
+    color: #766edb;
+  }

@@ -8,8 +8,12 @@ const {
   getUser,
 } = require("../../helpers/user/authentication");
 let OTP = 0;
+const client = new twilio(
+  process.env.TWILIO_ACCOUNT_SID,
+  process.env.TWILIO_AUTH_TOKEN
+);
 module.exports = {
-  userAuth: (req, res, next) => {
+  verifyLogin: (req, res, next) => {
     const token = req.cookies.token;
     console.log("token", token);
     try {
@@ -19,6 +23,13 @@ module.exports = {
           res.redirect("/signin");
         } else {
           // req.user = user;
+          // console.log(user);
+          let userObj = {
+            username : user.name,
+            userId: user._id
+          }
+          // console.log(userObj);
+          res.cookie("user", userObj, { maxAge: 24*60*60*1000, httpOnly: true });
           next();
         }
       });
@@ -43,10 +54,17 @@ module.exports = {
     }
   },
   getSignIn: (req, res) => {
-    res.render("user/authentication/signIn", { title: "User Signin",noHeader: true });
+    res.render("user/authentication/signIn", {
+      title: "User Signin",
+      noHeader: true,
+    });
   },
   getSignUp: (req, res) => {
-    res.render("user/authentication/signUp", { title: "User Signup",noHeader: true });
+    
+    res.render("user/authentication/signUp", {
+      title: "User Signup",
+      noHeader: true,
+    });
   },
   postSignIn: (req, res) => {
     doSignIn(req.body).then((response) => {
@@ -87,29 +105,22 @@ module.exports = {
     res.render("user/authentication/blocked");
   },
   getOtpSigninPage: (req, res) => {
-    res.render("user/authentication/otp_signin",{noHeader: true});
+    res.render("user/authentication/otp_signin", { noHeader: true });
   },
   postGetOtp: (req, res) => {
     const { phone } = req.body;
-    setTimeout(() =>{
+    setTimeout(() => {
       OTP = generateOTP();
-    }, 300000)
+    }, 300000);
     OTP = generateOTP();
     console.log(OTP);
-    const client = new twilio(
-      process.env.TWILIO_ACCOUNT_SID,
-      process.env.TWILIO_AUTH_TOKEN
-    );
     getUser(phone).then((user) => {
       if (user) {
-        client.messages
-          .create({
-            body: `Hey Welcome to  your otp for login is : ${OTP}`,
-            to: `+91${phone}`,
-            from: process.env.TWILIO_PHONE,
-          })
-          .then((message) => {
-            console.log(message.sid);
+       
+        client.verify.v2
+          .services(process.env.TWILIO_SERVICE_ID)
+          .verifications.create({ to: `+91${phone}`, channel: "sms"})
+          .then((verification) => {
             res.status(200).send({ message: "Otp send successfully" });
           })
           .catch((error) => {
@@ -121,29 +132,36 @@ module.exports = {
     });
   },
   postVerifyOtp: (req, res) => {
-    const {otp ,phone} = req.body;
-    console.log(phone,"BODY", otp,'PRE', OTP);
-    if(otp == OTP){ 
-      console.log(phone)
-      getUser(phone).then((user) => {
-        if(user) {
-          console.log(user) 
-          const token = jwt.sign(
-            user.toJSON(),
-            process.env.ACCESS_TOKEN_SECRET_KEY,
-            { expiresIn: "7d" }
-          );
-          res.cookie("token", token);
-          res.redirect("/")
-        } else {
-          res.status(401).send({ message: "NO user with this phone number" })
-        }
-      })
-      
-    } else {
-      res.status(401).send({message:"Otp doesn't match"})
-    }
+    const { otp, phone } = req.body;
+    console.log(phone, "BODY", otp, "PRE", OTP);
 
+    client.verify.v2
+      .services(process.env.TWILIO_SERVICE_ID)
+      .verificationChecks.create({ to: `+91${phone}`, code: Number(otp) })
+      .then((verification_check) => {
+        console.log(verification_check);
+        if (verification_check.valid) {
+          console.log(phone);
+          getUser(phone).then((user) => {
+            if (user) {
+              console.log(user);
+              const token = jwt.sign(
+                user.toJSON(),
+                process.env.ACCESS_TOKEN_SECRET_KEY,
+                { expiresIn: "7d" }
+              );
+              res.cookie("token", token);
+              res.redirect("/");
+            } else {
+              res
+                .status(401)
+                .send({ message: "NO user with this phone number" });
+            }
+          });
+        } else {
+          res.status(401).send({ message: "Otp doesn't match" });
+        }
+      });
   },
   getLogout: (req, res) => {
     res.clearCookie("token");

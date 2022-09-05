@@ -9,15 +9,27 @@
         class="d-inline-block align-text-top rounded-circle mx-3"
         style="transform: scale(1.5);"
       />
-      <p class="p-none title" >HomelandSpices</p>
+      <a class="fw-bold fs-5 a-none title text-dark" href="/">HomelandSpices</a>
     </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse ms-5 fs-7" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active text-uppercase fs-7 f-500" aria-current="page" href="#">About</a>
+          <a
+            class="nav-link active text-uppercase fs-7 f-500"
+            aria-current="page"
+            href="#"
+          >About</a>
         </li>
         <li class="nav-item">
           <a class="nav-link text-uppercase fs-7 f-500" href="#">blogs</a>
@@ -25,7 +37,7 @@
         <li class="nav-item">
           <a class="nav-link text-uppercase f-500" href="#">contact</a>
         </li>
-        {{!-- <li class="nav-item dropdown">
+        {{! <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Dropdown
           </a>
@@ -35,19 +47,44 @@
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="#">Something else here</a></li>
           </ul>
-        </li> --}}
+        </li> }}
       </ul>
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active text-uppercase fs-7" aria-current="page" href="/search"><img src="/images/icons/search.svg" width="25px" alt=""></a>
+          <a
+            class="nav-link active text-uppercase fs-7"
+            aria-current="page"
+            href="/search"
+          ><img src="/images/icons/search.svg" width="25px" alt="" /></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-uppercase fs-7" href="/cart"><img src="/images/icons/cart.svg" width="25px" alt=""></a>
+          <a class="nav-link text-uppercase fs-7" href="/cart/{{user.userId}}"><img
+              src="/images/icons/cart.svg"
+              width="25px"
+              alt=""
+            /></a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link btn bg-btn text-white px-5 mx-3 rounded-pill" href="/signin">Login</a>
+        <li class="nav-item d-flex justify-content-center">
+          {{#if user}}
+          <div class="d-flex m-auto align-items-center">
+            <img
+              src="/images/logo.png"
+              alt=""
+              width="15"
+              height="15"
+              class="d-inline-block align-text-top rounded-circle mx-3"
+              style="transform: scale(1.5);"
+            />
+            <div class="w-75 d-flex">
+              <p class="m-auto">{{user.username}}</p>
+              <img class="mx-3" width="18px" height="18px" src="/images/icons/up_arrow.svg" alt="">
+            </div>
+          </div>
+          {{else}}
+          <a class="nav-link btn bg-btn text-white px-5 mx-3 rounded-pill" href="/signin">Login</a> 
+          {{/if}}
         </li>
-        {{!-- <li class="nav-item dropdown">
+        {{! <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Dropdown
           </a>
@@ -57,9 +94,9 @@
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="#">Something else here</a></li>
           </ul>
-        </li> --}}
+        </li> }}
       </ul>
-      {{!-- <a href="/logout" class="btn btn-danger text-white">Logout </a> --}}
+      {{! <a href="/logout" class="btn btn-danger text-white">Logout </a> }}
     </div>
   </div>
 </nav>

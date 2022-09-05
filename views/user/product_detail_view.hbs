@@ -1,3 +1,52 @@
+<link rel="stylesheet" href="/stylesheets/user/product_detail.css" />
+<link rel="stylesheet" href="/stylesheets/button.css">
 {{#with product}}
-    <P>{{title}}</P>
+  <div class="row vh-100">
+    <div class="outer col-md-6 h-100">
+      <div class="padding m-auto h-75 w-75">
+        <div class="two-box w-100 h-100 d-flex justify-content-center">
+          <div class="box-one w-75 w-md-50 h-75 m-auto">
+            <img
+              class=" hero-image"
+              src="/product_images/{{_id}}.{{img_ext}}"
+              alt=""
+            />
+
+          </div>
+          {{! <div class="box-one w-75 w-md-50 h-75 m-auto">
+        </div> }}
+        </div>
+        <div class="pro-img">
+          <div class="small"></div>
+          <div class="small"></div>
+          <div class="small"></div>
+          <div class="small"></div>
+          <div class="small"></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 h-100 d-flex justify-content-center">
+      <div class="w-75 h-50 m-auto">
+        <p class="p-name">{{title}}</p>
+        <p class="price">₹{{price}}</p>
+        <p class="lorem w-50">
+          {{desc}}
+        </p>
+        <div class="buttons mb-3">
+          <span class="input-number-decrement">–</span><input
+            class="input-number"
+            type="text"
+            value="1"
+            min="0"
+            max="10"
+          />
+          <span class="input-number-increment">+</span>
+          <a href="/cart/add/{{../user.userId}}/{{_id}}" class="cart btn bg-btn">Add to cart</a>
+        </div>
+        <span>Free 2-5 days shipping </span><span>• Replacement</span>
+        <span>• Refund</span>
+      </div>
+    </div>
+  </div>
 {{/with}}
+<script src="/javascripts/user/count_button.js"></script>

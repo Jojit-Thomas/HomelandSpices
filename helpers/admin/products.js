@@ -14,6 +14,7 @@ module.exports = {
             price: Number(price),
             stocks: Number(stocks),
             img_ext: img_ext,
+            isDeleted: false,
           })
           .then((result) => {
             resolve(result);
@@ -26,7 +27,7 @@ module.exports = {
   deleteProduct: (productId) => {
     return new Promise((resolve, reject) => {
       products_model
-        .deleteOne({ _id: Types.ObjectId(productId) })
+        .updateOne({ _id: Types.ObjectId(productId) },{ isDeleted: true})
         .then((result) => {
           resolve(result);
         });

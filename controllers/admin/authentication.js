@@ -37,7 +37,7 @@ module.exports = {
     }
   },
   getSignIn: (req, res) => {
-    res.render("admin/authentication/signIn", { title: "Admin Login" });
+    res.render("admin/authentication/signIn", { title: "Admin Login", noHeader: true });
   },
   postSignIn: (req, res) => {
     doSignIn(req.body).then((response) => {
