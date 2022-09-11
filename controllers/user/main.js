@@ -1,19 +1,22 @@
-const { getAllProducts, getProduct } = require("../../helpers/common");
+const { getAllProducts, getProduct, getAllCategories } = require("../../helpers/common");
 const { getBannerImage } = require("../../helpers/user/banners");
+const { getAllWishlist } = require("../../helpers/user/wishlist");
 
 module.exports = {
-  getHome: (req, res) => {
+  getHome: async (req, res) => {
     let user = req.cookies.user ? req.cookies.user : null;
-
-    getAllProducts(user.userId).then((products) => {
-      getBannerImage().then((banner) => {
-        res.render("user/home", {
-          title: "Homeland Spices",
-          products: products,
-          user: user,
-          banner: banner
-        });
-      });
+    let products = await getAllProducts();
+    let banner = await getBannerImage();
+    let wishlist = await getAllWishlist(user.userId);
+    let categories = await getAllCategories();
+    console.log(wishlist[0]);
+    res.render("user/home", {
+      title: "Homeland Spices",
+      products: products,
+      user: user,
+      banner: banner,
+      wishlist: wishlist[0],
+      categories: categories,
     });
   },
   getProductPage: (req, res) => {
@@ -23,7 +26,7 @@ module.exports = {
     });
   },
   getSortCategory: (req, res) => {
-    user = req.session.user;
+    let user = req.cookies.user ? req.cookies.user : null;
     getCategory(req.params.categoryId).then((products) => {
       getAllCategories().then((categories) => {
         res.render("user/shop", { products: products, categories, user });

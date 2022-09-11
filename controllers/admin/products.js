@@ -1,12 +1,11 @@
 const fs = require("fs");
 const path = require("path");
-const { getAllCategories } = require("../../helpers/admin/categories");
 const {
   AddProduct,
   deleteProduct,
   updateProduct,
 } = require("../../helpers/admin/products");
-const { getAllProducts, getProduct } = require("../../helpers/common");
+const { getAllProducts, getProduct, getAllCategories } = require("../../helpers/common");
 module.exports = {
   getProducts: (req, res) => {
     getAllProducts().then((products) => {

@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const { ADDRESS_COLLECTION } = require("../config/collections");
 
 const addressSchema = new mongoose.Schema({
+  userId: mongoose.Schema.Types.ObjectId,
   name: String,
   phone: {
     type: String,
@@ -11,7 +12,11 @@ const addressSchema = new mongoose.Schema({
   },
   locality: String,
   city: String,
-  address: String,
+  state: String,
+  pincode: Number,
+  houseName: String,
+  landmark: String,
+  postOffice: String,
 });
 
 module.exports = mongoose.model("address_model", addressSchema, ADDRESS_COLLECTION);

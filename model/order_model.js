@@ -10,6 +10,7 @@ const orderSchema = new mongoose.Schema({
   products: Array,
   totalAmount: Number,
   status: String,
+  paymentMethod: String,
   date: Date,
 });
 

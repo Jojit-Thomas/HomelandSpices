@@ -6,7 +6,11 @@ const {
   stopAuthenticate,
 } = require("../Controllers/Admin/Authentication");
 const {
-  getBannerPage, getAddBanner, postAddBanner
+  getBannerPage,
+  getAddBanner,
+  postAddBanner,
+  postEditPosition,
+  getdeleteBanner,
 } = require("../controllers/admin/banner");
 const {
   postAddCategory,
@@ -14,17 +18,14 @@ const {
   getCategoriesPage,
   getDeleteCategory,
   getEditCategory,
-  postEditCategory
+  postEditCategory,
 } = require("../controllers/admin/categories");
-const {
-  getHome,
-  getLogout
-} = require("../controllers/admin/main");
+const { getHome, getLogout } = require("../controllers/admin/main");
 const {
   getOrderPage,
   getOrderDetailsPage,
   getChangeOrderStatus,
-  getCancelOrder
+  getCancelOrder,
 } = require("../controllers/admin/orders");
 const {
   getAddProducts,
@@ -44,7 +45,6 @@ const {
   getBlockUser,
 } = require("../controllers/admin/users");
 const router = express.Router();
-
 
 router.get("/", adminAuth, getHome); //Home_page
 router.get("/signin", stopAuthenticate, getSignIn);
@@ -68,22 +68,21 @@ router.post("/addUser", adminAuth, postAddUser);
 router.get("/blockUser/:id", adminAuth, getBlockUser);
 //================================Categories================================
 router.get("/category", adminAuth, getCategoriesPage);
-router.get("/category/add", adminAuth, getAddCategory)
-router.post("/category/add", adminAuth, postAddCategory)
-router.get("/category/delete/:id", adminAuth, getDeleteCategory)
-router.get("/category/edit/:categoryId", adminAuth, getEditCategory)
-router.post("/category/edit/:categoryId", adminAuth, postEditCategory)
+router.get("/category/add", adminAuth, getAddCategory);
+router.post("/category/add", adminAuth, postAddCategory);
+router.get("/category/delete/:id", adminAuth, getDeleteCategory);
+router.get("/category/edit/:categoryId", adminAuth, getEditCategory);
+router.post("/category/edit/:categoryId", adminAuth, postEditCategory);
 //=================================Orders=================================
-router.get('/orders', adminAuth, getOrderPage)
-router.get('/order/details/:id', getOrderDetailsPage)
-router.post('/order/changeStatus', getChangeOrderStatus)
-router.get('/order/cancel/:orderId/:productId', getCancelOrder)
+router.get("/orders", adminAuth, getOrderPage);
+router.get("/order/details/:id", getOrderDetailsPage);
+router.post("/order/changeStatus", getChangeOrderStatus);
+router.get("/order/cancel/:orderId/:productId", getCancelOrder);
 //=================================Banners=================================
-router.get('/banners', adminAuth, getBannerPage)
-router.get('/banners/add', adminAuth, getAddBanner)
-router.post('/banners/add', adminAuth, postAddBanner)
-
-
-
+router.get("/banners", adminAuth, getBannerPage);
+router.get("/banners/add", adminAuth, getAddBanner);
+router.post("/banners/add", adminAuth, postAddBanner);
+router.post("/banners/edit", adminAuth, postEditPosition);
+router.get("/banners/delete/:bannerId", adminAuth, getdeleteBanner);
 
 module.exports = router;

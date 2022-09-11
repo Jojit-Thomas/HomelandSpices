@@ -7,7 +7,6 @@ const {
   doSignIn,
   getUser,
 } = require("../../helpers/user/authentication");
-let OTP = 0;
 const client = new twilio(
   process.env.TWILIO_ACCOUNT_SID,
   process.env.TWILIO_AUTH_TOKEN
@@ -22,14 +21,6 @@ module.exports = {
           res.clearCookie("token");
           res.redirect("/signin");
         } else {
-          // req.user = user;
-          // console.log(user);
-          let userObj = {
-            username : user.name,
-            userId: user._id
-          }
-          // console.log(userObj);
-          res.cookie("user", userObj, { maxAge: 24*60*60*1000, httpOnly: true });
           next();
         }
       });
@@ -38,6 +29,7 @@ module.exports = {
       res.redirect("/");
     }
   },
+  // this is to prevent the user from login twice
   stopAuthenticate: (req, res, next) => {
     const token = req.cookies.token;
     if (token) {
@@ -60,25 +52,38 @@ module.exports = {
     });
   },
   getSignUp: (req, res) => {
-    
     res.render("user/authentication/signUp", {
       title: "User Signup",
       noHeader: true,
     });
   },
+
   postSignIn: (req, res) => {
     doSignIn(req.body).then((response) => {
       if (response.status) {
-        console.log(typeof response);
+        // signs a new jwt and store in cookie
         const token = jwt.sign(
           response.user.toJSON(),
           process.env.ACCESS_TOKEN_SECRET_KEY,
           { expiresIn: "7d" }
         );
-        res.cookie("token", token);
+        res.cookie("token", token, {
+          maxAge: 365 * 24 * 60 * 60 * 1000,
+          httpOnly: true,
+        });
+        // saves username and userId in cookie for future operations
+        let userObj = {
+          username: response.user.name,
+          userId: response.user._id,
+        };
+        console.log(userObj);
+        res.cookie("user", userObj, {
+          maxAge: 365 * 24 * 60 * 60 * 1000,
+          httpOnly: true,
+        });
         res.redirect("/");
       } else {
-        console.log(response);
+        // check is the user blocked by the admin
         if (response.blocked) {
           console.log("blocked");
           res.status(404).send({ message: "You are Blocked by the admin" });
@@ -109,17 +114,12 @@ module.exports = {
   },
   postGetOtp: (req, res) => {
     const { phone } = req.body;
-    setTimeout(() => {
-      OTP = generateOTP();
-    }, 300000);
-    OTP = generateOTP();
-    console.log(OTP);
     getUser(phone).then((user) => {
       if (user) {
-       
+        // twilio otp verify: create is used here
         client.verify.v2
           .services(process.env.TWILIO_SERVICE_ID)
-          .verifications.create({ to: `+91${phone}`, channel: "sms"})
+          .verifications.create({ to: `+91${phone}`, channel: "sms" })
           .then((verification) => {
             res.status(200).send({ message: "Otp send successfully" });
           })
@@ -134,7 +134,7 @@ module.exports = {
   postVerifyOtp: (req, res) => {
     const { otp, phone } = req.body;
     console.log(phone, "BODY", otp, "PRE", OTP);
-
+    //twilio otp verify function
     client.verify.v2
       .services(process.env.TWILIO_SERVICE_ID)
       .verificationChecks.create({ to: `+91${phone}`, code: Number(otp) })
@@ -142,6 +142,7 @@ module.exports = {
         console.log(verification_check);
         if (verification_check.valid) {
           console.log(phone);
+          // get the user data and generate jwt token
           getUser(phone).then((user) => {
             if (user) {
               console.log(user);
@@ -165,14 +166,8 @@ module.exports = {
   },
   getLogout: (req, res) => {
     res.clearCookie("token");
+    res.clearCookie("address");
+    res.clearCookie("user");
     res.redirect("/");
   },
 };
-function generateOTP() {
-  var digits = "0123456789";
-  let OTP = "";
-  for (let i = 0; i < 4; i++) {
-    OTP += digits[Math.floor(Math.random() * 10)];
-  }
-  return OTP;
-}

@@ -1,12 +1,12 @@
-
 <section>
   <div class="container-fluid">
     <div class="container-fluid">
       <div class="row my-4">
-        <div class=" float-end">
+        <div class="float-end">
           <a href="/admin/banners/add"><div
-            class="float-end btn text-white" style="background-color: var(--blurple);"
-          >Add Banners</div></a>
+              class="float-end btn text-white"
+              style="background-color: var(--blurple);"
+            >Add Banners</div></a>
         </div>
       </div>
     </div>
@@ -17,6 +17,7 @@
             <th class="" scope="col">#</th>
             <th class="" scope="col">Image</th>
             <th class="" scope="col">Title</th>
+            <th class="" scope="col">Position</th>
             <th class="" scope="col">Options</th>
           </tr>
         </thead>
@@ -24,24 +25,21 @@
           {{#each banners}}
             <tr class="bg-white">
               <th class="" scope="row">{{inc @index}}</th>
-              <td class=""><a href="/banners/{{this.img_name}}.{{img_ext}}">
-                <img
-                  src="/banners/{{this.img_name}}.{{img_ext}}"
-                  width="50px"
-                  alt=""
-                />
-              </a></td>
+              <td class=""><a href="/banners/{{this.img_name}}.{{img_ext}}" target="_blank">
+                  <img
+                    src="/banners/{{this.img_name}}.{{img_ext}}"
+                    width="50px"
+                    alt=""
+                  />
+                </a></td>
               <td class="">{{this.title}}</td>
-              {{! <td class=""><a href="/admin/delete-user"><img src="/images/trash.svg" alt="delete" width="25px" height="25px" ></a></td> }}
+              <td>
+                <input type="number" id="{{this._id}}" value="{{this.position}}">
+                <button class="btn btn-danger" type="button" onclick="editPosition('{{this._id}}')">Edit</button></td>
               <td class="" style="white-space: nowrap;">
-                {{!-- <a
-                  class="btn btn-primary"
-                  href="/admin/editProduct/{{this._id}}"
-                >Edit
-                </a> --}}
                 <a
                   class="btn btn-danger"
-                  href="/admin/banner/delete/{{this._id}}"
+                  href="/admin/banners/delete/{{this._id}}"
                   onclick="return confirm('Are you sure you want to delete {{this.name}} product?');"
                 >Delete
                 </a>
@@ -53,4 +51,27 @@
     </div>
   </div>
 </section>
-<link rel="stylesheet" href="/stylesheets/datatable.css">
+<link rel="stylesheet" href="/stylesheets/datatable.css" />
+
+<script>
+  function editPosition(bannerId) {
+    let position = $(`#${bannerId}`).val();
+    console.log(position);
+    $.ajax({
+      url: "/admin/banners/edit",
+      method : "POST",
+      data: {
+        bannerId: bannerId,
+        position: position,
+      },
+       success: function(data) {
+          console.log("success", data);
+          window.location.reload();
+       },
+       error: function(err) {
+        console.log("err",err);
+      }
+
+    })
+  }
+</script>

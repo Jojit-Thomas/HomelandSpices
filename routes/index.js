@@ -1,4 +1,5 @@
 const express = require("express");
+const { getNewAddressPage, getAddressPage, postAddress, postAddressSelection, postNewAddress } = require("../controllers/user/address");
 
 const {
   getSignIn,
@@ -33,7 +34,13 @@ const {
   getOrderDetailsPage,
   getCancelProduct,
 } = require("../controllers/user/orders");
-const { getAddToWishlist, getWishlistPage, getRemoveFromWishlist } = require("../controllers/user/wishlist");
+const { getPaymentPage } = require("../controllers/user/payment");
+const {
+  getAddToWishlist,
+  getWishlistPage,
+  getRemoveFromWishlist,
+} = require("../controllers/user/wishlist");
+const { getAddress } = require("../helpers/user/address");
 
 // router.use((req, res, next) => {
 //   res.setHeader("Cache-Control: no-cache, no-store, must-revalidate")
@@ -45,35 +52,40 @@ router.use((req, res, next) => {
   next();
 });
 
-/* Authentication routes */
-router.get("/signin", stopAuthenticate, getSignIn);
-router.post("/signin", stopAuthenticate, postSignIn);
+
+//=========================AUTHENTICATION ROUTES =========================
+router.get("/logout", verifyLogin, getLogout);
 router.get("/signup", stopAuthenticate, getSignUp);
 router.post("/signup", stopAuthenticate, postSignUp);
+router.get("/signin", stopAuthenticate, getSignIn);
+router.post("/signin", stopAuthenticate, postSignIn);
 router.get("/blocked", stopAuthenticate, getBlocked);
-router.get("/otpSigninPage", stopAuthenticate, getOtpSigninPage);
 router.post("/getOtp", stopAuthenticate, postGetOtp);
 router.post("/verifyOtp", stopAuthenticate, postVerifyOtp);
-
-
-
-// Main Routes
-
+router.get("/otpSigninPage", stopAuthenticate, getOtpSigninPage);
+//=========================MAIN ROUTES =========================
 router.get("/", verifyLogin, getHome);
 router.get("/product/:id", verifyLogin, getProductPage);
-router.get("/cart/:userId", verifyLogin, getCartPage);
-router.get("/cart/add/:userId/:proId", verifyLogin, getAddToCart);
-router.post("/cart/changeQuantity", verifyLogin, getCartChangeQuantity);
+//=========================CART ROUTES =========================
+router.get("/cart", verifyLogin, getCartPage);
+router.get("/cart/add/:proId", verifyLogin, getAddToCart);
 router.post("/cart/remove", verifyLogin, getRemoveFromCart);
-router.get("/checkout", verifyLogin, getCheckoutPage);
-router.post("/checkout", verifyLogin, postCheckout);
-router.get("/orders", verifyLogin, getOrderPage);
-// router.get("/order/details/:id", verifyLogin, getOrderDetailsPage);
-router.get("/order/cancel/:orderId/:productId", verifyLogin, getCancelProduct);
+router.post("/cart/changeQuantity", verifyLogin, getCartChangeQuantity);
 router.get("/categories/:categoryId", verifyLogin, getSortCategory);
+//=========================WISHLIST ROUTES =========================
 router.get("/wishlist", verifyLogin, getWishlistPage);
-router.get("/wishlist/add/:productId", verifyLogin, getAddToWishlist)
-router.post("/wishlist/remove", verifyLogin, getRemoveFromWishlist)
-router.get("/logout", verifyLogin, getLogout);
+router.get("/wishlist/add/:productId", verifyLogin, getAddToWishlist); 
+router.post("/wishlist/remove", verifyLogin, getRemoveFromWishlist);
+//=========================ADDRESS ROUTES =========================
+router.get("/address", verifyLogin, getAddressPage);
+router.post("/address", verifyLogin, postAddressSelection) 
+router.get("/address/add", verifyLogin, getNewAddressPage);
+router.post("/address/add", verifyLogin, postNewAddress);
+//=========================ORDER ROUTES =========================
+router.get("/orders", verifyLogin, getOrderPage);
+router.get("/order/cancel/:orderId/:productId", verifyLogin, getCancelProduct);
+router.get("/orders/details/:orderId/:productId", verifyLogin, getOrderDetailsPage);
+router.get("/payment", verifyLogin, getPaymentPage)
+router.post("/checkout", verifyLogin, postCheckout);
 
 module.exports = router;

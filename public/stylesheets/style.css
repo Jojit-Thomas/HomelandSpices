@@ -4,12 +4,16 @@
   --ma-white: #f7f7fc;
   --icons: #9a9bb0;
   --purple: #9155fd;
+  --white_lilac: #f8f7fd;
 }
 .bg-blurple {
   background-color: var(--blurple) !important;
 }
 .bg-btn {
   background-color: var(--purple) !important;
+}
+.bg-admin {
+  background-color: var(--white_lilac) !important;
 }
 .vh-100 {
   height: 100vh;
@@ -39,7 +43,7 @@
 }
 .imgCrop {
   width: 10rem;
-  height: 10rem;
+  height: auto;
   object-fit: cover;
 }
 

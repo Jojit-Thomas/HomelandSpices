@@ -1,40 +1,45 @@
 const { Types } = require("mongoose");
-const { PRODUCT_COLLECTION } = require("../../config/collections");
+const {
+  PRODUCT_COLLECTION,
+  ORDER_ADDRESS_COLLECTION,
+} = require("../../config/collections");
 const cart_model = require("../../model/cart_model");
 const order_model = require("../../model/order_model");
-
+const order_products_model = require("../../model/order_products_model");
 
 module.exports = {
-  placeOrder: (order, products, total) => {
-    return new Promise((resolve, reject) => {
-      console.log(order, products, total);
-      let status = order.paymentMethod === "cod" ? "placed" : "pending";
-      let orderObj = {
-        deliveryDetails: {
-          name: order.name,
-          phone: order.phone,
-          address: order.address,
-        },
-        userId: Types.ObjectId(order.userId),
-        paymentMethod: order.paymentMethod,
-        products: products,
-        totalAmount: total,
-        status: status,
-        date: new Date(),
-      };
-      get()
-        .collection(ORDER_COLLECTION)
-        .insertOne(orderObj)
-        .then((cart) => {
-          get()
-            .collection(CART_COLLECTION)
-            .deleteOne({ userId: Types.ObjectId(order.userId) })
-            .then(() => {
-              resolve();
-            });
-        });
-    });
-  },
+  // placeOrder: (order, products, total) => {
+  //   return new Promise((resolve, reject) => {
+  //     console.log(order, products, total);
+  //     let status = order.paymentMethod === "cod" ? "placed" : "pending";
+  //     let orderObj = {
+  //       deliveryDetails: {
+  //         name: order.name,
+  //         phone: order.phone,
+  //         address: order.address,
+  //       },
+  //       userId: Types.ObjectId(order.userId),
+  //       paymentMethod: order.paymentMethod,
+  //       products: products,
+  //       totalAmount: total,
+  //       status: status,
+  //       date: new Date(),
+  //     };
+  //     get()
+  //       .collection(ORDER_COLLECTION)
+  //       .insertOne(orderObj)
+  //       .then((cart) => {
+  //         get()
+  //           .collection(CART_COLLECTION)
+  //           .deleteOne({
+  //             userId: Types.ObjectId(order.userId)
+  //           })
+  //           .then(() => {
+  //             resolve();
+  //           });
+  //       });
+  //   });
+  // },
   getCartProdutDetails: (userId) => {
     console.log(userId);
     return new Promise((resolve, reject) => {
@@ -90,17 +95,17 @@ module.exports = {
             },
           ])
           .then((data) => {
-            console.log("total is : ", data);
-            data.map((item) => {
-              item.cartItems.total = item.total;
-              item.cartItems.status = "Order Placed";
-            });
-            let products = [];
-            data.forEach((item) => {
-              products.push(item.cartItems);
-            });
-            console.log("modified data is : ", data);
-            resolve(products);
+            // console.log("total is : ", data);
+            // data.map((item) => {
+            //   item.cartItems.total = item.total;
+            //   item.cartItems.status = "Order Placed";
+            // });
+            // let products = [];
+            // data.forEach((item) => {
+            //   products.push(item.cartItems);
+            // });
+            // console.log("modified data is : ", data);
+            resolve(data);
           });
       } catch (error) {
         console.error(error);
@@ -109,7 +114,7 @@ module.exports = {
   },
   placeOrder: (data, products, total) => {
     return new Promise((resolve, reject) => {
-      console.log( products, total);
+      console.log(products, total);
       let status = data.paymentMethod === "cod" ? "placed" : "pending";
       let orderObj = {
         deliveryDetails: Types.ObjectId(data.addressId),
@@ -123,18 +128,17 @@ module.exports = {
       // get()
       //   .collection(ORDER_COLLECTION)
       //   .insertOne(orderObj)
-        order_model.create(orderObj)
-        .then((cart) => {
-          // get()
-          //   .collection(CART_COLLECTION)
-            cart_model
-            .deleteOne({
-              userId: Types.ObjectId(data.userId),
-            })
-            .then(() => {
-              resolve();
-            });
-        });
+      order_model.create(orderObj).then((cart) => {
+        // get()
+        //   .collection(CART_COLLECTION)
+        cart_model
+          .deleteOne({
+            userId: Types.ObjectId(data.userId),
+          })
+          .then(() => {
+            resolve();
+          });
+      });
     });
   },
   getOrders: (userId) => {
@@ -161,43 +165,62 @@ module.exports = {
             $unwind: "$productDetails",
           },
           {
-            $sort: {date: -1}
-          }
+            $sort: {
+              date: -1,
+            },
+          },
         ])
         .then((data) => {
           resolve(data);
         });
     });
   },
-  // getOrderDetails: (orderId) => {
-  //   return new Promise((resolve, reject) => {
-  //     order_model
-  //       .aggregate([
-  //         {
-  //           $match: {
-  //             _id: Types.ObjectId(orderId),
-  //           },
-  //         },
-  //         {
-  //           $unwind: "$products",
-  //         },
-  //         {
-  //           $lookup: {
-  //             from: PRODUCT_COLLECTION,
-  //             localField: "products.productId",
-  //             foreignField: "_id",
-  //             as: "productDetails",
-  //           },
-  //         },
-  //         {
-  //           $unwind: "$productDetails",
-  //         },
-  //       ])
-  //       .then((data) => {
-  //         resolve(data);
-  //       });
-  //   });
-  // },
+  getOrderDetails: (orderId, productId) => {
+    return new Promise((resolve, reject) => {
+      order_model
+        .aggregate([
+          {
+            $match: {
+              _id: Types.ObjectId(orderId),
+            },
+          },
+          {
+            $unwind: "$products",
+          },
+          {
+            $match: {
+              "products.productId": Types.ObjectId(productId),
+            },
+          },
+          {
+            $lookup: {
+              from: PRODUCT_COLLECTION,
+              localField: "products.productId",
+              foreignField: "_id",
+              as: "productDetails",
+            },
+          },
+          {
+            $unwind: "$productDetails",
+          },
+          {
+            $lookup: {
+              from: ORDER_ADDRESS_COLLECTION,
+              localField: "deliveryDetails",
+              foreignField: "_id",
+              as: "address",
+            },
+          },
+          {
+            $unwind: "$address",
+          },
+        ])
+        .then((data) => {
+          console.log(data);
+          resolve(data);
+        });
+    });
+  },
   cancelOrders: (orderId, productId) => {
     return new Promise((resolve, reject) => {
       console.log(orderId, productId);
@@ -217,6 +240,16 @@ module.exports = {
           console.log(data);
           resolve();
         });
+    });
+  },
+  addOrderProducts: (userId, products) => { 
+    return new Promise((resolve, reject) => {
+      delete products._id; 
+      products.userId = userId;
+      console.log("Products in addorderproducts is : ",products);
+      order_products_model.create(products).then((data) => {
+        resolve(data.insertedId);
+      });
     });
   },
 };

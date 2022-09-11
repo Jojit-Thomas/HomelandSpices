@@ -8,7 +8,9 @@ module.exports = {
     data.email = data.email.toLowerCase();
     return new Promise(async (resolve, reject) => {
       let response = {};
-      user_model.findOne({ phone: data.phone }).then((dbValue) => {
+      console.log(data.phone, data.email)
+      // Checking the phone number and email is unique
+      user_model.findOne({ $or:[{phone: data.phone}, {email: data.email}]  }).then((dbValue) => {
         console.log(dbValue);
         if (dbValue) {
           response.status = false;

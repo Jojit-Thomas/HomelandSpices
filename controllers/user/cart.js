@@ -9,17 +9,16 @@ const {
 
 module.exports = {
   getAddToCart: (req, res) => {
-    console.log("add to cart");
-    console.log(req.params.userId);
-    console.log(req.params.proId);
-    addToCart(req.params.userId, req.params.proId).then(() => {
-      console.log("added to cart");
-      res.redirect(`/cart/${req.params.userId}`);
+    //take the user details from cookie
+    let user = req.cookies.user ? req.cookies.user : null;
+    addToCart(user.userId, req.params.proId).then(() => {
+      res.redirect("/cart");
     });
   },
   getCartPage: (req, res) => {
     console.log(req.params.userId)
-    getCart(req.params.userId).then((data) => {
+    let user = req.cookies.user ? req.cookies.user : null;
+    getCart(user.userId).then((data) => {
       let user = req.cookies.user ? req.cookies.user : null;
       getTotalAmount(req.params.userId).then((total) => {
         res.render("user/cart", { data: data, total: total, user: user });

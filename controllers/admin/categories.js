@@ -1,4 +1,5 @@
-const { AddCategory, getAllCategories, deleteCategory, getCategoryById, editCategory } = require("../../helpers/admin/categories");
+const { AddCategory, deleteCategory, getCategoryById, editCategory } = require("../../helpers/admin/categories");
+const { getAllCategories } = require("../../helpers/common");
 
 module.exports = {
   getCategoriesPage: (req, res) => {

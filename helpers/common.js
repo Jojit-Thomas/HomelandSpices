@@ -1,7 +1,6 @@
 const { Types } = require("mongoose");
 const products_model = require("../model/products_model");
-const address_model = require("../model/address_model");
-const wishlist_model = require("../model/wishlist_model");
+const category_model = require("../model/category_model");
 
 module.exports = {
   getProduct: (productId) => {
@@ -13,26 +12,18 @@ module.exports = {
         });
     });
   },
-  getAllProducts: (userId) => {
+  getAllProducts: () => {
     return new Promise((resolve, reject) => {
-      products_model.find({isDeleted : {$ne: true}}).then((products) => {
-        console.log(products);
+      products_model.find({ isDeleted: { $ne: true } }).then((products) => {
+        // console.log(products);
         resolve(products);
       });
     });
   },
-  addAddress: (body) => {
+  getAllCategories: () => {
     return new Promise((resolve, reject) => {
-      const { name, phone, locality, city, address } = body;
-      let addressObj = { 
-        name: name,
-        phone: phone,
-        locality: locality,
-        city: city,
-        address: address,
-      };
-      address_model.create(addressObj).then((state) => {
-        resolve(state);
+      category_model.find().then((category) => {
+        resolve(category);
       });
     });
   },

@@ -4,8 +4,6 @@ const cart_model = require("../../model/cart_model");
 
 module.exports = {
   addToCart: (userId, productId) => {
-    console.log("userId", userId, "productId", productId);
-    console.log("userId", typeof userId, "productId", typeof productId);
     return new Promise((resolve, reject) => {
       console.log(userId, productId);
       try {
@@ -13,19 +11,13 @@ module.exports = {
           productId: Types.ObjectId(productId),
           quantity: 1,
         };
-
-        cart_model.findOne({ userId: Types.ObjectId(userId) }).then((cart) => {
-          console.log(cart);
+        //checking the existence of the cart document
+        cart_model.findOne({ userId: Types.ObjectId(userId) }).then(async (cart) => {
           if (cart) {
-            let state = false;
-            let data = cart.cartItems.forEach((product) => {
-              console.log(product.productId.toString(), "      ", productId);
-              if (product.productId.toString() == Types.ObjectId(productId)) {
-                return (state = true);
-              }
-            });
-            console.log(data);
-            if (state == true) {
+            // checking the existence of the product in the cart
+            let state = await cart_model.findOne({ userId: Types.ObjectId(userId), "cartItems.productId": Types.ObjectId(productId) });
+            if (state) {
+              // if already exist increment the quantity
               cart_model
                 .updateOne(
                   {
@@ -42,6 +34,7 @@ module.exports = {
                   resolve(status);
                 });
             } else {
+              //if not exist add to cartItems array
               cart_model
                 .updateOne(
                   {

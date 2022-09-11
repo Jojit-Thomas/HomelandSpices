@@ -58,32 +58,56 @@
           ><img src="/images/icons/search.svg" width="25px" alt="" /></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-uppercase fs-7" href="/cart/{{user.userId}}"><img
-              src="/images/icons/cart.svg"
-              width="25px"
-              alt=""
-            /></a>
+          <a
+            class="nav-link text-uppercase fs-7"
+            href="/cart"
+          ><img src="/images/icons/cart.svg" width="25px" alt="" /></a>
         </li>
-        <li class="nav-item d-flex justify-content-center">
+        <li class="nav-item d-flex justify-content-center " data-bs-toggle="dropdown"
+          aria-expanded="false">
           {{#if user}}
-          <div class="d-flex m-auto align-items-center">
-            <img
-              src="/images/logo.png"
-              alt=""
-              width="15"
-              height="15"
-              class="d-inline-block align-text-top rounded-circle mx-3"
-              style="transform: scale(1.5);"
-            />
-            <div class="w-75 d-flex">
-              <p class="m-auto">{{user.username}}</p>
-              <img class="mx-3" width="18px" height="18px" src="/images/icons/up_arrow.svg" alt="">
+            <div class="d-flex m-auto align-items-center">
+              <img
+                src="/images/logo.png"
+                alt=""
+                width="15"
+                height="15"
+                class="d-inline-block align-text-top rounded-circle mx-3"
+                style="transform: scale(1.5);"
+              />
+              <div class="w-75 d-flex">
+                <p class="m-auto">{{user.username}}</p>
+                <img
+                  class="mx-3"
+                  width="18px"
+                  height="18px"
+                  src="/images/icons/up_arrow.svg"
+                  alt=""
+                />
+              </div>
             </div>
-          </div>
           {{else}}
-          <a class="nav-link btn bg-btn text-white px-5 mx-3 rounded-pill" href="/signin">Login</a> 
+            <a
+              class="nav-link btn bg-btn text-white px-5 mx-3 rounded-pill"
+              href="/signin"
+            >Login</a>
           {{/if}}
         </li>
+        {{!-- <button
+          class="btn btn-secondary dropdown-toggle"
+          type="button"
+          id="dropdownMenuButton1"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          Dropdown button
+        </button> --}}
+        <ul class="dropdown-menu " aria-labelledby="dropdownMenuButton1">
+          <li><a class="dropdown-item" href="#">Profile</a></li>
+          <li><a class="dropdown-item" href="/orders">My Orders</a></li>
+          <li><a class="dropdown-item" href="/logout">Logout</a></li>
+          {{!-- <li><a class="dropdown-item" href="#">Something else here</a></li> --}}
+        </ul>
         {{! <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Dropdown

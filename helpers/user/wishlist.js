@@ -34,6 +34,13 @@ module.exports = {
         });
     });
   },
+  getAllWishlist: (userId) => {
+    return new Promise((resolve, reject) => {
+      wishlist_model.find({userId : Types.ObjectId(userId)}).then((wishlist) => {
+        resolve(wishlist);
+      })
+    })
+  },
   getWishlist: (userId) => {
     return new Promise((resolve, reject) => {
       wishlist_model
