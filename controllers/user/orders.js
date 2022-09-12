@@ -29,26 +29,15 @@ module.exports = {
     // fetching product details and total amount
     let products = await getCartProdutDetails(user.userId);
     console.log("products is " , products)
-    let orderProducts = await addOrderProducts(user.userId, products[0])
-    console.log("orderProducts is : ", orderProducts);
-    // console.log("total is : ", data);
-    //         data.map((item) => {
-    //           item.cartItems.total = item.total;
-    //           item.cartItems.status = "Order Placed";
-    //         });
-    //         let products = [];
-    //         data.forEach((item) => {
-    //           products.push(item.cartItems);
-    //         });
-    //         console.log("modified data is : ", data);
-    // let orderProducts = await 
+    // let orderProducts = await addOrderProducts(user.userId, products[0])
+    // console.log("orderProducts is : ", orderProducts);
     let total = await getTotalAmount(user.userId);
     const data = {
       userId: user.userId,
       addressId: orderAddress._id,
       paymentMethod: paymentMethod,
     };
-    placeOrder(data, orderProducts, total).then(() => {
+    placeOrder(data, products, total).then(() => {
       res.redirect("/");
     });
   },
@@ -71,8 +60,9 @@ module.exports = {
     });
   },
   getCancelProduct: (req, res) => {
-    cancelOrders(req.params.orderId, req.params.productId).then(() => {
-      res.redirect("/");
+    const {orderId, productId} = req.params;
+    cancelOrders(orderId, productId).then(() => {
+      res.redirect(`/orders/details/${orderId}/${productId}`);
     });
   },
 };

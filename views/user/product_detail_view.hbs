@@ -1,11 +1,12 @@
 <link rel="stylesheet" href="/stylesheets/user/product_detail.css" />
-<link rel="stylesheet" href="/stylesheets/button.css">
+<link rel="stylesheet" href="/stylesheets/button.css">\
+ <script src="https://unpkg.com/js-image-zoom@0.4.1/js-image-zoom.js" type="application/javascript"></script>
 {{#with product}}
   <div class="row vh-100">
     <div class="outer col-md-6 h-100">
       <div class="padding m-auto h-75 w-75">
         <div class="two-box w-100 h-100 d-flex justify-content-center">
-          <div class="box-one w-75 w-md-50 h-75 m-auto">
+          <div class="box-one w-75 w-md-50 h-75 m-auto" id="img-container">
             <img
               class=" hero-image"
               src="/product_images/{{_id}}.{{img_ext}}"
@@ -49,4 +50,16 @@
     </div>
   </div>
 {{/with}}
+
+{{!-- <script> --}}
+{{!-- var options = { --}}
+    {{!-- width: 500, --}}
+    {{!-- zoomWidth: 1000, --}}
+    {{!-- scale: 0.8, --}}
+    {{!-- offset: {vertical: 0, horizontal: 10} --}}
+{{!-- }; --}}
+{{!-- new ImageZoom(document.getElementById("img-container"), options); --}}
+ {{!--  --}}
+{{!-- </script> --}}
+
 <script src="/javascripts/user/count_button.js"></script>

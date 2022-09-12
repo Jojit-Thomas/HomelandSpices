@@ -9,6 +9,8 @@ module.exports = {
     let banner = await getBannerImage();
     let wishlist = await getAllWishlist(user.userId);
     let categories = await getAllCategories();
+    // for(x in products) //On
+    //   if(x in wishlist)//On
     console.log(wishlist[0]);
     res.render("user/home", {
       title: "Homeland Spices",

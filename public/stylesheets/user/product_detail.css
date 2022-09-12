@@ -12,8 +12,8 @@
 
 
 .hero-image {
-  width: 100%;
-  height: 100%;
+  width: 100% !important;
+  height: 100% !important;
   object-fit: cover;
 }
 
@@ -22,8 +22,13 @@
   height: 15.625rem; */
   /* background: #e0c1af; */
 }
+/* 
+.box-one div  {
+  width: 20rem !important;
+} */
 
-.pro-img {
+
+.pro-img { 
   margin-top: 2rem;
   display: flex;
   gap: 3rem;

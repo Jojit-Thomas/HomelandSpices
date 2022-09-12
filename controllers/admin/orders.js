@@ -8,6 +8,7 @@ module.exports = {
   },
   getOrderDetailsPage: (req, res) => {
     getOrderDetails(req.params.id).then((orders) => {
+      console.log("Order is : ",orders)
       res.render('admin/order_details',{orderDetails:orders, admin: true})
     })
   },

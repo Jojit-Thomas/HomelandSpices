@@ -5,7 +5,7 @@ const {
 } = require("../../config/collections");
 const cart_model = require("../../model/cart_model");
 const order_model = require("../../model/order_model");
-const order_products_model = require("../../model/order_products_model");
+
 
 module.exports = {
   // placeOrder: (order, products, total) => {
@@ -95,17 +95,17 @@ module.exports = {
             },
           ])
           .then((data) => {
-            // console.log("total is : ", data);
-            // data.map((item) => {
-            //   item.cartItems.total = item.total;
-            //   item.cartItems.status = "Order Placed";
-            // });
-            // let products = [];
-            // data.forEach((item) => {
-            //   products.push(item.cartItems);
-            // });
-            // console.log("modified data is : ", data);
-            resolve(data);
+            console.log("total is : ", data);
+            data.map((item) => {
+              item.cartItems.total = item.total;
+              item.cartItems.status = "Order Placed";
+            });
+            let products = [];
+            data.forEach((item) => {
+              products.push(item.cartItems);
+            });
+            console.log("modified data is : ", data);
+            resolve(products);
           });
       } catch (error) {
         console.error(error);
@@ -116,6 +116,12 @@ module.exports = {
     return new Promise((resolve, reject) => {
       console.log(products, total);
       let status = data.paymentMethod === "cod" ? "placed" : "pending";
+      try{
+        var date = new Date().toLocaleString();
+      } catch (error) {
+        console.log(error)
+      }
+      console.log("date is: ",date)
       let orderObj = {
         deliveryDetails: Types.ObjectId(data.addressId),
         userId: Types.ObjectId(data.userId),
@@ -123,14 +129,9 @@ module.exports = {
         products: products,
         totalAmount: total,
         paymentStatus: status,
-        date: new Date(),
+        date: date,
       };
-      // get()
-      //   .collection(ORDER_COLLECTION)
-      //   .insertOne(orderObj)
       order_model.create(orderObj).then((cart) => {
-        // get()
-        //   .collection(CART_COLLECTION)
         cart_model
           .deleteOne({
             userId: Types.ObjectId(data.userId),
@@ -171,6 +172,7 @@ module.exports = {
           },
         ])
         .then((data) => {
+          data[0] ? (data[0].date = data[0].date.toLocaleDateString()) : false;
           resolve(data);
         });
     });
@@ -242,14 +244,14 @@ module.exports = {
         });
     });
   },
-  addOrderProducts: (userId, products) => { 
-    return new Promise((resolve, reject) => {
-      delete products._id; 
-      products.userId = userId;
-      console.log("Products in addorderproducts is : ",products);
-      order_products_model.create(products).then((data) => {
-        resolve(data.insertedId);
-      });
-    });
-  },
+  // addOrderProducts: (userId, products) => { 
+  //   return new Promise((resolve, reject) => {
+  //     delete products._id; 
+  //     products.userId = userId;
+  //     console.log("Products in addorderproducts is : ",products);
+  //     order_products_model.create(products).then((data) => {
+  //       resolve(data.insertedId);
+  //     });
+  //   });
+  // },
 };

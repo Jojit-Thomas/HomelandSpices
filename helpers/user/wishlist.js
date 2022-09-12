@@ -15,7 +15,7 @@ module.exports = {
                   userId: Types.ObjectId(userId),
                 },
                 {
-                  $push: { wishlistItems: Types.ObjectId(productId) },
+                  $addToSet: { wishlistItems: Types.ObjectId(productId) },
                 }
               )
               .then(() => {

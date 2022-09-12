@@ -1,5 +1,5 @@
 const express = require("express");
-const { getNewAddressPage, getAddressPage, postAddress, postAddressSelection, postNewAddress } = require("../controllers/user/address");
+const { getNewAddressPage, getAddressPage, postAddressSelection, postNewAddress } = require("../controllers/user/address");
 
 const {
   getSignIn,

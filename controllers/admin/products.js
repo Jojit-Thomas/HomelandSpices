@@ -37,15 +37,16 @@ module.exports = {
     });
   },
   deleteProduct: (req, res) => {
-    getProduct(req.params.id).then((result) => {
-      console.log(result);
-      fs.unlinkSync(
-        path.join(
-          __dirname,
-          `../../public/product_images/${req.params.id}.${result.img_ext}`
-        )
-      );
-    });
+    // getProduct(req.params.id).then((result) => {
+    //   console.log(result);
+    //   fs.unlinkSync(
+    //     path.join( 
+    //       __dirname,
+    //       `../../public/product_images/${req.params.id}.${result.img_ext}`
+    //     )
+    //   );
+    // });
+    //soft delete the product 
     deleteProduct(req.params.id).then((result) => {
       if (result) {
         res.redirect("/admin/products");
