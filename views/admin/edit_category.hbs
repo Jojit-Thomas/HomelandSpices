@@ -2,22 +2,22 @@
 <div class="container mt-4">
   <div class="row d-flex justify-content-center">
       <form action="/admin/category/edit/{{category._id}}" id="addCategory" method="post"  class="loginBox col-md-6">
-        <input
+        <input required
           type="text"
           class="w-100 p-2 m-2 form-control"
           name="name"
           placeholder="Name"
           value="{{category.title}}"
         />
-        <input
+        <input required
           type="text"
           class="w-100 p-2 m-2 form-control"
           name="desc"
           placeholder="Description"
           value="{{category.desc}}"
         />
-        {{!-- <input type="file" class="w-100 p-2 m-2 form-control" name="image" /> --}}
-        <input type="submit" class="btn btn-success p-2 m-2 float-end" />
+        {{!-- <input required type="file" class="w-100 p-2 m-2 form-control" name="image" /> --}}
+        <input required type="submit" class="btn btn-success p-2 m-2 float-end" />
       </form>
   </div>
 </div>

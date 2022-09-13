@@ -9,13 +9,13 @@
       enctype="multipart/form-data"
       class="loginBox col-md-6"
     >
-      <input
+      <input required
         type="text"
         class="w-100 p-2 m-2 form-control"
         name="title"
         placeholder="Title"
       />
-      <input
+      <input required
         type="text"
         class="w-100 p-2 m-2 form-control"
         name="description"
@@ -29,26 +29,26 @@
         {{/each}}
       </select>
       
-      {{!-- <input
+      {{!-- <input required
         type="text"
         class="w-100 p-2 m-2 form-control"
         name="category"
         placeholder="Category"
       /> --}}
-      <input
+      <input required
         type="number"
         class="w-100 p-2 m-2 form-control"
         name="price"
         placeholder="Price"
       />
-      <input
+      <input required
         type="number"
         class="w-100 p-2 m-2 form-control"
         name="stocks"
         placeholder="Total Stocks"
       />
-      <input type="file" class="w-100 p-2 m-2 form-control" name="image" />
-      <input type="submit" class="btn btn-success p-2 m-2 float-end" />
+      <input required type="file" class="w-100 p-2 m-2 form-control" name="image" />
+      <input required type="submit" class="btn btn-success p-2 m-2 float-end" />
     </form>
   </div>
 </div>

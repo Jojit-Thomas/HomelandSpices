@@ -13,7 +13,7 @@
       {{#with user}}
       <form id="editUser" action="/admin/edituser/{{this._id}}" method="post">
         <p for="name">Full Name</p>
-        <input
+        <input required
           class="form-control py-2 px-3 mb-3"
           placeholder="E.g : John Doe"
           id="name"
@@ -22,7 +22,7 @@
           value="{{name}}"
         />
         <p for="email">Email</p>
-        <input
+        <input required
           class="form-control py-2 px-3 mb-3"
           placeholder="E.g : Johndoe@gmail.com"
           id="email"
@@ -32,7 +32,7 @@
         />
         <p id="error" class="text-danger"></p>
         <p for="phone">Phone</p>
-        <input
+        <input required
           class="form-control py-2 px-3 mb-3"
           placeholder="E.g : 99XXXXXXXX"
           id="phone"
@@ -41,7 +41,7 @@
           value="{{phone}}"
         />
         <p for="password">Password</p>
-        <input
+        <input required
           class="form-control py-2 px-3 mb-3"
           placeholder="E.g : PaSs#1$2&3"
           id="password"
@@ -49,7 +49,7 @@
           name="password"
         />
         <p for="confirmPassword">Confirm Password</p>
-        <input
+        <input required
           class="form-control py-2 px-3 mb-3"
           placeholder="E.g : PaSs#1$2&3"
           id="confirmPassword"

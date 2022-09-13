@@ -8,14 +8,14 @@
         id="editProduct"
         class="loginBox col-md-6"
       >
-        <input
+        <input required
           type="text"
           class="w-100 p-2 m-2 form-control"
           name="title"
           placeholder="Title"
           value="{{title}}"
         />
-        <input
+        <input required
           type="text"
           class="w-100 p-2 m-2 form-control"
           name="description"
@@ -28,21 +28,21 @@
           <option value="2">Two</option>
           <option value="3">Three</option>
         </select> --}}
-        <input
+        <input required
           type="text"
           class="w-100 p-2 m-2 form-control"
           name="category"
           placeholder="Category"
           value="{{category}}"
         />
-        <input
+        <input required
           type="number"
           class="w-100 p-2 m-2 form-control"
           name="price"
           placeholder="Price"
           value="{{price}}"
         />
-        <input
+        <input required
           type="number"
           class="w-100 p-2 m-2 form-control"
           name="stocks"
@@ -55,8 +55,8 @@
           width="50px"
           srcset=""
         />
-        <input type="file" class="w-100 p-2 m-2 form-control" name="image" />
-        <input type="submit" class="btn btn-success p-2 m-2 float-end" />
+        <input required type="file" class="w-100 p-2 m-2 form-control" name="image" />
+        <input required type="submit" class="btn btn-success p-2 m-2 float-end" />
       </form>
     </div>
   </div>

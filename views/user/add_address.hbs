@@ -1,22 +1,22 @@
 {{!-- <form id="checkout-form" method="post">
   <div class="mb-3">
     <label class="form-label">Name</label>
-    <input type="text" name="name" class="form-control" />
+    <input required type="text" name="name" class="form-control" />
     <div id="emailHelp" class="form-text">We'll never share your email with
       anyone else.</div>
   </div>
   <div class="mb-3">
     <label class="form-label">Phone</label>
-    <input type="number" name="phone" class="form-control" />
+    <input required type="number" name="phone" class="form-control" />
   </div>
 
   <div class="mb-3">
     <label class="form-label">Locality</label>
-    <input type="text" name="locality" class="form-control" />
+    <input required type="text" name="locality" class="form-control" />
   </div>
   <div class="mb-3">
     <label class="form-label">City</label>
-    <input type="text" name="city" class="form-control" />
+    <input required type="text" name="city" class="form-control" />
   </div>
   <div class="mb-3">
     <label class="form-label">state</label>
@@ -31,7 +31,7 @@
   </div>
 
   <div class="form-check">
-    <input
+    <input required
       class="form-check-input"
       name="paymentMethod"
       type="radio"
@@ -43,7 +43,7 @@
     </label>
   </div>
   <div class="form-check">
-    <input
+    <input required
       class="form-check-input"
       name="paymentMethod"
       type="radio"
@@ -64,13 +64,13 @@
       <div class="container">
         <form action="" id="checkout-form" method="post" class="loginBox">
           <div class="d-flex">
-            <input
+            <input required
               type="text"
               class="w-100 p-2 m-2 form-control"
               name="name"
               placeholder="Name"
             />
-            <input
+            <input required
               type="number"
               class="w-100 p-2 m-2 form-control"
               name="phone"
@@ -78,13 +78,13 @@
             />
           </div>
           <div class="d-flex">
-            <input
+            <input required
               type="number"
               class="w-100 p-2 m-2 form-control"
               name="pincode"
               placeholder="Pin Code"
             />
-            <input
+            <input required
               type="text"
               class="w-100 p-2 m-2 form-control"
               name="locality"
@@ -97,7 +97,7 @@
               <option value="Kerala">Kerala</option>
               <option value="Tamil Nadu">Tamil Nadu</option>
             </select>
-            <input
+            <input required
               type="text"
               class="w-100 p-2 m-2 form-control"
               name="city" 
@@ -105,13 +105,13 @@
             />
           </div>
           <div class="d-flex">
-            <input
+            <input required
               type="text"
               class="w-100 p-2 m-2 form-control"
               name="houseName"
               placeholder="House Name"
             />
-            <input
+            <input required
               type="text"
               class="w-100 p-2 m-2 form-control"
               name="landmark"
@@ -119,7 +119,7 @@
             />
           </div>
           <div class="d-flex">
-            <input
+            <input required
               type="text"
               class="w-100 p-2 m-2 form-control"
               name="postOffice"
@@ -127,8 +127,8 @@
             />
           </div>
           <div class="d-flex mt-2">
-            <input type="reset" class="btn btn-danger p-2 m-2 w-100" />
-            <input type="submit" value="Save" class="btn btn-success p-2 m-2 w-100" />
+            <input required type="reset" class="btn btn-danger p-2 m-2 w-100" />
+            <input required type="submit" value="Save" class="btn btn-success p-2 m-2 w-100" />
           </div>
         </form>
       </div>
