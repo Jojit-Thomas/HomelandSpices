@@ -1,32 +1,45 @@
 <style>
-      .table > :not(:last-child) > :last-child > * {
-        border: none !important;
-      }
-      .h6-none {
-        margin: 0 !important;
-      }
-      .nos {
-        font-size: 0.625rem;
-        font-weight: 500;
-      }
-      .search {
-        width: 70%;
-        border-radius: 0.4rem;
-        border: 1px solid #5541db;
-      }
-      table {
-        display: table;
-        border-spacing: 0px 0.2rem;
-        border-collapse: separate;
-      }
-      table td {
-        width: 30%;
-      }
-      .table-container{
-        width: 100%;
-        overflow: scroll;
-      }
-    </style>
+  .table> :not(:last-child)> :last-child>* {
+    border: none !important;
+  }
+
+  .h6-none {
+    margin: 0 !important;
+  }
+
+  .nos {
+    font-size: 0.625rem;
+    font-weight: 500;
+  }
+
+  .search {
+    width: 70%;
+    border-radius: 0.4rem;
+    border: 1px solid #5541db;
+  }
+
+  #search {
+    border: none;
+    background-color: transparent;
+    resize: none;
+    outline: none;
+  }
+
+  table {
+    display: table;
+    border-spacing: 0px 0.2rem;
+    border-collapse: separate;
+  }
+
+  table td {
+    width: 30%;
+  }
+
+  .table-container {
+    width: 100%;
+    overflow: scroll;
+  }
+</style>
 {{!-- <section>
   <div class="container-fluid">
     <div class="container-fluid">
@@ -85,137 +98,99 @@
 </section> --}}
 
 
- <section class="container-fluid" >
-      <nav class="navbar navbar-expand-lg navbar-light flex-wrap">
-        <a class="navbar-brand col-lg-12" href="#"
-          ><h3 class="ms-4">Order List</h3></a
-        >
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul
-            class="navbar-nav me-auto mb-2 mb-lg-0 list-group-horizontal flex-wrap"
-          >
-            <li class="nav-item">
-              <a class="nav-link active mx-3" aria-current="page" href="#"
-                >All Items<span class="count">(10)</span></a
-              >
-            </li>
-            <li class="nav-item mx-3">
-              <a class="nav-link" href="#"
-                >Processing <span class="count">(10)</span></a
-              >
-            </li>
-            <li class="nav-item mx-3">
-              <a class="nav-link" href="#"
-                >Dispatched <span class="count">(10)</span></a
-              >
-            </li>
-            <li class="nav-item mx-3">
-              <a class="nav-link" href="#"
-                >Shipment <span class="count">(10)</span></a
-              >
-            </li>
-            <li class="nav-item mx-3">
-              <a class="nav-link" href="#"
-                >Delivered <span class="count">(10)</span></a
-              >
-            </li>
-            <li class="nav-item mx-3">
-              <a class="nav-link" href="#"
-                >Cancel Request <span class="count">(10)</span></a
-              >
-            </li>
-          </ul>
-        </div>
-      </nav>
-      <div class="table-container">
-        <table class="table mt-4 p-4">
-          <thead class="bg-white">
-            <tr>
-              <th scope="col" class="m-auto text-center align-middle">S.no</th>
-              
-              <th scope="col" class="d-flex justify-content-center">
-                <div class="search d-flex p-2">
-                  <i class="fa fa-search my-auto mx-1" aria-hidden="true"></i>
-                  <form action="">
-                    <input required
-                      type="text"
-                      placeholder="Search Here..."
-                      style="border: none; width: 100%"
-                    />
-                  </form>
-                </div>
-              </th>
-              {{!-- <th scope="col" class="m-auto text-center align-middle">Name</th> --}}
-              <th scope="col" class="m-auto text-center align-middle">Description</th>
-              <th scope="col" class="m-auto text-center align-middle">Price</th>
-              <th scope="col" class="m-auto text-center align-middle">
-                Image
-              </th>
-              <th scope="col" class="m-auto text-center align-middle">Options</th>
-            </tr>
-          </thead>
-          <tbody class="mt-3 m-auto text-center align-middle">
-            {{#each products}}
-            <tr class="bg-white">
-              <th class="" scope="row">{{inc @index}}</th>
-              <td class="">{{this.title}}</td>
-              <td class="">{{this.desc}}</td>
-              <td class="">{{this.price}}</td>
-              <td class=""><img
-                  src="/product_images/{{this._id}}.{{img_ext}}"
-                  width="50px"
-                  alt=""
-                /></td>
-              <td class="" style="white-space: nowrap;">
-                <a
-                  class="btn btn-primary"
-                  href="/admin/editProduct/{{this._id}}"
-                >Edit
-                </a>
-                <a
-                  class="btn btn-danger"
-                  href="/admin/deleteProduct/{{this._id}}"
-                  onclick="return confirm('Are you sure you want to delete {{this.name}} product?');"
-                >Delete
-                </a>
-              </td>
-            </tr>
-          {{/each}}
-  <!-- ===================================================================================================================== -->
-            {{!-- <tr class="bg-white my-1">
-              <th scope="row">
-                <div class="d-flex">
-                  <div
-                    style="width: 40px; height: 40px; background-color: gray"
-                    class="mx-2"
-                  ></div>
-                  <div>
-                    <h6 class="h6-none">Product Name</h6>
-                    <span class="nos">Quantity: 5</span>
-                  </div>
-                </div>
-              </th>
-              <td class="m-auto text-center align-middle">Mark</td>
-              <td class="m-auto text-center align-middle">Delivered</td>
-              <td class="m-auto text-center align-middle">5</td>
-              <td class="m-auto text-center align-middle">₹100</td>
-              <td class="m-auto text-center align-middle">₹500</td>
-            </tr> --}}
-  <!-- ===================================================================================================================== -->
-          </tbody>
-        </table>
-      </div>
-    </section>
+<section class="container-fluid">
+  <nav class="navbar navbar-expand-lg navbar-light flex-wrap">
+    <a class="navbar-brand col-lg-12" href="#">
+      <h3 class="ms-4">Order List</h3>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 list-group-horizontal flex-wrap">
+        <li class="nav-item">
+          <a class="nav-link active mx-3" aria-current="page" href="#">All Items<span class="count">(10)</span></a>
+        </li>
+        <li class="nav-item mx-3">
+          <a class="nav-link" href="#">Processing <span class="count">(10)</span></a>
+        </li>
+        <li class="nav-item mx-3">
+          <a class="nav-link" href="#">Dispatched <span class="count">(10)</span></a>
+        </li>
+        <li class="nav-item mx-3">
+          <a class="nav-link" href="#">Shipment <span class="count">(10)</span></a>
+        </li>
+        <li class="nav-item mx-3">
+          <a class="nav-link" href="#">Delivered <span class="count">(10)</span></a>
+        </li>
+        <li class="nav-item mx-3">
+          <a class="nav-link" href="#">Cancel Request <span class="count">(10)</span></a>
+        </li>
+        <li class=" float-end">
+          <a href="/admin/addProduct">
+            <div class="float-end btn text-white" style="background-color: var(--blurple);">Add Product</div>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="table-container">
+    <table class="table mt-4 p-4">
+      <thead class="bg-white">
+        <tr>
+          <th scope="col" class="m-auto text-center align-middle">S.no</th>
 
-<link rel="stylesheet" href="/stylesheets/datatable.css">
+          <th scope="col" class="d-flex justify-content-center">
+            <div class="search d-flex p-2">
+              <i class="fa fa-search my-auto mx-1" aria-hidden="true"></i>
+              <form action="">
+                <input type="text" placeholder="Search Here..." id="search" style="border: none; width: 100%" />
+              </form>
+            </div>
+          </th>
+          {{!-- <th scope="col" class="m-auto text-center align-middle">Name</th> --}}
+          <th scope="col" class="m-auto text-center align-middle">Description</th>
+          <th scope="col" class="m-auto text-center align-middle">Price</th>
+          <th scope="col" class="m-auto text-center align-middle">
+            Image
+          </th>
+          <th scope="col" class="m-auto text-center align-middle">Options</th>
+        </tr>
+      </thead>
+      <tbody class="mt-3 m-auto text-center align-middle" id="table">
+        {{#each products}}
+        <tr class="bg-white">
+          <th class="" scope="row">{{inc @index}}</th>
+          <td class="">{{this.title}}</td>
+          <td class="">{{this.desc}}</td>
+          <td class="">{{this.price}}</td>
+          <td class=""><img src="/product_images/{{this._id}}.{{img_ext}}" width="50px" alt="" /></td>
+          <td class="" style="white-space: nowrap;">
+            <a class="btn btn-primary" href="/admin/editProduct/{{this._id}}">Edit
+            </a>
+            <a class="btn btn-danger" href="/admin/deleteProduct/{{this._id}}"
+              onclick="return confirm('Are you sure you want to delete {{this.name}} product?');">Delete
+            </a>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<script>
+  $(document).ready(function () {
+    $("#search").on("keyup", function () {
+      var value = $(this).val().toLowerCase();
+      $("#table tr").filter(function () {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+    });
+  });
+</script>
+
+
+
+{{!-- <link rel="stylesheet" href="/stylesheets/datatable.css"> --}}

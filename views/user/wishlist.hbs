@@ -1,33 +1,121 @@
-<link rel="stylesheet" href="/stylesheets/user/home.css" />
+ 
+<style>
+  @media screen and (min-width: 768px) {
+  .outer {
+    padding: 3rem;
+  }
+}
 
-<section>
-  <div class="container mt-5 vh-100">
-    <div class="row g-3 d-flex">
-      {{! <div class="col d-flex "> }}
+@media screen and (max-width: 768px) {
+  .outer {
+    padding: 0.3rem;
+  }
 
-      {{#each products}}
-        <div class="card col-10 col-sm-6 col-md-4 col-lg-3">
-            <a href="/product/{{this.wishlist._id}}" class="h-75">
-            <img
-            src="/product_images/{{this.wishlist._id}}.{{this.wishlist.img_ext}}"
-            alt="product image"
-            class="img-pro h-100"
-          />
-          </a>
-          <p class="pro-text">{{this.wishlist.title}}</p>
-          <div class="d-flex justify-content-between">
-            <span class="pro-price my-auto">From :${{this.wishlist.price}}</span>
-            {{!-- <a href="/wishlist/remove/{{this.wishlist._id}}"></a> --}}
-            <img onclick="removeFromWishlist('{{this.wishlist._id}}')" src="/images/icons/remove.svg" width="20px" height="20px" class="me-2 mb-2" alt="">
+  .proImg {
+    width:
+      70% !important;
+    margin-left: 10% !important;
+    height: auto;
+ object-fit: cover;
+  }
+
+  .title {
+    font-size: 1rem;
+    word-wrap: break-word;
+  }
+
+  .desc {
+    font-size: 0.8rem;
+    word-wrap: break-word;
+  }
+  .cart{
+    padding: 0.1rem !important;
+  }
+}
+@media screen and (max-width: 368px) {
+  .removeText {
+    display: none !important ;
+  }
+  .removeIcon {
+    display: block !important;
+  }
+}
+</style>
+
+<div class="container-fluid h-100">
+  <div class="row d-flex justify-content-center align-items-center h-100">
+    <div class="col-12">
+      <div class="card border border-0">
+        <div class="card-body p-0">
+          <div class="row g-0">
+            <div class="col-lg-10 col-sm-12 col-12 outer">
+              <div class="outer">
+                <div
+                  class="d-flex justify-content-between align-items-center mb-5"
+                >
+                  <h1 class="fw-bold mb-0 text-black">Wishlist</h1>
+                  <h6 class="mb-0 text-muted">{{wishListItems.length}} items</h6>
+                </div>
+                <hr class="my-4" />
+                {{#each wishListItems}}
+                  <div id="div{{this.product._id}}">
+                    <div class="d-flex" >
+                    <div
+                      class="col-sm-4 col-md-4 col-lg-5 col-xl-3 col-4 m-auto"
+                    >
+                      <img
+                        src="/product_images/{{this.product._id}}.{{this.product.img_ext}}"
+                        class="imgCrop m-auto ms-4 proImg"
+                        class="card-img-bottom"
+                        alt="product Image"
+                      />
+                    </div>
+                    <div class="d-flex justify-content-between col-8 col-sm-8 flex-wrap my-auto"
+                    >
+                      <div class="col-11 col-sm-12 col-md-10 col-lg-10 col-xl-5 my-auto"
+                      >
+                        <a href="/orders/details/{{this._id}}/{{this.product._id}}" class="text-decoration-none"><h5
+                          class="text-dark  title"
+                        >{{this.product.title}}</h5></a>
+                        <p
+                          class="text-muted mb-0 desc"
+                        >{{this.product.desc}} <br>Purchased On : {{this.date}}</p>
+                      </div>
+                      <div class="col-sm-2 col-md-4 col-lg-4 col-xl-2 my-auto "
+                      >
+                        <h6 class="mb-0">₹{{this.product.price}}</h6>
+                      </div>
+                      <div class="col-sm-2 col-md-2 col-lg-0 col-xl-2 my-auto ">
+                      <button
+                        class="text-center m-auto align-items-end d-flex text-danger btn-none removeText"
+                        onclick="removeFromWishlist('{{this.product._id}}')"
+                      >Remove</button>
+                      </div>
+                      <div class="col-sm-2 col-md-4 col-lg-4 col-xl-2 my-auto ">
+                        <div onclick="addToCart('{{this.product._id}}')" class="cart btn bg-btn text-white text-uppercase">cart +</div>
+                      </div>
+                    <img class="d-none d-sm-none removeIcon col-sm-1 my-auto" onclick="removeFromWishlist('{{this.product._id}}')" src="/images/icons/remove.svg" width="18px" height="18px"  alt="">
+                    </div>
+                  </div>
+                  <hr class="my-4" />
+                  </div>
+                {{/each}}
+
+                <div class="pt-5">
+                  <h6 class="mb-0"><a href="/" class="text-body"><i
+                        class="fas fa-long-arrow-alt-left me-2"
+                      ></i>Back to shop</a></h6>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      {{/each}}
-      {{#unless products}}
-        <h1>No Products are available</h1>
-      {{/unless}}
+      </div>
     </div>
-  </div> 
-</section>
+  </div>
+</div>
+
+
 
 
 <script>
@@ -41,7 +129,25 @@
       },
       success: function(data) {
         console.log(data);
-        window.location.reload();
+        $(`#div${productId}`).remove();
+        //window.location.reload();
+      },
+      error: function(data) {
+        console.log(data);
+      }
+    })
+  }
+  function addToCart(productId) {
+    $.ajax({
+      type: "POST",
+      url: "/cart/add",
+      data: {
+        productId: productId
+      },
+      success: function(data) {
+        console.log(data);
+        removeFromWishlist(productId);
+        //window.location.reload();
       },
       error: function(data) {
         console.log(data);

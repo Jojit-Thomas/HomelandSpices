@@ -39,3 +39,10 @@
     margin: auto;
   }
 }
+.toast-success {
+  /* background-color: #00b7ff !important; */
+  opacity: 1 !important;
+}
+.toast-container {
+  
+}

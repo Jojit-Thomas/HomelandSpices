@@ -52,10 +52,10 @@ module.exports = {
               from: PRODUCT_COLLECTION,
               localField: "wishlistItems",
               foreignField: "_id",
-              as: "wishlist",
+              as: "product",
             },
           },
-          { $unwind: "$wishlist" },
+          { $unwind: "$product" },
         ])
         .then((result) => {
           console.log(result);

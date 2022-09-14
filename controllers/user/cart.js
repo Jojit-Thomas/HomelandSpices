@@ -11,8 +11,8 @@ module.exports = {
   getAddToCart: (req, res) => {
     //take the user details from cookie
     let user = req.cookies.user ? req.cookies.user : null;
-    addToCart(user.userId, req.params.proId).then(() => {
-      res.redirect("/cart");
+    addToCart(user.userId, req.body.productId).then(() => {
+      res.status(200)
     });
   },
   getCartPage: (req, res) => {
@@ -40,7 +40,7 @@ module.exports = {
     let user = req.cookies.user ? req.cookies.user : null;
     removeFromCart(cart, product).then((data) => {
       if (data) {
-        res.redirect(`/cart/${user.userId}`);
+        res.redirect("/cart");
       } else {
         res.send("some error occured");
       }

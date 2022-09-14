@@ -33,7 +33,7 @@ $(document).ready(function () {
     const phone = $("#phone").val();
     console.log("sendOtp clicked");
     $.ajax({
-      url: "/getOtp",
+      url: "/otp/get",
       data: {
         phone: phone,
       },
@@ -45,7 +45,7 @@ $(document).ready(function () {
         console.log(response.message);
         $("#success").text(response.message);
         $("#maxAge").show();
-        $("#sendBtn").val('Resend Otp')
+        $("#sendBtn").text('Resend Otp')
       },
       error: function (err) {
         console.log(err);

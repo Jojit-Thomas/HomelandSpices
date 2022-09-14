@@ -60,21 +60,25 @@ router.post("/signup", stopAuthenticate, postSignUp);
 router.get("/signin", stopAuthenticate, getSignIn);
 router.post("/signin", stopAuthenticate, postSignIn);
 router.get("/blocked", stopAuthenticate, getBlocked);
-router.post("/getOtp", stopAuthenticate, postGetOtp);
+router.post("/otp/get", stopAuthenticate, postGetOtp);
 router.post("/verifyOtp", stopAuthenticate, postVerifyOtp);
 router.get("/otpSigninPage", stopAuthenticate, getOtpSigninPage);
 //=========================MAIN ROUTES =========================
 router.get("/", verifyLogin, getHome);
 router.get("/product/:id", verifyLogin, getProductPage);
+router.get("/shop", verifyLogin, (req, res) => {
+  let user = req.cookies.user ? req.cookies.user : null;
+  res.render("user/shop", {user: user});
+})
 //=========================CART ROUTES =========================
 router.get("/cart", verifyLogin, getCartPage);
-router.get("/cart/add/:proId", verifyLogin, getAddToCart);
+router.post("/cart/add", verifyLogin, getAddToCart);
 router.post("/cart/remove", verifyLogin, getRemoveFromCart);
 router.post("/cart/changeQuantity", verifyLogin, getCartChangeQuantity);
 router.get("/categories/:categoryId", verifyLogin, getSortCategory);
 //=========================WISHLIST ROUTES =========================
 router.get("/wishlist", verifyLogin, getWishlistPage);
-router.get("/wishlist/add/:productId", verifyLogin, getAddToWishlist); 
+router.post("/wishlist/add", verifyLogin, getAddToWishlist); 
 router.post("/wishlist/remove", verifyLogin, getRemoveFromWishlist);
 //=========================ADDRESS ROUTES =========================
 router.get("/address", verifyLogin, getAddressPage);

@@ -64,7 +64,6 @@ module.exports = {
               as: "productDetails",
             },
           },
-   
           {
             $set: {
               date: {

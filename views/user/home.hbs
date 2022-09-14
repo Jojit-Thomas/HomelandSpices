@@ -1,23 +1,36 @@
 <link rel="stylesheet" href="/stylesheets/user/home.css" />
-
-<div class="bannerSec container-fluid vh-100 d-flex"
-  style="background-image:url('/banners/{{banner.img_name}}.{{banner.img_ext}}');">
+<div
+  class="bannerSec container-fluid vh-100 d-flex "
+  style="background-image:url('/banners/{{banner.img_name}}.{{banner.img_ext}}');"
+>
   <div class="col-sm-9 col-lg-6 my-auto">
     <h1 class="fw-bold fs-48">Order Spices to your door</h1>
     <div class="d-flex" style="height: 3.5rem">
       <div class="col-sm-7 h-100 ms-2 bg-white">
-        <input required type="text" class="form-control h-100 border border-0" placeholder="What you are looking for" />
+        <input
+          type="text"
+          id="search-input"
+          class="form-control h-100 border border-0"
+          placeholder="What you are looking for"
+          onkeyup="search()"
+        />
       </div>
       <div class="col-sm-3 ms-2 bg-white">
-        <select class="form-select h-100 border border-0" aria-label="Category Selection">
+        <select
+          class="form-select h-100 border border-0"
+          aria-label="Category Selection"
+        >
           <option selected>Category</option>
           {{#each categories}}
-          <option name="category" value="{{this._id}}">{{this.title}}</option>
+            <option name="category" value="{{this._id}}">{{this.title}}</option>
           {{/each}}
         </select>
       </div>
-      <div class="col-sm-2 ms-2 ">
-        <a href="/search" class="btn btn-dark w-100 h-100 d-flex justify-content-center">
+      <div class="col-sm-2 ms-2">
+        <a
+          href="/search"
+          class="btn btn-dark w-100 h-100 d-flex justify-content-center"
+        >
           <p class="m-auto fs-5">
             Search
           </p>
@@ -29,40 +42,86 @@
   </div>
 </div>
 
-<section>
-  <div class="container mt-5 vh-100">
+<section class="bg-white">
+  <div class="container mt-5 vh-100 ">
     <div class="row g-3 d-flex">
-     {{!-- {{#each wishlist.wishlistItems}}
+      {{!-- {{#each wishlist.wishlistItems}}
           <h1>{{this}}</h1>
           {{#ifEquals ../id "{{this}}"}}
           <h1>In wishlist{{this}}</h1>
           {{/ifEquals}}
           {{/each}} --}}
       {{#each products}}
-      <div class="card col-10 col-sm-6 col-md-4 col-lg-3">
-        <a href="/product/{{this._id}}" class="h-75">
-          <img src="/product_images/{{this._id}}.{{this.img_ext}}" loading="lazy" alt="product image" class="img-pro h-100" />
-        </a>
-        <p class="pro-text">{{this.title}}</p>
-        <div class="d-flex justify-content-between">
-          <span class="pro-price my-auto">From :${{this.price}}</span>
-          
-          <a href="/wishlist/add/{{this._id}}"><img src="/images/icons/heart.svg" loading="lazy" width="20px" height="20px"
-              class="me-3 mb-3" alt=""></a>
+        <div class="card col-10 col-sm-6 col-md-4 col-lg-3">
+          <a href="/product/{{this._id}}" class="h-75">
+            <img
+              src="/product_images/{{this._id}}.{{this.img_ext}}"
+              loading="lazy"
+              alt="product image"
+              class="img-pro h-100"
+            />
+          </a>
+          <p class="pro-text">{{this.title}}</p>
+          <div class="d-flex justify-content-between">
+            <span class="pro-price my-auto">From :${{this.price}}</span>
+            <img
+             onclick="addToWishlist('{{this._id}}')"
+                src="/images/icons/heart.svg"
+                loading="lazy"
+                width="20px"
+                height="20px"
+                class="me-3 mb-3"
+                alt=""
+              />
+          </div>
         </div>
-      </div>
       {{/each}}
       {{#unless products}}
-      <h1>No Products are available</h1>
+        <h1>No Products are available</h1>
       {{/unless}}
     </div>
   </div>
 </section>
 
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
 
 <script>
-  function addToWishlist(){
-    
+  function addToWishlist(productId){
+    toastr.options = {
+      "progressBar": true,
+      "positionClass": "toast-bottom-center",
+      "timeOut": "2000",
+      "hideDuration": "1",
+    }
+    toastr.success('Successfully added to the Wishlist')
+    $.ajax({
+      url: "/wishlist/add",
+      method: "POST",
+      data: {
+        productId: productId
+      },
+      success: function(data){
+        console.log(data);
+      },error: function (err) {
+        console.log(err);
+      }
+    })
   }
+  function search () {
+    const input = document.querySelector("#search-input");
+    const cards = document.getElementsByClassName("card");
+    let filter = input.value.toLowerCase();
+    for (let i = 0; i < cards.length; i++) {
+        let title = cards[i].querySelector(".pro-text")
+        if (title.innerText.toLowerCase().indexOf(filter) > -1) {
+            console.log(title)
+            cards[i].classList.remove("d-none")
+        } else {
+            cards[i].classList.add("d-none")
+        }
+    }
+}
 </script>
+
