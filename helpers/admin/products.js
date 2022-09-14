@@ -10,7 +10,7 @@ module.exports = {
           .create({
             title: title,
             desc: description,
-            category: category,
+            category: Types.ObjectId(category),
             price: Number(price),
             stocks: Number(stocks),
             img_ext: img_ext,

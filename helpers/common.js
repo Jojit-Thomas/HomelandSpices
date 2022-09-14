@@ -27,4 +27,13 @@ module.exports = {
       });
     });
   },
+  getCategory: (id) => {
+    return new Promise((resolve, reject) => {
+      console.log(id)
+      products_model.find({category: Types.ObjectId(id)}).then((category) => {
+        console.log("IN category helper",category);
+        resolve(category);
+      })
+    })
+  },
 };

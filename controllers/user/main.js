@@ -1,4 +1,9 @@
-const { getAllProducts, getProduct, getAllCategories } = require("../../helpers/common");
+const {
+  getAllProducts,
+  getProduct,
+  getAllCategories,
+  getCategory,
+} = require("../../helpers/common");
 const { getBannerImage } = require("../../helpers/user/banners");
 const { getAllWishlist } = require("../../helpers/user/wishlist");
 
@@ -34,5 +39,11 @@ module.exports = {
         res.render("user/shop", { products: products, categories, user });
       });
     });
+  },
+  getShopPage: async (req, res) => {
+    let user = req.cookies.user ? req.cookies.user : null;
+    let products = await getAllProducts();
+    let categories = await getAllCategories()
+    res.render("user/shop", { user: user, products: products, categories: categories });
   },
 };

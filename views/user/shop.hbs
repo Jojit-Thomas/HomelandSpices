@@ -1,0 +1,132 @@
+<link rel="stylesheet" href="/stylesheets/user/home.css" />
+
+<style>
+  .fa-2x { font-size: 1.5rem; } input { border:none; border-bottom: 1px solid
+  var(--blurple); background-color:transparent; box-shadow: none; height: 2rem;
+  font-size: larger; } /*.sortOptions{ width: 10vw } @media screen and
+  (max-width: 768px) { .sortOptions{ width: 20vw !important; } }*/
+</style>
+
+<section>
+  <div class="container-fluid mt-5">
+    <div class="w-100 text-center">
+      <h1>Search for a Product</h1>
+    </div>
+    <div class="w-100 d-flex justify-content-center mt-4">
+      <div
+        class="d-flex justify-content-between search-bar"
+        style="width: calc(10rem + 15vw);;"
+      >
+        <input
+          type="text"
+          name="search"
+          placeholder="Search here..."
+          id=""
+          style="width: calc(100% - 30px);"
+        />
+        <i class="fa-solid fa-magnifying-glass fa-2x"></i>
+      </div>
+    </div>
+    <div class="container d-flex flex-wrap justify-content-between mt-5">
+      <div class="d-flex col-12 col-md-6">
+        <span
+          class="text-center d-flex px-1 px-sm-4 col-sm-4 col-4 sortOptions"
+        >
+          <input type="checkbox" checked name="stock" id="" />
+          <span class="my-auto mx-3">Stock</span>
+        </span>
+        <span
+          class="text-center d-flex justify-content-between px-1 px-sm-4 col-sm-4 col-4 sortOptions"
+        >
+          <span class="my-auto">Price</span>
+          <i class="fa-solid fa-angle-down my-auto"></i>
+        </span>
+        <span
+          class="text-center d-flex justify-content-between px-1 px-sm-4 col-sm-4 col-4 sortOptions"
+        >
+          <span class="my-auto">Sort</span>
+          <i class="fa-solid fa-angle-down my-auto"></i>
+        </span>
+      </div>
+      <div class="d-flex col-12 col-md-6">
+        <span
+          class="text-center d-flex justify-content-between px-1 px-sm-4 col-sm-4 col-4 sortOptions"
+        >
+          <span class="my-auto">Rating</span>
+          <i class="fa-solid fa-angle-down my-auto"></i>
+        </span>
+        <span
+          class="text-center d-flex justify-content-between px-1 px-sm-4 col-sm-4 col-4 sortOptions"
+        >
+          <span class="my-auto">Latest</span>
+          <i class="fa-solid fa-angle-down my-auto"></i>
+        </span>
+        <span
+          class="text-center d-flex justify-content-between px-1 px-sm-4 col-sm-4 col-4 sortOptions"
+          data-bs-toggle="dropdown"
+        >
+          <span class="my-auto">Category</span>
+          <i class="fa-solid fa-angle-down my-auto"></i>
+        </span>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+          {{#each categories}}
+            <li><a class="dropdown-item" href="/categories/{{this._id}}">{{this.title}}</a></li>
+          {{/each}}
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="bg-white">
+  <div class="container mt-5 vh-100">
+    <div class="row g-3 d-flex">
+      {{#each products}}
+        <div class="card col-10 col-sm-6 col-md-4 col-lg-3">
+          <a href="/product/{{this._id}}" class="h-75">
+            <img
+              src="/product_images/{{this._id}}.{{this.img_ext}}"
+              loading="lazy"
+              alt="product image"
+              class="img-pro h-100"
+            />
+          </a>
+          <p class="pro-text">{{this.title}}</p>
+          <div class="d-flex justify-content-between">
+            <span class="pro-price my-auto">From :${{this.price}}</span>
+            <img
+              onclick="addToWishlist('{{this._id}}')"
+              src="/images/icons/heart.svg"
+              loading="lazy"
+              width="20px"
+              height="20px"
+              class="me-3 mb-3"
+              alt=""
+            />
+          </div>
+        </div>
+      {{/each}}
+      {{#unless products}}
+        <h1>No Products are available</h1>
+      {{/unless}}
+    </div>
+  </div>
+</section>
+
+<script
+  src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
+></script>
+<link
+  rel="stylesheet"
+  href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
+/>
+
+<script>
+  function addToWishlist(productId){ toastr.options = { "progressBar": true,
+  "positionClass": "toast-bottom-center", "timeOut": "2000", "hideDuration":
+  "1", } toastr.success('Successfully added to the Wishlist') $.ajax({ url:
+  "/wishlist/add", method: "POST", data: { productId: productId }, success:
+  function(data){ console.log(data); },error: function (err) { console.log(err);
+  } }) }
+</script>

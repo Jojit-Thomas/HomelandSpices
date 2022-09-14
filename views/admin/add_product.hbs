@@ -7,10 +7,10 @@
       <input required type="text" class="w-100 p-2 m-2 form-control" name="title" placeholder="Title" />
       <input required type="text" class="w-100 p-2 m-2 form-control" name="description" placeholder="Description" />
 
-      <select class="form-select w-100 p-2 m-2" aria-label="Category Selection">
+      <select name="category" class="form-select w-100 p-2 m-2" aria-label="Category Selection">
         <option selected>Category</option>
         {{#each categories}}
-        <option name="category" value="{{this._id}}">{{this.title}}</option>
+        <option value="{{this._id}}">{{this.title}}</option>
         {{/each}}
       </select>
       <input required type="number" class="w-100 p-2 m-2 form-control" name="price" placeholder="Price" />

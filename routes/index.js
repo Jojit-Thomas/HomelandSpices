@@ -24,11 +24,11 @@ const {
   getHome,
   getProductPage,
   getSortCategory,
+  getShopPage,
 } = require("../controllers/user/main");
 const router = express.Router();
 
 const {
-  getCheckoutPage,
   postCheckout,
   getOrderPage,
   getOrderDetailsPage,
@@ -40,6 +40,7 @@ const {
   getWishlistPage,
   getRemoveFromWishlist,
 } = require("../controllers/user/wishlist");
+const { getAllCategories, getCategory } = require("../helpers/common");
 const { getAddress } = require("../helpers/user/address");
 
 // router.use((req, res, next) => {
@@ -66,10 +67,7 @@ router.get("/otpSigninPage", stopAuthenticate, getOtpSigninPage);
 //=========================MAIN ROUTES =========================
 router.get("/", verifyLogin, getHome);
 router.get("/product/:id", verifyLogin, getProductPage);
-router.get("/shop", verifyLogin, (req, res) => {
-  let user = req.cookies.user ? req.cookies.user : null;
-  res.render("user/shop", {user: user});
-})
+router.get("/shop", verifyLogin, getShopPage)
 //=========================CART ROUTES =========================
 router.get("/cart", verifyLogin, getCartPage);
 router.post("/cart/add", verifyLogin, getAddToCart);
@@ -87,9 +85,8 @@ router.get("/address/add", verifyLogin, getNewAddressPage);
 router.post("/address/add", verifyLogin, postNewAddress);
 //=========================ORDER ROUTES =========================
 router.get("/orders", verifyLogin, getOrderPage);
-router.get("/order/cancel/:orderId/:productId", verifyLogin, getCancelProduct);
+router.get("/orders/cancel/:orderId/:productId", verifyLogin, getCancelProduct);
 router.get("/orders/details/:orderId/:productId", verifyLogin, getOrderDetailsPage);
 router.get("/payment", verifyLogin, getPaymentPage)
 router.post("/checkout", verifyLogin, postCheckout);
-
 module.exports = router;

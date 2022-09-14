@@ -4,7 +4,7 @@ const { PRODUCT_COLLECTION } = require("../config/collections");
 const productsSchema = new mongoose.Schema({
   title: String,
   desc: String,
-  category: String,
+  category: mongoose.Schema.Types.ObjectId,
   price: Number,
   stocks: Number,
   img_ext: String,
