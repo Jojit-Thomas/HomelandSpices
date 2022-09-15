@@ -1,12 +1,11 @@
 const {
   getAllUsers,
   deleteUser,
-  getUser,
-  updateUser,
   addUser,
   blockUnblock,
 } = require("../../helpers/admin/users");
 const bcrypt = require("bcrypt");
+const { getUser, updateUser } = require("../../helpers/common");
 module.exports = {
   getUsers: (req, res) => {
     getAllUsers().then((users) => {
@@ -30,6 +29,7 @@ module.exports = {
     });
   },
   postEditUser: (req, res) => {
+    console.log(req.body);
     bcrypt.hash(req.body.password, 10).then((pass) => {
       req.body.password = pass;
       updateUser(req.params.id, req.body).then((state) => {

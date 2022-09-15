@@ -20,48 +20,6 @@ module.exports = {
       });
     });
   },
-  getUser: (id) => {
-    return new Promise((resolve, reject) => {
-      user_model.findOne({ _id: Types.ObjectId(id) }).then((user) => {
-        resolve(user);
-      });
-    });
-  },
-  updateUser: (id, body) => {
-    return new Promise((resolve, reject) => {
-      const { name, email, phone, password } = body;
-      let response = {};
-      user_model
-        .findOne({
-          $and: [{ _id: { $ne: Types.ObjectId(id) } }, { email: email }],
-        })
-        .then((user) => {
-          if (user) {
-            response.status = false;
-            response.error = "Email already registered";
-            resolve(response);
-          } else {
-            user_model
-              .updateOne(
-                { _id: Types.ObjectId(id) },
-                {
-                  $set: {
-                    name: name,
-                    email: email,
-                    phone: phone,
-                    password: password,
-                    isAllowed: true,
-                  },
-                }
-              )
-              .then((done) => {
-                response.status = true;
-                resolve(response);
-              });
-          }
-        });
-    });
-  },
   addUser: (data) => {
     console.log(data);
     data.email = data.email.toLowerCase();

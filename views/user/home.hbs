@@ -95,7 +95,6 @@
       "timeOut": "2000",
       "hideDuration": "1",
     }
-    toastr.success('Successfully added to the Wishlist')
     $.ajax({
       url: "/wishlist/add",
       method: "POST",
@@ -103,7 +102,7 @@
         productId: productId
       },
       success: function(data){
-        console.log(data);
+        toastr.success('Successfully added to the Wishlist')
       },error: function (err) {
         console.log(err);
       }

@@ -1,24 +1,24 @@
 // const { db } = require("../../config/connection");
 const bcrypt = require("bcrypt");
 const user_model = require("../../model/user_model.js");
+const { generateBcrypt } = require("../bcrypt.js");
 
 module.exports = {
   doSignUp: (data) => {
     let { name, email, phone, password } = data;
     data.email = data.email.toLowerCase();
-    return new Promise(async (resolve, reject) => {
+    return new Promise( (resolve, reject) => {
       let response = {};
       console.log(data.phone, data.email)
       // Checking the phone number and email is unique
-      user_model.findOne({ $or:[{phone: data.phone}, {email: data.email}]  }).then((dbValue) => {
+      user_model.findOne({ $or:[{phone: data.phone}, {email: data.email}]  }).then(async(dbValue) => {
         console.log(dbValue);
         if (dbValue) {
           response.status = false;
           response.error = "phone already registered";
           resolve(response);
         } else {
-          bcrypt.hash(data.password, 10).then((result) => {
-            password = result;
+            let password = await generateBcrypt(data.password);
             delete data.confirmPassword;
             user_model
               .create({
@@ -34,7 +34,6 @@ module.exports = {
                 response.status = true;
                 resolve(response);
               });
-          });
         }
       });
     });
@@ -52,6 +51,7 @@ module.exports = {
             // console.log('blocked')
             resolve(response);
           } else {
+            console.log(data.password,"    ", user.password);
             bcrypt.compare(data.password, user.password).then((status) => {
               if (status) {
                 console.log("Login Success");

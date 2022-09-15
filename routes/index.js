@@ -35,6 +35,7 @@ const {
   getCancelProduct,
 } = require("../controllers/user/orders");
 const { getPaymentPage } = require("../controllers/user/payment");
+const { getProfilePage, postEditUser, postChangePassword, getChangePassword } = require("../controllers/user/user");
 const {
   getAddToWishlist,
   getWishlistPage,
@@ -68,6 +69,10 @@ router.get("/otpSigninPage", stopAuthenticate, getOtpSigninPage);
 router.get("/", verifyLogin, getHome);
 router.get("/product/:id", verifyLogin, getProductPage);
 router.get("/shop", verifyLogin, getShopPage)
+router.get("/user/profile", verifyLogin, getProfilePage)
+router.post("/user/edit", verifyLogin, postEditUser)
+router.get("/user/password/reset", verifyLogin, getChangePassword)
+router.post("/user/password/reset", verifyLogin, postChangePassword)
 //=========================CART ROUTES =========================
 router.get("/cart", verifyLogin, getCartPage);
 router.post("/cart/add", verifyLogin, getAddToCart);

@@ -91,6 +91,7 @@ module.exports = {
               $project: {
                 cartItems: 1,
                 total: 1,
+                "cart.price": 1,
               },
             },
           ])
@@ -98,6 +99,7 @@ module.exports = {
             console.log("total is : ", data);
             data.map((item) => {
               item.cartItems.total = item.total;
+              item.cartItems.price = item.cart.price;
               item.cartItems.status = "Order Placed";
             });
             let products = [];
