@@ -99,6 +99,7 @@ module.exports = {
             console.log("total is : ", data);
             data.map((item) => {
               item.cartItems.total = item.total;
+              item.cartItems.finalTotal = item.total;
               item.cartItems.price = item.cart.price;
               item.cartItems.status = "Order Placed";
             });
@@ -146,66 +147,13 @@ module.exports = {
   },
   getOrders: (userId) => {
     return new Promise((resolve, reject) => {
+      console.log(userId);
       order_model
         .aggregate([
           {
             $match: {
               userId: Types.ObjectId(userId),
             },
-          },
-          {
-            $unwind: "$products",
-          },
-          {
-            $lookup: {
-              from: PRODUCT_COLLECTION,
-              localField: "products.productId",
-              foreignField: "_id",
-              as: "productDetails",
-            },
-          },
-          {
-            $unwind: "$productDetails",
-          },
-          {
-            $sort: {
-              date: -1,
-            },
-          },
-        ])
-        .then((data) => {
-          data[0] ? (data[0].date = data[0].date.toLocaleDateString()) : false;
-          resolve(data);
-        });
-    });
-  },
-  getOrderDetails: (orderId, productId) => {
-    return new Promise((resolve, reject) => {
-      order_model
-        .aggregate([
-          {
-            $match: {
-              _id: Types.ObjectId(orderId),
-            },
-          },
-          {
-            $unwind: "$products",
-          },
-          {
-            $match: {
-              "products.productId": Types.ObjectId(productId),
-            },
-          },
-          {
-            $lookup: {
-              from: PRODUCT_COLLECTION,
-              localField: "products.productId",
-              foreignField: "_id",
-              as: "productDetails",
-            },
-          },
-          {
-            $unwind: "$productDetails",
           },
           {
             $lookup: {
@@ -216,12 +164,70 @@ module.exports = {
             },
           },
           {
-            $unwind: "$address",
+            $lookup: {
+              from: PRODUCT_COLLECTION,
+              localField: "products.productId",
+              foreignField: "_id",
+              as: "productDetails",
+            },
+          },
+          {
+            $set: {
+              date: {
+                $dateToString: { format: "%d/%m/%Y -- %H:%M", date: "$date" },
+              },
+            },
+          },
+          {
+            $set: {
+              productDetails : {$sortArray: { input: "$productDetails", sortBy: { _id: 1 } }}
+            }
+          },
+          // {
+          //   $sort: { }
+          // }
+        ])
+        .then((data) => {
+          console.log(data)
+          resolve(data);
+        });
+    });
+  },
+
+  getOrderDetails: (orderId, productId) => {
+    return new Promise((resolve, reject) => {
+      order_model
+        .aggregate([
+          {
+            $match: {
+              _id: Types.ObjectId(orderId),
+            },
+          },
+          {
+            $lookup: {
+              from: PRODUCT_COLLECTION,
+              localField: "products.productId",
+              foreignField: "_id",
+              as: "productDetails",
+            },
+          },
+          {
+            $set: {
+              productDetails : {$sortArray: { input: "$productDetails", sortBy: { _id: 1 } }}
+            }
+          },
+          {
+            $lookup: {
+              from: ORDER_ADDRESS_COLLECTION,
+              localField: "deliveryDetails",
+              foreignField: "_id",
+              as: "address",
+            },
           },
         ])
         .then((data) => {
-          console.log(data);
-          resolve(data);
+          console.log(data[0]);
+          resolve(data[0]);
         });
     });
   },
@@ -237,7 +243,8 @@ module.exports = {
           {
             $set: {
               "products.$.status": "cancelled",
-            },
+              "products.$.finalTotal": "0",
+            }, 
           }
         )
         .then((data) => {
@@ -246,6 +253,26 @@ module.exports = {
         });
     });
   },
+  // totalOrderAmount: (orderId) => {
+  //   return new Promise((resolve, reject) => {
+  //     console.log(orderId);
+  //     order_model
+  //       .aggregate([
+  //         {$match: { _id: Types.ObjectId(orderId)}},
+  //         {
+  //           $project: {
+  //             _id : null,
+  //             totalAmount: "$products.$.finalTotal"//this doesn't work
+  //           }
+  //         }
+  //       ])
+  //       .then((data) => {
+  //         console.log("total is : ",data[0].totalAmount);
+  //         resolve();
+  //       });
+  //   });
+  // },
+
   // addOrderProducts: (userId, products) => { 
   //   return new Promise((resolve, reject) => {
   //     delete products._id; 

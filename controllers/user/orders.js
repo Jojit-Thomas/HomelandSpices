@@ -13,6 +13,7 @@ const {
   cancelOrders,
   getOrderDetails,
   addOrderProducts,
+  totalOrderAmount,
 } = require("../../helpers/user/order");
 module.exports = {
   postCheckout: async (req, res) => {
@@ -53,16 +54,18 @@ module.exports = {
   },
   getOrderDetailsPage: (req, res) => {
     let user = req.cookies.user ? req.cookies.user : null;
+    console.log(req.params)
     const { orderId, productId } = req.params;
+    // totalOrderAmount(orderId)
     getOrderDetails(orderId, productId).then((orders) => {
-      console.log(orders[0]);
-      res.render("user/order_details", { order: orders[0], user: user });
+      res.render("user/order_details", { orders: orders, user: user });
     });
   },
   getCancelProduct: (req, res) => {
     const {orderId, productId} = req.params;
     cancelOrders(orderId, productId).then(() => {
-      res.redirect(`/orders/details/${orderId}/${productId}`);
+      res.redirect("/orders");
     });
+    
   },
 };

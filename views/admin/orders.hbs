@@ -1,11 +1,7 @@
 <section>
 	<div class='container'>
 		<div class='container'>
-			<div class='row'>
-				<a href='/admin/add-product' class='mt-5'><div
-						class='float-end btn btn-success'
-					></div></a>
-			</div>
+
 		</div>
 		<table class='table'>
 			<thead>
@@ -24,7 +20,7 @@
 				{{#each orders}}
 					<tr>
 						<th class='' scope='row'>{{@index}}</th>
-						<td class=''>{{this.user.username}}</td>
+						<td class=''>{{this.user.name}}</td>
 						<td class=''>{{this.deliveryDetails.address}}</td>
 						<td class=''>{{this.totalAmount}}</td>
 						<td> {{this.date}}</td>

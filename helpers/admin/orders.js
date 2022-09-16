@@ -31,7 +31,7 @@ module.exports = {
           },
         ])
         .then((data) => {
-          console.log(data);
+          // console.log(data);
           // data[0] ? data[0].date = data[0].date.toLocaleString() : console.log("cannot set date");
           // data[0].date = data[0].date.toLocaleString()
           resolve(data);
@@ -71,6 +71,14 @@ module.exports = {
               },
             },
           },
+          {
+            $set: {
+              productDetails : {$sortArray: { input: "$productDetails", sortBy: { _id: 1 } }}
+            }
+          },
+          // {
+          //   $sort: { }
+          // }
         ])
         .then((data) => {
           // console.log(data[0])
@@ -89,6 +97,7 @@ module.exports = {
           {
             $set: {
               "products.$.status": status,
+              "products.$.finalTotal": "0",
             },
           }
         )

@@ -20,7 +20,8 @@ module.exports = {
     let user = req.cookies.user ? req.cookies.user : null;
     getCart(user.userId).then((data) => {
       let user = req.cookies.user ? req.cookies.user : null;
-      getTotalAmount(req.params.userId).then((total) => {
+      getTotalAmount(user.userId).then((total) => {
+        console.log(total)
         res.render("user/cart", { data: data, total: total, user: user });
       });
     });

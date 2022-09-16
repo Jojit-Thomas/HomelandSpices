@@ -1,4 +1,8 @@
-const { getOrders, updateOrderStatus, getOrderDetails } = require("../../helpers/admin/orders");
+const {
+  getOrders,
+  updateOrderStatus,
+  getOrderDetails,
+} = require("../../helpers/admin/orders");
 
 module.exports = {
   getOrderPage: (req, res) => {
@@ -8,21 +12,20 @@ module.exports = {
   },
   getOrderDetailsPage: (req, res) => {
     getOrderDetails(req.params.id).then((orders) => {
-      console.log("Order is : ",orders)
-      res.render('admin/order_details',{orderDetails:orders, admin: true})
-    })
+      console.log("Order is : ", orders);
+      res.render("admin/order_details", { orderDetails: orders, admin: true });
+    });
   },
-  getChangeOrderStatus : (req, res) => {
-    const { orderId, productId, status } = req.body
+  getChangeOrderStatus: (req, res) => {
+    const { orderId, productId, status } = req.body;
     updateOrderStatus(orderId, productId, status).then((orders) => {
-      res.status(200).send("success")
-    })
+      res.status(200).send("success");
+    });
   },
   getCancelOrder: (req, res) => {
-    console.log(req.params.orderId)
-    console.log('success')
-    updateOrderStatus(req.params.orderId,req.params.productId, "cancelled").then(() => {
-      res.redirect('/admin/orders')
-    })
-  }
+    const { orderId, productId } = req.params;
+    updateOrderStatus(orderId, productId, "cancelled").then(() => {
+      res.redirect(`/admin/order/details/${orderId}`);
+    });
+  },
 };

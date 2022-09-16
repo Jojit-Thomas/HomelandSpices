@@ -88,24 +88,24 @@
         <h3 class="mb-4">Order Summary</h3>
         <div class="d-flex justify-content-between w-100">
           <p>Price</p>
-          <p>$499.99</p>
+          <p id="price">₹{{total}}</p>
         </div>
         <div class="d-flex justify-content-between w-100">
           <p>Discount</p>
-          <p>$49.00</p>
+          <p>- ₹49.00</p>
         </div>
         <div class="d-flex justify-content-between w-100">
           <p>Shipping</p>
-          <p class="purple">Free</p>
+          <p class="text-purple">Free</p>
         </div>
         <div class="d-flex justify-content-between w-100">
           <p>Coupon Applied</p>
-          <p>$0.00</p>
+          <p>- ₹0.00</p>
         </div>
         <hr />
         <div class="d-flex justify-content-between w-100">
-          <p class="purple">TOTAL</p>
-          <p class="purple">$548.99</p>
+          <p class="text-purple">TOTAL</p>
+          <p class="text-purple" id="total">₹{{total}}</p>
         </div>
         <p>Estimated Delivery by <span class="fw-bold">01 Aug 2022</span></p>
         <form action="/address">
@@ -139,7 +139,8 @@ function changeQuantity(cartId, productId, userId, count) {
         },
         method: "POST",
         success: function(data) {
-            $("#total").text(data.total);
+            $("#price").text(`₹${data.total}`);
+            $("#total").text(`₹${data.total}`);
             val = val + count;
             document.getElementById(productId).value = val;
             if (val <= 1) {
