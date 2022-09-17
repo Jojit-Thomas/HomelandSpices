@@ -91,7 +91,7 @@
                         <div
                           class="col-sm-2 col-md-4 col-lg-4 col-xl-2 my-auto d-none d-lg-block"
                         >
-                          <h6 class="mb-3">₹{{this.price}}</h6>
+                          <h6 class="mb-3">₹{{index_of ../products @index "price"}}</h6>
                           <h6 class="mb-0">Qty : {{index_of ../products @index "quantity"}}</h6>
                         </div>
                         <div
@@ -117,9 +117,9 @@
                   {{/each}}
                   </div>
                   {{/each}}
-                  <h6 class="mb-0"><a href="/admin/orders" class="text-body"><i
+                  <h6 class="mb-0"><a href="/" class="text-body"><i
                         class="fas fa-long-arrow-alt-left me-2"
-                      ></i>Back to Orders</a></h6>
+                      ></i>Back to Shop</a></h6>
                 </div>
               </div>
             </div>

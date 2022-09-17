@@ -118,13 +118,12 @@ module.exports = {
   placeOrder: (data, products, total) => {
     return new Promise((resolve, reject) => {
       console.log(products, total);
-      let status = data.paymentMethod === "cod" ? "placed" : "pending";
+      let status = data.paymentMethod === "paypal" ? "placed" : "pending";
       try{
         var date = new Date().toLocaleString();
       } catch (error) {
         console.log(error)
       }
-      console.log("date is: ",date)
       let orderObj = {
         deliveryDetails: Types.ObjectId(data.addressId),
         userId: Types.ObjectId(data.userId),
@@ -140,9 +139,10 @@ module.exports = {
             userId: Types.ObjectId(data.userId),
           })
           .then(() => {
-            resolve();
+            console.log("order created data : ",cart)
+            resolve({id: cart._id, total: cart.totalAmount});
           });
-      });
+      })
     });
   },
   getOrders: (userId) => {
@@ -183,9 +183,9 @@ module.exports = {
               productDetails : {$sortArray: { input: "$productDetails", sortBy: { _id: 1 } }}
             }
           },
-          // {
-          //   $sort: { }
-          // }
+          {
+            $sort: { date: -1 }
+          }
         ])
         .then((data) => {
           console.log(data)

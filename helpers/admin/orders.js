@@ -29,6 +29,9 @@ module.exports = {
               },
             },
           },
+          {
+            $sort: {date: -1}
+          }
         ])
         .then((data) => {
           // console.log(data);
@@ -107,4 +110,40 @@ module.exports = {
         });
     });
   },
+  getStats: (timestamp) => {
+    return new Promise((resolve, reject) => {
+      timestamp = "$"+timestamp;
+      console.log(timestamp);
+      order_model.aggregate([
+        { $group: {
+          _id: {
+            $add: [
+             { $dayOfYear: "$date"}, 
+             { $multiply: 
+               [400, {$year: "$date"}]
+             }
+          ]},   
+          totalAmount: { $sum: "$totalAmount" },
+          date: {$min: "$date"}
+        }
+      },
+      {
+        $sort: {date: -1}
+      },
+      {
+        $limit: 14,
+      }
+      ]).then((data) => {
+        let date =[]
+        let totalAmount =[]
+        data.forEach((item) => {
+          date.push(item.date.toDateString())
+          totalAmount.push(item.totalAmount)
+        })
+        data = {date : date, totalAmount: totalAmount}
+        console.log(data)
+        resolve(data);
+      })
+    })
+  }
 };

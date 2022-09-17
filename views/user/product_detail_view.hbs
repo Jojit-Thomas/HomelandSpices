@@ -1,11 +1,6 @@
 <link rel="stylesheet" href="/stylesheets/user/product_detail.css" />
 <link rel="stylesheet" href="/stylesheets/button.css">
 
-{{!-- <style>
-  .magnifier{
-    width: 50vw !important;
-  }
-</style> --}}
 
 {{#with product}}
   <div class="row vh-100">
@@ -21,8 +16,6 @@
             />
 
           </div>
-          {{! <div class="box-one w-75 w-md-50 h-75 m-auto">
-        </div> }}
         </div>
         <div class="pro-img">
           <div class="small"></div>
@@ -57,13 +50,22 @@
     </div>
   </div>
 {{/with}}
-
+ {{!-- cropper js cdn link --}}
 <script src="/javascripts/zoomsl.min.js"></script>
+{{!-- toastr cdn links  --}}
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
 <script>
   $(document).ready(function() {
     $("#zoom").imagezoomsl({});
-  })
+  });
     function addToCart(productId) {
+       toastr.options = {
+      "progressBar": true,
+      "positionClass": "toast-bottom-center",
+      "timeOut": "2000",
+      "hideDuration": "1",
+    };
     $.ajax({
       type: "POST",
       url: "/cart/add",
@@ -71,13 +73,13 @@
         productId: productId
       },
       success: function(data) {
-        console.log(data);
+        toastr.success('Successfully added to the Cart.');
         //window.location.reload();
       },
       error: function(data) {
         console.log(data);
       }
-    })
+    });
   }
 </script>
 

@@ -7,4 +7,51 @@
     </div>
 </div> --}}
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <h1>Home Page</h1>
+
+<canvas id="myChart" style="width:100%;max-width:600px;height:auto;"></canvas>
+
+<script>
+ $(document).ready(function() {
+  $.ajax({
+    url: `/admin/stats/sales?timestamp=dayOfYear`,
+    method: "GET",
+    success: function(response) {
+      console.log(response);
+      var xValues =response.date;
+      var yValues = response.totalAmount;
+      new Chart("myChart", {
+        type: "line",
+        data: {
+          labels: xValues,
+          datasets: [{
+            fill: false,
+            lineTension: 0,
+            label: 'Sales',
+            backgroundColor: 'rgb(255, 99, 132)',
+            borderColor: 'rgb(255, 99, 132)',
+            data: yValues
+          }]
+        },
+        options: {
+          legend: {
+            display: false
+          },
+          scales: {
+            yAxes: [{
+              ticks: {
+                min: 6,
+                max: 16
+              }
+            }],
+          }
+        }
+      });
+    },
+    error: function(err) {
+      console.log(err);
+    }
+  })
+})
+</script>

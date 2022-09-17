@@ -34,25 +34,21 @@ const {
   getOrderDetailsPage,
   getCancelProduct,
 } = require("../controllers/user/orders");
-const { getPaymentPage } = require("../controllers/user/payment");
+const { getPaymentPage, verifyPayment, verifyPaymentController } = require("../controllers/user/payment");
 const { getProfilePage, postEditUser, postChangePassword, getChangePassword } = require("../controllers/user/user");
 const {
   getAddToWishlist,
   getWishlistPage,
   getRemoveFromWishlist,
 } = require("../controllers/user/wishlist");
-const { getAllCategories, getCategory } = require("../helpers/common");
-const { getAddress } = require("../helpers/user/address");
 
-// router.use((req, res, next) => {
-//   res.setHeader("Cache-Control: no-cache, no-store, must-revalidate")
-//   next();
-// })
+const paypal = require("../controllers/paypal");
+const { getTotalAmount } = require("../helpers/user/cart");
 
-router.use((req, res, next) => {
-  res.set("Cache-Control", "no-store");
-  next();
-});
+router.use((req, res, next) => {  
+  res.set("Cache-Control", "no-store"); 
+  next(); 
+});  
 
 
 //=========================AUTHENTICATION ROUTES =========================
@@ -94,4 +90,33 @@ router.get("/orders/cancel/:orderId/:productId", verifyLogin, getCancelProduct);
 router.get("/orders/details/:orderId/:productId", verifyLogin, getOrderDetailsPage);
 router.get("/payment", verifyLogin, getPaymentPage)
 router.post("/checkout", verifyLogin, postCheckout);
+router.post("/payment/verify", verifyLogin, verifyPayment)
+
+
+
+
+router.post("/api/orders", async (req, res) => {
+  try {
+    let user = req.cookies.user ? req.cookies.user : null;
+    let total = await getTotalAmount(user.userId);
+    const order = await paypal.createOrder(total);
+    res.json(order);
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+
+router.post("/api/orders/:orderID/capture", async (req, res) => {
+  const { orderID } = req.params;
+  try {
+    const captureData = await paypal.capturePayment(orderID);
+    res.json(captureData);
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+
+
+
+
 module.exports = router;

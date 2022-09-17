@@ -11,6 +11,7 @@ const orderSchema = new mongoose.Schema({
   totalAmount: Number,
   status: String,
   paymentMethod: String,
+  paymentStatus: String,
   date: Date,
 });
 

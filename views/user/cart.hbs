@@ -122,6 +122,9 @@
   </div>
 </div>
 
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
 <script>
 function changeQuantity(cartId, productId, userId, count) {
     let val =
@@ -154,8 +157,12 @@ function changeQuantity(cartId, productId, userId, count) {
     })
 }
 function removeFromCart(cartId, productId) {
-    console.log(cartId,
-        productId);
+  toastr.options = {
+      "progressBar": true,
+      "positionClass": "toast-bottom-center",
+      "timeOut": "2000",
+      "hideDuration": "1",
+    };
     $.ajax({
         url: "/cart/remove",
         data: {
@@ -164,13 +171,13 @@ function removeFromCart(cartId, productId) {
         },
         method: "POST",
         success: function(data) {
-          removeFromWishlist(productId)
+          removeFromWishlist(productId);
+          toastr.success('Product removed successfully.');
         },
         error: function(err) {}
     })
 }
  function removeFromWishlist(productId) {
-    console.log("Removing from wishlist")
     $.ajax({
       type: "POST",
       url: "/wishlist/remove",
@@ -180,7 +187,6 @@ function removeFromCart(cartId, productId) {
       success: function(data) {
         console.log(data);
         $(`#div${productId}`).remove();
-        //window.location.reload();
       },
       error: function(data) {
         console.log(data);

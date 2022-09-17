@@ -5,6 +5,7 @@ const {
   getAddressById,
 } = require("../../helpers/user/address");
 const { getTotalAmount } = require("../../helpers/user/cart");
+const { generateRazorpay } = require("../../controllers/user/payment");
 const {
   getCartProdutDetails,
   placeOrder,
@@ -23,10 +24,7 @@ module.exports = {
     //getting the address and adding it into order address collection to make it immutable
     let address = await getAddressById(addrs);
     let orderAddress = await addCheckoutAddress(address);
-    let paymentMethod =
-      req.body.paymentMethod === ("Cash On Delivery" || "Online Payment")
-        ? req.body.paymentMethod
-        : "Manipulated Payment Status";
+    const { paymentMethod } = req.body
     // fetching product details and total amount
     let products = await getCartProdutDetails(user.userId);
     console.log("products is " , products)
@@ -38,8 +36,21 @@ module.exports = {
       addressId: orderAddress._id,
       paymentMethod: paymentMethod,
     };
-    placeOrder(data, products, total).then(() => {
-      res.redirect("/");
+    placeOrder(data, products, total).then((state) => {
+      if (paymentMethod === "cashOnDelivery"){
+        res.send({method: "cod"});
+      } else if (paymentMethod === "razorPay"){
+        generateRazorpay(state.id, state.total * 100).then((response) => {
+          let state = {
+            method: "razorPay",
+            res: response,
+          }
+          console.log("ready to send response")
+          res.send(state)
+        })
+      } else if (paymentMethod === "paypal"){
+        res.send({method: "paypal"});
+      }
     });
   },
   getOrderPage: (req, res) => {

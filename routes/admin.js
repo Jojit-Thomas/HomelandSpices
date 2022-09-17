@@ -20,7 +20,7 @@ const {
   getEditCategory,
   postEditCategory,
 } = require("../controllers/admin/categories");
-const { getHome, getLogout } = require("../controllers/admin/main");
+const { getHome, getLogout, getSalesStatsDate } = require("../controllers/admin/main");
 const {
   getOrderPage,
   getOrderDetailsPage,
@@ -50,6 +50,7 @@ router.get("/", adminAuth, getHome); //Home_page
 router.get("/signin", stopAuthenticate, getSignIn);
 router.post("/signin", stopAuthenticate, postSignIn);
 router.get("/logout", adminAuth, getLogout);
+router.get("/stats/sales", adminAuth, getSalesStatsDate)
 
 //===========================Product Management============================
 router.get("/products", adminAuth, getProducts); //Products_page

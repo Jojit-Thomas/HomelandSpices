@@ -12,7 +12,7 @@ module.exports = {
     //take the user details from cookie
     let user = req.cookies.user ? req.cookies.user : null;
     addToCart(user.userId, req.body.productId).then(() => {
-      res.status(200)
+      res.status(200).json("success")
     });
   },
   getCartPage: (req, res) => {
