@@ -1,3 +1,4 @@
+const { Types } = require("mongoose");
 const order_model = require("../../model/order_model");
 
 module.exports = {
@@ -11,7 +12,7 @@ module.exports = {
           },
           {
             $set: {
-              paymentStatus: "placed",
+              paymentStatus: "Received",
             },
           }
         )

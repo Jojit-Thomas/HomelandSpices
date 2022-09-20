@@ -26,6 +26,7 @@ const {
   getOrderDetailsPage,
   getChangeOrderStatus,
   getCancelOrder,
+  getChangePaymentStatus,
 } = require("../controllers/admin/orders");
 const {
   getAddProducts,
@@ -76,9 +77,10 @@ router.get("/category/edit/:categoryId", adminAuth, getEditCategory);
 router.post("/category/edit/:categoryId", adminAuth, postEditCategory);
 //=================================Orders=================================
 router.get("/orders", adminAuth, getOrderPage);
-router.get("/order/details/:id", getOrderDetailsPage);
-router.post("/order/changeStatus", getChangeOrderStatus);
-router.get("/order/cancel/:orderId/:productId", getCancelOrder);
+router.get("/order/details/:id", adminAuth, getOrderDetailsPage);
+router.post("/order/changeStatus", adminAuth, getChangeOrderStatus);
+router.post("/order/paymentStatus/change", adminAuth, getChangePaymentStatus)
+router.get("/order/cancel/:orderId/:productId", adminAuth, getCancelOrder);
 //=================================Banners=================================
 router.get("/banners", adminAuth, getBannerPage);
 router.get("/banners/add", adminAuth, getAddBanner);

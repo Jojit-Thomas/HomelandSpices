@@ -30,6 +30,12 @@
 .vh-25 {
   height: 25vh;
 }
+.dropdown {
+  border: none;
+  background-color: #0004;
+  padding: 0.4rem;
+  border-radius: 5px;
+}
 
 .fs-7 {
   font-size: 0.75rem;

@@ -1,14 +1,4 @@
-<link
-  href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-  rel="stylesheet"
-  integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-  crossorigin="anonymous"
-/>
-<script
-  src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-  integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-  crossorigin="anonymous"
-></script>
+
 <style>
   .bg_purple { background-color: #9155fd; } .purple { color: #766edb; } .purplec
   { color: #9155fd; } .a-none { text-decoration: none; } input[type="radio"] {
@@ -88,7 +78,7 @@
     </div>
     <div
       class="col-lg-3 col-sm-12 col-12 p-4 mt-5 border border-1"
-      style="height: 500px"
+      style="height: 400px"
     >
       <h3 class="mb-4">Order Summary</h3>
       <div class="d-flex justify-content-between w-100">
@@ -103,17 +93,17 @@
         <p>Shipping</p>
         <p class="text-purple">Free</p>
       </div>
-      <div class="d-flex justify-content-between w-100">
+      {{!-- <div class="d-flex justify-content-between w-100">
         <p>Coupon Applied</p>
         <p>₹0.00</p>
-      </div>
+      </div> --}}
       <hr />
       <div class="d-flex justify-content-between w-100">
         <p class="text-purple">TOTAL</p>
         <p class="text-purple">₹{{total}}</p>
       </div>
       <p>Estimated Delivery by <span class="fw-bold">01 Aug 2022</span></p>
-      <input type="text" name="coupon" class="form-control" placeholder="Coupon Code" />
+      {{!-- <input type="text" name="coupon" class="form-control" placeholder="Coupon Code" /> --}}
       <button class="btn bg_purple text-white w-100 mt-3">CONTINUE TO PAYMENT</button>
     </div>
   </div>

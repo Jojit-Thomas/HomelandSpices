@@ -80,10 +80,20 @@
                     </div>
                     {{/each}}
                     <div
-                      class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 col-xxl-3 my-auto paymentMethod"
+                      class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-2 col-xxl-2 my-auto paymentMethod"
                     >
                       <h6 class="mb-0"><strong>Payment Method:</strong>
                         <br />{{this.paymentMethod}}</h6>
+                    </div>
+                    <div
+                      class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-2 col-xxl-2 my-auto paymentMethod"
+                    >
+                      <h6 class="mb-0"><strong>Payment Status:</strong></h6>
+                        <select name="paymentStatus" class="border border-0 " id="paymentStatus" onchange="changePaymentStatus('{{_id}}')">
+                            <option value="" id="paymentStatusSelected">{{paymentStatus}}</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Received">Received</option>
+                          </select>
                     </div>
                   </div>
                   <hr class="my-4" />
@@ -133,7 +143,7 @@
                         <div
                           class="col-sm-2 col-md-4 col-lg-4 col-xl-2 my-auto d-none d-lg-block"
                         >
-                          <select name="status" {{#ifEquals (index_of ../products @index "status") "cancelled"}} disabled {{/ifEquals}} id="status{{index_of ../products @index "productId"}}" onchange="changeStatus('{{../_id}}','{{index_of ../products @index 'productId'}}')">
+                          <select name="status" class="dropdown" {{#ifEquals (index_of ../products @index "status") "cancelled"}} disabled {{/ifEquals}} id="status{{index_of ../products @index "productId"}}" onchange="changeStatus('{{../_id}}','{{index_of ../products @index 'productId'}}')">
                              <option selected>
                               {{#ifEquals (index_of ../products @index "status") "cancelled"}}
                               Cancelled
@@ -219,33 +229,42 @@
 
 <script>
   function changeStatus(orderId, productId) {
-    console.log(orderId, productId);
-    let val = $(`#status${productId}`).val();
-     console.log(val);
-     $.ajax({
-        type: "POST",
-        url: "/admin/order/changeStatus",
-        data: {
-            orderId: orderId,
-            productId: productId,
-            status: val,
-        },
-        success: function(data) {
-            console.log('success')
-            $(`#${productId}`).text(val)
-        },
-        error: function(error) {
-            console.log(error)
-        }
-    })
+  console.log(orderId, productId);
+  let val = $(`#status${productId}`).val();
+  console.log(val);
+  $.ajax({
+    type: "POST",
+    url: "/admin/order/changeStatus",
+    data: {
+      orderId: orderId,
+      productId: productId,
+      status: val,
+    },
+    success: function(data) {
+      console.log('success')
+      $(`#${productId}`).text(val)
+    },
+    error: function(error) {
+      console.log(error)
+    }
+  })
+}
+function changePaymentStatus( orderId ) {
+  let val = $("#paymentStatus").val();
+  $.ajax({
+    type: "POST",
+    url: "/admin/order/paymentStatus/change",
+    data: {
+      orderId: orderId,
+      status: val,
+    },
+    success: function(data) {
+      console.log('success',val)
+      $("#paymentStatusSelected").text(val)
+    },
+    error: function(error) {
+      console.log(error)
+    }
+  })
 }
 </script>
-{{!-- 
-<script>
-  function changeStatus(orderId, productId) { console.log(orderId, productId)
-  let val = $(`#status${productId}`).val() console.log(val) $.ajax({ type:
-  "POST", url: "/admin/order/changeStatus", data: { orderId: orderId, productId:
-  productId, status: val, }, success: function (data) { console.log('success')
-  $(`#${productId}`).text(val) }, error: function (error) { console.log(error) }
-  }) }
-</script> --}}

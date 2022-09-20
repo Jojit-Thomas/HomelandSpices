@@ -5,6 +5,7 @@ const {
 } = require("../../config/collections");
 const cart_model = require("../../model/cart_model");
 const order_model = require("../../model/order_model");
+const products_model = require("../../model/products_model");
 
 
 module.exports = {
@@ -40,6 +41,17 @@ module.exports = {
   //       });
   //   });
   // },
+  reduceStock: (productId,quantity) => {
+    return new Promise((resolve, reject) => {
+      products_model.updateOne({
+        _id: Types.ObjectId(productId),
+      },{
+        $inc: { stocks : -quantity}
+      }).then(() => {
+        resolve();
+      })
+    })
+  },
   getCartProdutDetails: (userId) => {
     console.log(userId);
     return new Promise((resolve, reject) => {
@@ -118,7 +130,7 @@ module.exports = {
   placeOrder: (data, products, total) => {
     return new Promise((resolve, reject) => {
       console.log(products, total);
-      let status = data.paymentMethod === "paypal" ? "placed" : "pending";
+      let status = data.paymentMethod === "paypal" ? "Received" : "Pending";
       try{
         var date = new Date().toLocaleString();
       } catch (error) {

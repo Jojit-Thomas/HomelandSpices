@@ -15,6 +15,7 @@ const {
   getOrderDetails,
   addOrderProducts,
   totalOrderAmount,
+  reduceStock,
 } = require("../../helpers/user/order");
 module.exports = {
   postCheckout: async (req, res) => {
@@ -27,6 +28,9 @@ module.exports = {
     const { paymentMethod } = req.body
     // fetching product details and total amount
     let products = await getCartProdutDetails(user.userId);
+    products.forEach(async (product) => {
+      await reduceStock(product.productId, product.quantity)
+    })
     console.log("products is " , products)
     // let orderProducts = await addOrderProducts(user.userId, products[0])
     // console.log("orderProducts is : ", orderProducts);

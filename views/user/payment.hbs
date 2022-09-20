@@ -1,48 +1,4 @@
-{{!-- <form id="paymentForm" method="post">
-    <input required type="radio" name="paymentMethod" value="cashOnDelivery" id="">
-    <label for="paymentMethod">Cash On Delivery</label>
-    <input required type="radio" name="paymentMethod" value="razorPay" id="">
-    <label for="paymentMethod">Razor Pay</label>
-    <input required type="radio" name="paymentMethod" value="paypal" id="">
-    <label for="paymentMethod">Paypal</label>
-    <div id="paypal-button-container"></div>
-    <button type="submit" id="checkout" class="btn btn-primary">Proceed to Checkout</button>
-</form>
- --}}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<link
-  href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-  rel="stylesheet"
-  integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-  crossorigin="anonymous"
-/>
-<script
-  src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-  integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-  crossorigin="anonymous"
-></script>
 <style>
   .bg_purple { background-color: #9155fd; } .purple { color: #766edb; } .purplec
   { color: #9155fd; } .a-none { text-decoration: none; } input[type="radio"] {
@@ -54,91 +10,69 @@
   screen and (max-width: 768px) { .options { margin: 1rem 2.6rem; } .outer{
   padding: 1rem 1rem; } }
 </style>
-<form action="/address" method="post">
+<form id="paymentForm" method="post">
   <div class="container pt-5 d-flex flex-wrap">
     <div class="col-lg-9 col-sm-12 col-12 outer">
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb py-4">
-          <li class="breadcrumb-item" aria-current="page">
-            Address
-          </li>
-          {{!-- <li class="breadcrumb-item text-muted">Shipping</li> --}}
-          <li class="breadcrumb-item text-muted">
+          <a class="breadcrumb-item text-muted" href="/address" aria-current="page">
+          Address
+          </a>
+          <li  class="breadcrumb-item ">
             Payment
           </li>
         </ol>
       </nav>
-      <!-- ================================================================================ -->
+      <input type="radio" name="paymentMethod" hidden id="paymentMethodInp">
       <div class="accordion" id="accordionExample">
-  <div class="accordion-item">
-    <h2 class="accordion-header" id="headingOne">
-      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-        Accordion Item #1
-      </button>
-    </h2>
-    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-      <div class="accordion-body">
- <input required type="radio" name="paymentMethod" value="cashOnDelivery" id="">
-    <label for="paymentMethod">Cash On Delivery</label>      </div>
-    </div>
-  </div>
-  <div class="accordion-item">
-    <h2 class="accordion-header" id="headingTwo">
-      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-        Accordion Item #2
-      </button>
-    </h2>
-    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-      <div class="accordion-body">
-<input required type="radio" name="paymentMethod" value="razorPay" id="">
-    <label for="paymentMethod">Razor Pay</label>
-    
-    </div>
-  </div>
-  <div class="accordion-item">
-    <h2 class="accordion-header" id="headingThree">
-      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-        Accordion Item #3
-      </button>
-    </h2>
-    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-      <div class="accordion-body">
-<input required type="radio" name="paymentMethod" value="paypal" id="">
-    <label for="paymentMethod">Paypal</label>
-    <div id="paypal-button-container"></div>      </div>      </div>
-    </div>
-  </div>
-</div>  
-      <!-- ================================================================================ -->
-      {{!-- <div class="d-flex justify-content-between mb-5 w-100 flex-wrap">
-        <div class="d-flex col-12 col-sm-8">
-          <input required
-            type="radio"
-            name="address"
-            class="my-auto me-4 col-1 col-sm-1"
-          />
-          <div class="col-11 col-sm-11">
-            <h4>Abhisek</h4>
-            <p class="mb-0 address">Vadakkemadam house, palakkad</p>
-            <p class="mb-0">
-              <span class="text-muted">Contact - </span>9947XXXXX
-            </p>
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingOne">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#cashOnDelivery" aria-expanded="true" aria-controls="cashOnDelivery">
+            Cash On Delivery
+            </button>
+          </h2>
+          <div id="cashOnDelivery" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+              <h6>Cash on Delivery</h6>
+            </div>
           </div>
         </div>
-        <div class="d-flex col-12 col-sm-4 options" id="" style="width: 10rem">
-          <a href=" /Address/Edit" class="text-dark a-none">Edit</a>
-          <span class="mx-3">|</span>
-          <a href=" /Address/Remove" class="text-danger a-none"> Remove</a>
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingTwo">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#razorPay" aria-expanded="false" aria-controls="razorPay">
+            Razor Pay
+            </button>
+          </h2>
+          <div id="razorPay" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+              <h6>Razor Pay</h6>
+            </div>
+          </div>
         </div>
-      </div> --}}
-
-      <!-- ================================================================================ -->
-      <hr />
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingThree">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#paypal" aria-expanded="false" aria-controls="paypal">
+            Paypal
+            </button>
+          </h2>
+          <div id="paypal" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+              <div id="paypal-button-container"></div>
+            </div>
+          </div>
+        </div>
+        <hr />
+        <div class="pt-5">
+          <h6 class="mb-0"><a href="/address" class="text-body"><i
+            class="fas fa-long-arrow-alt-left me-2"
+            ></i>Back to Address</a></h6>
+        </div>
+      </div>
     </div>
     <div
       class="col-lg-3 col-sm-12 col-12 p-4 mt-5 border border-1"
       style="height: 500px"
-    >
+      >
       <h3 class="mb-4">Order Summary</h3>
       <div class="d-flex justify-content-between w-100">
         <p>Price</p>
@@ -163,7 +97,7 @@
       </div>
       <p>Estimated Delivery by <span class="fw-bold">01 Aug 2022</span></p>
       <input type="text" name="coupon" class="form-control" placeholder="Coupon Code" />
-      <button class="btn bg_purple text-white w-100 mt-3">CONTINUE TO PAYMENT</button>
+      <button class="btn bg_purple text-white w-100 mt-3" id="placeOrder">PLACE ORDER</button>
     </div>
   </div>
 </form>
@@ -172,94 +106,72 @@
 
 
 
+<script>
+  $(document).ready(function() {
+    $("#paymentMethodInp").trigger("click");//click the radio button with id paymentMethodInp 
+    $("#paymentMethodInp").val($(".show").attr("id"))//on window load reads the id of the div with class "show" 
+    console.log($("#paymentMethodInp").val());
+  })
+  $(".accordion-button").click(function() {
+    setTimeout(function() {
+      $(".show").attr("id") ? 
+    $("#paymentMethodInp").val($(".show").attr("id")) : null //if any accordion is Chosen the id of the div is set as the value of the input field "paymentMethodInp"
+    console.log($("#paymentMethodInp").val());
+    },500)
+  })
+</script>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+{{!-- 
+$("#placeOrder").click(function() {
+        if($(".show").attr("id") == "paypal") {}
+      }) --}}
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-{{!-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>  --}}
-  <script >
+<script>
 $("#paymentForm").submit((e) => {
-  e.preventDefault()
+  e.preventDefault();
+
+
+if($("#paymentMethodInp").val() == "paypal"){
+  if ($(".paypal-success")[0]){
+    alert("submitting checkout")
+    submitCheckout();
+} else {
+  Swal.fire("Sorry", "Please complete the paypal payment or choose any other payment", "error").then((state) => {
+          state.isConfirmed ? location.reload() : null;
+        })
+}
+} else {
+  submitCheckout();
+}
+  
+})
+
+function submitCheckout () {
   $.ajax({
     url: '/checkout',
     method: 'post',
-    data: $('#paymentForm').serialize(),
+    data: $("#paymentForm").serialize(),
     success: (response) => {
-      console.log("response is :  ", response)
+      console.log("response is :  ", response);
       if (response.method == "cod") {
         Swal.fire("Hurray !", "Your order has been placed", "success").then((state) => {
-          state.isConfirmed ? location.href = '/' : null
+          state.isConfirmed ? location.href = '/' : null;
         })
       } else if (response.method == "paypal") {
-
         Swal.fire("Hurray !", "Your order has been placed", "success").then((state) => {
-          state.isConfirmed ? location.href = '/' : null
+          state.isConfirmed ? location.href = '/' : null;
         })
       }
       
       else {
-        razorPayment(response.res)
+        razorPayment(response.res);
       }
 
     }
   })
-})
+}
 
 function razorPayment(order) {
     console.log(order)
@@ -272,8 +184,7 @@ function razorPayment(order) {
     "image": "https://example.com/your_logo",
     "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
     "handler": function(response) {
-
-      verifyPayment(response, order)
+      verifyPayment(response, order);
     },
     "prefill": {
       "name": "Jojit Thomas",
@@ -299,9 +210,10 @@ function razorPayment(order) {
       },
       method: 'post',
       success: (response) => {
+        console.log("verifyPayment");
         if (response.status) {
           Swal.fire("Hurray !", "Your order has been placed", "success").then((state) => {
-          state.isConfirmed ? location.href = '/' : null
+          state.isConfirmed ? location.href = '/' : null;
         })
         } else {
         Swal.fire({
@@ -309,7 +221,7 @@ function razorPayment(order) {
           title: 'Oops...',
           text: 'Something went wrong!',
         }).then((state) => {
-          state.isConfirmed ? location.href = '/' : null
+          state.isConfirmed ? location.href = '/' : null;
         })
         }
       }
@@ -317,11 +229,11 @@ function razorPayment(order) {
   }
 }
   </script>
-  <script src="https://www.paypal.com/sdk/js?client-id=AQVb1x9c8x-8KRWAB7HMhWnn7QVr2wFOjNXRiEvK7duoDBVWvFo3sPewxuRTES51JAdNV9FOkDbxVXQU&currency=USD"></script>
+  <script src="https://www.paypal.com/sdk/js?client-id=AQVb1x9c8x-8KRWAB7HMhWnn7QVr2wFOjNXRiEvK7duoDBVWvFo3sPewxuRTES51JAdNV9FOkDbxVXQU&currency=USD"  data-namespace="paypal_sdk"></script>
     <!-- Set up a container element for the button -->
     
     <script>
-       paypal
+       paypal_sdk
         .Buttons({
           // Sets up the transaction when a payment button is clicked
           createOrder: function (data, actions) {
@@ -356,12 +268,9 @@ function razorPayment(order) {
                     "\n\nSee console for all available details"
                 );
                 $(document).ready(function (){
-                $("#checkout").trigger("click");
+                $("#paypal").addClass("paypal-success");
+                $("#placeOrder").trigger("click");//After completing the payment submitting the order
                 })
-                // When ready to go live, remove the alert and show a success message within this page. For example:
-                // var element = document.getElementById('paypal-button-container');
-                // element.innerHTML = '<h3>Thank you for your payment!</h3>';
-                // Or go to another URL:  actions.redirect('thank_you.html');
               });
           },
         })

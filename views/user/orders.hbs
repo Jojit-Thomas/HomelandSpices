@@ -23,31 +23,7 @@
                 </div>
                 <hr class="my-4" />
                 {{#with orders.[0]}}
-                  <div class="d-flex justify-content-between flex-wrap">
-                    {{#each address}}
-                    <div
-                      class="col-12 col-sm-5 col-md-6 col-lg-6 col-xl-5 col-xxl-4 my-auto address"
-                    >
-                      <h5 class="text-dark title">{{this.name}}</h5>
-                      <p class="text-muted mb-0 desc">{{this.houseName}},
-                        {{this.postOffice}}
-                        P.O.,
-                        {{this.locality}},
-                        {{this.city}},
-                        {{this.landmark}}, Pincode :
-                        {{this.pincode}}</p>
-                      <small>Phone : {{this.phone}}</small>
-
-                    </div>
-                    {{/each}}
-                    <div
-                      class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 col-xxl-3 my-auto paymentMethod"
-                    >
-                      <h6 class="mb-0"><strong>Payment Method:</strong>
-                        <br />{{this.paymentMethod}}</h6>
-                    </div>
-                  </div>
-                  <hr class="my-4" />
+                  
                   {{! ==========================================ORDER DETAILS ========================================== }}
                   {{/with}}
                   {{#each orders}}

@@ -1,4 +1,5 @@
 const { response } = require("express");
+const createHttpError = require("http-errors");
 const jwt = require("jsonwebtoken");
 const twilio = require("twilio");
 require("dotenv").config();
@@ -14,33 +15,31 @@ const client = new twilio(
 module.exports = {
   verifyLogin: (req, res, next) => {
     const token = req.cookies.token;
-    console.log("token", token);
-    try {
-      jwt.verify(token, process.env.ACCESS_TOKEN_SECRET_KEY, (err, user) => {
-        if (err) {
-          res.clearCookie("token");
-          res.redirect("/signin");
-        } else {
-          next();
-        }
+    verifyAccessToken(token)
+      .then(() => {
+        next();
+      })
+      .catch((err) => {
+        console.error("Error is ", err.message);
+        res.clearCookie("token");
+        res.redirect("/signin");
+        // next(err);
       });
-    } catch (err) {
-      res.clearCookie("token");
-      res.redirect("/");
-    }
   },
   // this is to prevent the user from login twice
   stopAuthenticate: (req, res, next) => {
     const token = req.cookies.token;
     if (token) {
-      jwt.verify(token, process.env.ACCESS_TOKEN_SECRET_KEY, (err, user) => {
-        if (err) {
-          res.clearCookie("token");
-          next();
-        } else {
+      verifyAccessToken(token)
+        .then(() => {
           res.redirect("/");
-        }
-      });
+        })
+        .catch((err) => {
+          console.error("Error is ", err.message);
+          res.clearCookie("token");
+          res.redirect("/signin");
+          // next(err);
+        });
     } else {
       next();
     }
@@ -61,27 +60,23 @@ module.exports = {
   postSignIn: (req, res) => {
     doSignIn(req.body).then((response) => {
       if (response.status) {
-        // signs a new jwt and store in cookie
-        const token = jwt.sign(
-          response.user.toJSON(),
-          process.env.ACCESS_TOKEN_SECRET_KEY,
-          { expiresIn: "7d" }
-        );
-        res.cookie("token", token, {
-          maxAge: 365 * 24 * 60 * 60 * 1000,
-          httpOnly: true,
-        });
-        // saves username and userId in cookie for future operations
-        let userObj = {
+        let payload = {
           username: response.user.name,
           userId: response.user._id,
         };
-        console.log(userObj);
-        res.cookie("user", userObj, {
-          maxAge: 365 * 24 * 60 * 60 * 1000,
-          httpOnly: true,
+        // signs a new jwt and store in cookie
+        signAccessToken(payload).then((token) => {
+          res.cookie("token", token, {
+            maxAge: 24 * 60 * 60 * 1000,
+            httpOnly: true,
+          });
+          // saves username and userId in cookie for future operations
+          res.cookie("user", payload, {
+            maxAge: 365 * 24 * 60 * 60 * 1000,
+            httpOnly: true,
+          });
+          res.redirect("/");
         });
-        res.redirect("/");
       } else {
         // check is the user blocked by the admin
         if (response.blocked) {
@@ -171,3 +166,50 @@ module.exports = {
     res.redirect("/");
   },
 };
+function verifyAccessToken(token) {
+  return new Promise((resolve, reject) => {
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET_KEY, (err, user) => {
+      if (err) {
+        const Error =
+          err.name === "JsonWebTokenError" ? "Unauthorized" : err.message;
+        reject(createHttpError.Unauthorized(Error));
+      } else {
+        resolve();
+      }
+    });
+  });
+}
+function signAccessToken(payload) {
+  return new Promise((resolve, reject) => {
+    const options = {
+      expiresIn: "1d",
+      issuer: "Homelandspices.com",
+    };
+    jwt.sign(
+      JSON.parse(JSON.stringify(payload)),
+      process.env.ACCESS_TOKEN_SECRET_KEY,
+      options,
+      (err, token) => {
+        if (err) reject(createHttpError.InternalServerError());
+        else resolve(token);
+      }
+    );
+  });
+}
+function signRefreshToken(payload) {
+  return new Promise((resolve, reject) => {
+    const options = {
+      expiresIn: "1y",
+      issuer: "Homelandspices.com",
+    };
+    jwt.sign(
+      JSON.parse(JSON.stringify(payload)),
+      process.env.REFRESH_TOKEN_SECRET_KEY,
+      options,
+      (err, token) => {
+        if (err) reject(createHttpError.InternalServerError());
+        else resolve(token);
+      }
+    );
+  });
+}

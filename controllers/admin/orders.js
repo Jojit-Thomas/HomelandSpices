@@ -2,6 +2,7 @@ const {
   getOrders,
   updateOrderStatus,
   getOrderDetails,
+  updatePaymentStatus,
 } = require("../../helpers/admin/orders");
 
 module.exports = {
@@ -28,4 +29,10 @@ module.exports = {
       res.redirect(`/admin/order/details/${orderId}`);
     });
   },
+  getChangePaymentStatus: (req, res) => {
+    const {orderId, status} = req.body;
+    updatePaymentStatus(orderId, status).then(() => {
+      res.status(200).send("success");
+    })
+  }
 };

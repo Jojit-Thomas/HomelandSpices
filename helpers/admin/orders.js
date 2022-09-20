@@ -110,6 +110,23 @@ module.exports = {
         });
     });
   },
+  updatePaymentStatus: (orderId, paymentStatus) => {
+    console.log(orderId, paymentStatus)
+    return new Promise((resolve, reject) => {
+      order_model.updateOne({
+        _id: Types.ObjectId(orderId),
+      },
+      {
+        $set: {
+          paymentStatus: paymentStatus,
+        }
+      }).then(() => {
+        resolve();
+      }).catch((err) => {
+        console.error(err)
+      })
+    })
+  },
   getStats: (timestamp) => {
     return new Promise((resolve, reject) => {
       timestamp = "$"+timestamp;

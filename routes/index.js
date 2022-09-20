@@ -74,7 +74,7 @@ router.get("/cart", verifyLogin, getCartPage);
 router.post("/cart/add", verifyLogin, getAddToCart);
 router.post("/cart/remove", verifyLogin, getRemoveFromCart);
 router.post("/cart/changeQuantity", verifyLogin, getCartChangeQuantity);
-router.get("/categories/:categoryId", verifyLogin, getSortCategory);
+router.get("/categories/:categoryId", verifyLogin, getSortCategory); 
 //=========================WISHLIST ROUTES =========================
 router.get("/wishlist", verifyLogin, getWishlistPage);
 router.post("/wishlist/add", verifyLogin, getAddToWishlist); 

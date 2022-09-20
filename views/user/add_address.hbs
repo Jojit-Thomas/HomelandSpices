@@ -137,7 +137,7 @@
   $('#checkout-form').submit(function (e) { e.preventDefault();
   console.log('submit'); console.log($('#checkout-form').serialize()); $.ajax({
   url: '/address/add', type: 'POST', data: $('#checkout-form').serialize(),
-  success: function (data) { console.log('success'); window.location.reload(); },error:
+  success: function (data) { console.log('success'); window.location.href = "/address"; },error:
   function (err) { console.log(err); } }) })
 </script>
 {{!-- 
