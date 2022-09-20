@@ -5,6 +5,8 @@ const {
   getTotalAmount,
   changeCartQuantity,
   removeFromCart,
+  checkStock,
+  cartProducts,
 } = require("../../helpers/user/cart");
 
 module.exports = {
@@ -43,8 +45,23 @@ module.exports = {
       if (data) {
         res.redirect("/cart");
       } else {
-        res.send("some error occured");
+        res.send("Some error occured");
       }
     });
   },
+  getCheckStock: (req, res) => {
+    let user = req.cookies.user ? req.cookies.user : null;
+    cartProducts(user.userId).then((data) => {
+      let outOfStock ;
+      for(x in data.cartItems) {
+        let remains = data.cart[x].stocks - data.cartItems[x].quantity
+        console.log("remains : ",remains)
+        if(remains <= 0){
+          outOfStock = true;
+          res.status(307).json({message: `Sorry, ${data.cart[x].title} product now out of stock, check again later`})
+        }
+      }
+      outOfStock ? null: res.status(200).json({success: true})
+    })
+  }
 };

@@ -108,7 +108,7 @@
           <p class="text-purple" id="total">₹{{total}}</p>
         </div>
         <p>Estimated Delivery by <span class="fw-bold">01 Aug 2022</span></p>
-        <form action="/address">
+        <form id="address">
           {{!-- <input type="text" class="form-control" placeholder="Coupon Code" /> --}}
           <button class="btn bg_purple text-white w-100 mt-3">
             CONTINUE TO SHIPPING
@@ -125,7 +125,31 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+
 <script>
+  $("#address").submit((e) => {
+    e.preventDefault();
+    $.ajax({
+      url: "/checkStock",
+      data: {},
+      method: "GET",
+      success: function(data) {
+        window.location.href = "/address"
+      }, error: function (err) {
+        err = jQuery.parseJSON(err.responseText);
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: err.message,
+        }).then((state) => {
+          state.isConfirmed ? location.href = '/cart' : null;
+        })
+      }
+    })
+  })
 function changeQuantity(cartId, productId, userId, count) {
     let val =
         document.getElementById(productId).value;

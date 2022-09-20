@@ -19,6 +19,7 @@ const {
   getCartPage,
   getCartChangeQuantity,
   getRemoveFromCart,
+  getCheckStock,
 } = require("../controllers/user/cart");
 const {
   getHome,
@@ -75,6 +76,7 @@ router.post("/cart/add", verifyLogin, getAddToCart);
 router.post("/cart/remove", verifyLogin, getRemoveFromCart);
 router.post("/cart/changeQuantity", verifyLogin, getCartChangeQuantity);
 router.get("/categories/:categoryId", verifyLogin, getSortCategory); 
+router.get("/checkStock", verifyLogin, getCheckStock);
 //=========================WISHLIST ROUTES =========================
 router.get("/wishlist", verifyLogin, getWishlistPage);
 router.post("/wishlist/add", verifyLogin, getAddToWishlist); 

@@ -1,7 +1,7 @@
 // import fetch from "node-fetch";
 const fetch = require("node-fetch");
 
-const { CLIENT_ID, APP_SECRET } = process.env;
+const { PAYPAL_CLIENT_ID, PAYPAL_APP_SECRET } = process.env;
 const base = "https://api-m.sandbox.paypal.com";
 
 module.exports.createOrder = function createOrder(value) {
@@ -49,7 +49,7 @@ module.exports.capturePayment = async function capturePayment(orderId) {
 };
 
 async function generateAccessToken() {
-  const auth = Buffer.from(CLIENT_ID + ":" + APP_SECRET).toString("base64");
+  const auth = Buffer.from(PAYPAL_CLIENT_ID + ":" + PAYPAL_APP_SECRET).toString("base64");
   const response = await fetch(`${base}/v1/oauth2/token`, {
     method: "post",
     body: "grant_type=client_credentials",

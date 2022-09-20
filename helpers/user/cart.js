@@ -1,6 +1,7 @@
 const { Types } = require("mongoose");
 const { PRODUCT_COLLECTION } = require("../../config/collections");
 const cart_model = require("../../model/cart_model");
+const products_model = require("../../model/products_model");
 
 module.exports = {
   addToCart: (userId, productId) => {
@@ -205,4 +206,29 @@ module.exports = {
         });
     })
   },
+  cartProducts: (userId,quantity) => {
+    return new Promise((resolve, reject) => {
+      cart_model.aggregate([
+        {
+          $match: {
+            userId: Types.ObjectId(userId),
+          },
+        },
+        {
+          $lookup: {
+            from: PRODUCT_COLLECTION,
+            localField: "cartItems.productId",
+            foreignField: "_id",
+            as: "cart",
+          },
+        },
+        // {
+        //   $unset: "cartItems"
+        // },
+      ]).then((data) => {
+        console.log(data[0])
+        resolve(data[0]);
+      })
+    })
+  }
 };
