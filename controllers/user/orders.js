@@ -13,10 +13,10 @@ const {
   // getOrderDetails,
   cancelOrders,
   getOrderDetails,
-  addOrderProducts,
-  totalOrderAmount,
   reduceStock,
+  getOrderProductPrice,
 } = require("../../helpers/user/order");
+const { addToWallet } = require("../../helpers/common");
 module.exports = {
   postCheckout: async (req, res) => {
     console.log(req.body);
@@ -76,8 +76,11 @@ module.exports = {
       res.render("user/order_details", { orders: orders, user: user });
     });
   },
-  getCancelProduct: (req, res) => {
+  getCancelProduct: async (req, res) => {
     const {orderId, productId} = req.params;
+    let user = req.cookies.user ? req.cookies.user : null;
+    let amount = await getOrderProductPrice(orderId, productId);
+    await addToWallet(user.userId, amount)
     cancelOrders(orderId, productId).then(() => {
       res.redirect("/orders");
     });

@@ -30,6 +30,9 @@
       <div class="w-75 h-50 m-auto">
         <p class="p-name">{{title}}</p>
         <p class="price">₹{{price}}</p>
+        {{#ifLess stocks "11"}}
+        <p class="text-danger">Hurry, Only {{stocks}} left!</p>
+        {{/ifLess}}
         <p class="lorem w-50">
           {{desc}}
         </p>

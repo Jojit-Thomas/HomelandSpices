@@ -5,6 +5,7 @@ const category_model = require("../model/category_model");
 const user_model = require("../model/user_model");
 const { generateBcrypt } = require("./bcrypt");
 
+
 module.exports = {
   getProduct: (productId) => {
     return new Promise((resolve, reject) => {
@@ -82,5 +83,17 @@ module.exports = {
       }
     });
   },
-  
+  addToWallet: (userId, amount) => {
+    return new Promise((resolve, reject) => {
+      user_model.updateOne(
+        { _id: Types.ObjectId(userId) },
+        {
+          $inc: { wallet: Number(amount) }, 
+        }
+      ).then((data) => {
+        console.log(data);
+        resolve();
+      })
+    });
+  }, 
 };

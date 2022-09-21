@@ -146,14 +146,18 @@ module.exports = {
         date: date,
       };
       order_model.create(orderObj).then((cart) => {
+       if(!data.paymentMethod === "razorPay"){
         cart_model
-          .deleteOne({
-            userId: Types.ObjectId(data.userId),
-          })
-          .then(() => {
-            console.log("order created data : ",cart)
-            resolve({id: cart._id, total: cart.totalAmount});
-          });
+        .deleteOne({
+          userId: Types.ObjectId(data.userId),
+        })
+        .then(() => {
+          console.log("order created data : ",cart)
+          resolve({id: cart._id, total: cart.totalAmount});
+        });
+       } else {
+        resolve({id: cart._id, total: cart.totalAmount});
+       }
       })
     });
   },
@@ -197,7 +201,7 @@ module.exports = {
           },
           {
             $sort: { date: -1 }
-          }
+          }, 
         ])
         .then((data) => {
           console.log(data)
@@ -260,11 +264,22 @@ module.exports = {
           }
         )
         .then((data) => {
-          console.log(data);
+          console.log("cancel ",data);
           resolve();
         });
     });
   },
+  getOrderProductPrice: (orderId, productId) => {
+    return new Promise((resolve, reject) => {
+      order_model.findOne({
+        _id: Types.ObjectId(orderId),
+        "products.productId": Types.ObjectId(productId),
+      }).then((data) => {
+        // console.log("price is : " + data?.products?.[0]?.price)
+        resolve(data?.products?.[0]?.price);
+      })
+    })
+  }
   // totalOrderAmount: (orderId) => {
   //   return new Promise((resolve, reject) => {
   //     console.log(orderId);

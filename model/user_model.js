@@ -19,7 +19,8 @@ const userSchema = new mongoose.Schema({
   isAllowed: {
     required: true,
     type: Boolean,
-  }
+  },
+  wallet: Number,
 });
 
 module.exports = mongoose.model("users", userSchema, USER_COLLECTION);

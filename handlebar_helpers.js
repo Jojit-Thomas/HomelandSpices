@@ -9,6 +9,10 @@ module.exports = {
       // console.log(arg1 + "=" + arg2);
       return arg1 == arg2 ? options.fn(this) : options.inverse(this);
     });
+    handlebars.registerHelper("ifLess", function (arg1, arg2, options) {
+      // console.log(arg1 + "=" + arg2);
+      return arg1 < arg2 ? options.fn(this) : options.inverse(this);
+    });
     handlebars.registerHelper('index_of', function(context,ndx,property) {
       return context[ndx][property];
     });

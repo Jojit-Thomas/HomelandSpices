@@ -1,5 +1,5 @@
 const express = require("express");
-const { getNewAddressPage, getAddressPage, postAddressSelection, postNewAddress } = require("../controllers/user/address");
+const { getNewAddressPage, getAddressPage, postAddressSelection, postNewAddress, getDeleteAddress, getNewUserAddressPage } = require("../controllers/user/address");
 
 const {
   getSignIn,
@@ -35,7 +35,7 @@ const {
   getOrderDetailsPage,
   getCancelProduct,
 } = require("../controllers/user/orders");
-const { getPaymentPage, verifyPayment, verifyPaymentController } = require("../controllers/user/payment");
+const { getPaymentPage, verifyPayment } = require("../controllers/user/payment");
 const { getProfilePage, postEditUser, postChangePassword, getChangePassword } = require("../controllers/user/user");
 const {
   getAddToWishlist,
@@ -85,7 +85,9 @@ router.post("/wishlist/remove", verifyLogin, getRemoveFromWishlist);
 router.get("/address", verifyLogin, getAddressPage);
 router.post("/address", verifyLogin, postAddressSelection) 
 router.get("/address/add", verifyLogin, getNewAddressPage);
+router.get("/user/address/add", verifyLogin, getNewUserAddressPage);
 router.post("/address/add", verifyLogin, postNewAddress);
+router.delete("/address/delete/:id", verifyLogin, getDeleteAddress)
 //=========================ORDER ROUTES =========================
 router.get("/orders", verifyLogin, getOrderPage);
 router.get("/orders/cancel/:orderId/:productId", verifyLogin, getCancelProduct);
@@ -96,12 +98,12 @@ router.post("/payment/verify", verifyLogin, verifyPayment)
 
 
 
-
 router.post("/api/orders", async (req, res) => {
   try {
     let user = req.cookies.user ? req.cookies.user : null;
     let total = await getTotalAmount(user.userId);
     const order = await paypal.createOrder(total);
+    console.log(order);
     res.json(order);
   } catch (err) {
     res.status(500).send(err.message);

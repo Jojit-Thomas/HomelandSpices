@@ -59,9 +59,13 @@ module.exports = {
         if(remains <= 0){
           outOfStock = true;
           res.status(307).json({message: `Sorry, ${data.cart[x].title} product now out of stock, check again later`})
+          break;
         }
       }
-      outOfStock ? null: res.status(200).json({success: true})
+      if(!outOfStock){
+        res.status(200).json({success: true})
+      }
     })
   }
 };
+  

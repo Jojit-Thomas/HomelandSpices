@@ -3,7 +3,7 @@
   screen and (max-width: 768px) { .outer { padding: 0.3rem; } .proImg { width:
   70% !important; margin-left: 10% !important; } .title { font-size: 1rem;
   word-wrap: break-word; } .desc { font-size: 0.8rem; word-wrap: break-word; } }
-  @media screen and (max-width: 576px) { .paymentMethod { margin-top: 1.5rem
+  @media screen and (max-width: 576px) { .payment { margin-top: 1.5rem
   !important; } } @media screen and (min-width: 370px) and (max-width: 576px) {
   .address { width: 60% !important; } }
 </style>
@@ -43,10 +43,16 @@
 
                     </div>
                     <div
-                      class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 col-xxl-3 my-auto paymentMethod"
+                      class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-2 col-xxl-2 my-auto payment"
                     >
                       <h6 class="mb-0"><strong>Payment Method:</strong>
                         <br />{{paymentMethod}}</h6>
+                    </div>
+                    <div
+                      class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-2 col-xxl-2 my-auto payment"
+                    >
+                      <h6 class="mb-0"><strong>Payment Status:</strong></h6>
+                        <span>{{paymentStatus}}</span>
                     </div>
                   </div>
                   <hr class="my-4" />

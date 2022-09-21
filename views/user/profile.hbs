@@ -1,4 +1,4 @@
-<style>
+{{!-- <style>
   .avatar{ width: calc(10rem + 20vw); height: calc(10rem + 20vw); } @media
   screen and (min-width: 576px) { .inp-sm-5 { width: 48%; } }
 </style>
@@ -44,13 +44,6 @@
             onclick="editUser()"
           ><p class="m-auto text-white text-uppercase">Edit</p></div>
         </div>
-                {{!-- <input 
-          class="form-control py-2 px-3 mb-3 d-none"
-          placeholder="E.g : PaSs#1$2&3"
-          id="password"
-          type="password"
-          name="password"
-        /> --}}
         </form>
       {{/with}}
       <div class="d-flex flex-wrap justify-content-between">
@@ -80,22 +73,214 @@
       </div>
     </div>
   </div>
+</section> --}}
+
+<section class="w-100">
+  <h1 class="text-center mt-5 text-uppercase">ACCOUNT</h1>
+  <div class="container">
+    <h3 class="text-uppercase mt-5">MY ACCOUNT</h3>
+    <hr class="my-3" />
+  <!-- ========================================================================================================== -->
+    <section class="my-5">
+      <div class="d-flex justify-content-between">
+        <h5 class="text-uppercase">My wallet</h5>
+        {{! <div class="btn btn-outline-primary"  onclick="editUser()">Edit</div> }}
+      </div>
+      <hr class="my-3" />
+      <div
+        class="d-flex justify-content-between col-12 col-sm-9-col-md-8 col-lg-6 col-xl-4"
+      >
+        <small class="text-uppercase align-middle my-auto">current balance :
+        </small>
+        <input
+          class="align-middle input-none"
+          id="name"
+          type="text"
+          name="name"
+          value="₹{{userDetails.wallet}}"
+        />
+      </div>
+      <hr class="my-2" />
+      <div
+        class="d-flex justify-content-between col-12 col-sm-9-col-md-8 col-lg-6 col-xl-4"
+      >
+        <small class="text-uppercase align-middle my-auto">Add wallet :
+        </small>
+        <div style="width: 199px;"><a
+                class="btn btn-outline-primary"
+                href="/"
+              >Add to wallet</a></div>
+      </div>
+      <hr class="my-2" />
+    </section>
+  <!-- ========================================================================================================== -->
+    <section class="my-5">
+      <div class="d-flex justify-content-between">
+        <h5 class="text-uppercase">ACCOUNT DETAILS</h5>
+        <div class="btn btn-outline-primary" onclick="editUser()">Edit</div>
+      </div>
+      <hr class="my-3" />
+      {{#with userDetails}}
+        <form id="userDetails">
+          <div
+            class="d-flex justify-content-between col-12 col-sm-9-col-md-8 col-lg-6 col-xl-4"
+          >
+            <small class="text-uppercase align-middle my-auto">name : </small>
+            <input
+              class="align-middle input-none"
+              id="name"
+              type="text"
+              name="name"
+              value="{{name}}"
+            />
+          </div>
+          <hr class="my-2" />
+          <div
+            class="d-flex justify-content-between col-12 col-sm-9-col-md-8 col-lg-6 col-xl-4"
+          >
+            <small class="text-uppercase align-middle my-auto">email : </small>
+            <input
+              class="align-middle input-none"
+              id="email"
+              type="text"
+              name="email"
+              value="{{email}}"
+            />
+          </div>
+          <hr class="my-2" />
+          <div
+            class="d-flex justify-content-between col-12 col-sm-9-col-md-8 col-lg-6 col-xl-4"
+          >
+            <small class="text-uppercase align-middle my-auto">phone : </small>
+            <input
+              class="align-middle input-none"
+              id="phone"
+              type="text"
+              name="phone"
+              value="{{phone}}"
+            />
+          </div>
+          <hr class="my-2" />
+          <div
+            class="d-flex justify-content-between col-12 col-sm-9-col-md-8 col-lg-6 col-xl-4"
+          >
+            <small class="text-uppercase align-middle my-auto">Password :
+            </small>
+            <div style="width: 199px;"><a
+                class="btn btn-outline-primary"
+                href="/user/password/reset"
+              >Change Password</a></div>
+          </div>
+          <hr class="my-2" />
+
+        </form>
+      {{/with}}
+    </section>
+  <!-- ========================================================================================================== -->
+    <section class="my-5">
+      <div class="d-flex justify-content-between">
+        <h5 class="text-uppercase">Order history</h5>
+        {{! <div class="btn btn-outline-primary"  onclick="editUser()">Edit</div> }}
+      </div>
+      <hr class="my-3" />
+      <div class="d-flex flex-wrap">
+        {{#each address}}
+          <div
+            class="col-10 offset-1 offset-sm-0 col-sm-6 col-md-4 p-2"
+            id="address{{this._id}}"
+          >
+            <div class="rounded border w-100 h-100 p-3">
+              <div class="d-flex justify-content-between">
+                <h5 class="text-dark title">{{this.name}}</h5>
+                <div
+                  class="d-flex justify-content-between"
+                  style="width: 20%;"
+                ><i class="fa-solid fa-pencil text-dark"></i>
+                  <i
+                    class="fa-solid fa-trash text-danger"
+                    onclick="deleteAddress('{{this._id}}')"
+                  ></i>
+                </div>
+              </div>
+              <p class="text-muted mb-0 desc">{{this.houseName}},
+                {{this.postOffice}}
+                P.O.,
+                {{this.locality}},
+                {{this.city}},
+                {{this.landmark}}, Pincode :
+                {{this.pincode}}</p>
+              <small>Phone : {{this.phone}}</small>
+            </div>
+          </div>
+        {{/each}}
+        <div
+          class="col-10 col-sm-4 col-md-3 p-2 d-flex justify-content-center"
+          style="height: 160px;"
+        >
+          <span onclick="addNewAddress()" class="m-auto">+ Create New Address</span>
+        </div>
+      </div>
+    </section>
+  </div>
 </section>
 
-
+{{!-- Swal cdn link --}}
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-  function editUser() {
-    console.log("Edit user")
-    $.ajax({
-      url: "/user/edit",
-      method : "POST",
-      data : $("#userDetails").serialize(),
+ function editUser() {
+  console.log("Edit user")
+  $.ajax({
+    url: "/user/edit",
+    method: "POST",
+    data: $("#userDetails").serialize(),
+    success: function(data) {
+      console.log(data);
+    },
+    errors: function(err) {
+      console.log(err);
+    }
+  })
+}
+
+function deleteAddress(id) {
+  Swal.fire({
+    icon: 'error',
+    title: 'Delete address',
+    text: "Are you sure want to delete this address?",
+    showDenyButton: true,
+  }).then((state) => {
+    if(state.isConfirmed) {
+      $.ajax({
+      url: `/address/delete/${id}`,
+      method: "DELETE",
+      data: {},
       success: function(data) {
-        console.log(data);
+        $(`#address${id}`).remove();
       },
-      errors: function(err) {
-        console.log(err)
-      }
+      error: function(err) {}
     })
-  }
+    } else if (state.isDenied) {
+      Swal.close();
+    }
+  })
+}
+function addNewAddress() {
+  $.ajax({
+    url: "/user/address/add",
+    method: "GET",
+    success: function(data) {
+      location.href = "/user/address/add"
+    }, error: function(err) {
+      Swal.fire({
+    icon: 'error',
+    title: 'Limit Reached',
+    text: "The maximum number of address you can have is 5",
+  }).then((state) => {
+    if(state.isConfirmed){
+      Swal.close();
+    }
+  })
+    }
+  })
+}
 </script>

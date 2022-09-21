@@ -1,7 +1,7 @@
 
 <style>
-  .bg_purple { background-color: #9155fd; } .purple { color: #766edb; } .purplec
-  { color: #9155fd; } .a-none { text-decoration: none; } input[type="radio"] {
+  .bg_purple { background-color: #9155fd; } .purple { color: #766edb; }
+  .a-none { text-decoration: none; } input[type="radio"] {
   width: 18px; height: 18px; } .breadcrumb-item + .breadcrumb-item::before {
   margin: 0 1vw; content: var(--bs-breadcrumb-divider, " > "); }
   .breadcrumb-item { font-size: large; font-weight: 700; } .address { word-wrap:
@@ -26,7 +26,7 @@
       </nav>
       <!-- ================================================================================ -->
       {{#each address}}
-        <div class="d-flex justify-content-between mb-5 w-100 flex-wrap">
+        <div class="d-flex justify-content-between  w-100 flex-wrap" id="address{{this._id}}">
         <div class="d-flex col-12 col-sm-8">
           <input required
             type="radio"
@@ -45,9 +45,10 @@
         <div class="d-flex col-12 col-sm-4 options" id="" style="width: 10rem">
           <a href=" /Address/Edit" class="text-dark a-none">Edit</a>
           <span class="mx-3">|</span>
-          <a href=" /Address/Remove" class="text-danger a-none"> Remove</a>
+          <span onclick="deleteAddress('{{this._id}}')" class="text-danger a-none"> Remove</span>
         </div>
       </div>
+      <hr class="my-4" id="hr{{this._id}}">
       {{/each}}
       <!-- ================================================================================ -->
       {{!-- <div class="d-flex justify-content-between mb-5 w-100 flex-wrap">
@@ -73,8 +74,7 @@
       </div> --}}
 
       <!-- ================================================================================ -->
-      <hr />
-      <a href="/address/add" class="purplec">+ CREATE NEW ADDRESS</a>
+      <a href="/address/add" class="text-decoration-none">+ Create New Address</a>
     </div>
     <div
       class="col-lg-3 col-sm-12 col-12 p-4 mt-5 border border-1"
@@ -99,8 +99,8 @@
       </div> --}}
       <hr />
       <div class="d-flex justify-content-between w-100">
-        <p class="text-purple">TOTAL</p>
-        <p class="text-purple">₹{{total}}</p>
+        <p class="">TOTAL</p>
+        <p class="">₹{{total}}</p>
       </div>
       <p>Estimated Delivery by <span class="fw-bold">01 Aug 2022</span></p>
       {{!-- <input type="text" name="coupon" class="form-control" placeholder="Coupon Code" /> --}}
@@ -108,3 +108,31 @@
     </div>
   </div>
 </form>
+
+{{!-- Swal cdn link --}}
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  function deleteAddress(id) {
+  Swal.fire({
+    icon: 'error',
+    title: 'Delete address',
+    text: "Are you sure want to delete this address?",
+    showDenyButton: true,
+  }).then((state) => {
+    if(state.isConfirmed) {
+      $.ajax({
+      url: `/address/delete/${id}`,
+      method: "DELETE",
+      data: {},
+      success: function(data) {
+        $(`#address${id}`).remove();
+        $(`#hr${id}`).remove();
+      },
+      error: function(err) {}
+    })
+    } else if (state.isDenied) {
+      Swal.close();
+    }
+  })
+}
+</script>

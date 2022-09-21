@@ -1,7 +1,8 @@
 const { Types } = require("mongoose");
-const { changePaymentStatus } = require("../../helpers/user/payment")
+const { changePaymentStatus } = require("../../helpers/user/payment");
 const Razorpay = require("razorpay");
 const { getTotalAmount } = require("../../helpers/user/cart");
+const cart_model = require("../../model/cart_model");
 require("dotenv").config();
 var instance = new Razorpay({
   key_id: "rzp_test_8JLZOZRODQ9Mpc",
@@ -9,10 +10,10 @@ var instance = new Razorpay({
 });
 
 module.exports = {
-  getPaymentPage: async(req, res) => {
+  getPaymentPage: async (req, res) => {
     let user = req.cookies.user ? req.cookies.user : null;
-    let total = await getTotalAmount(user.userId)
-    res.render("user/payment", { user: user, total: total});
+    let total = await getTotalAmount(user.userId);
+    res.render("user/payment", { user: user, total: total });
   },
   generateRazorpay: (orderId, totalAmount) => {
     return new Promise((resolve, reject) => {
@@ -28,20 +29,25 @@ module.exports = {
     });
   },
   verifyPayment: (req, res) => {
+    let user = req.cookies.user ? req.cookies.user : null;
     verifyPaymentController(req.body)
       .then(() => {
         changePaymentStatus(req.body["order[receipt]"])
-          .then(() => {
-            console.log("success")
+          .then(async () => {
+            console.log("success");
+            await cart_model
+              .deleteOne({
+                userId: Types.ObjectId(user.userId),
+              })
             res.status(200).send({ status: true });
           })
           .catch((err) => {
             console.log(err);
             res.status(500).json({ status: false });
           });
-        })
-        .catch((err) => {
-        console.log(err)
+      })
+      .catch((err) => {
+        console.log(err);
         res.status(500).json({ status: false });
       });
   },
@@ -61,7 +67,12 @@ function verifyPaymentController(data) {
     if (hmac == data["response[razorpay_signature]"]) {
       resolve();
     } else {
-      console.log("not identical",hmac, "   ", data["response[razorpay_signature]"])
+      console.log(
+        "not identical",
+        hmac,
+        "   ",
+        data["response[razorpay_signature]"]
+      );
       reject("Payment failed");
     }
   });

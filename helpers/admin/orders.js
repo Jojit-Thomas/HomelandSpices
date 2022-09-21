@@ -145,7 +145,7 @@ module.exports = {
         }
       },
       {
-        $sort: {date: -1}
+        $sort: {date: 1}
       },
       {
         $limit: 14,

@@ -1,14 +1,14 @@
 
 <style>
-  .bg_purple { background-color: #9155fd; } .purple { color: #766edb; } .purplec
-  { color: #9155fd; } .a-none { text-decoration: none; } input[type="radio"] {
+  .bg_purple { background-color: #9155fd; } .purple { color: #766edb; } 
+  .a-none { text-decoration: none; } input[type="radio"] {
   width: 18px; height: 18px; } .breadcrumb-item + .breadcrumb-item::before {
   margin: 0 1vw; content: var(--bs-breadcrumb-divider, " > "); }
   .breadcrumb-item { font-size: large; font-weight: 700; } .address { word-wrap:
   break-word; /* overflow-wrap: break-word; */ } @media screen and (min-width:
   768px) { .options { margin: auto 0; } .outer{ padding: 1rem 3rem; } } @media
   screen and (max-width: 768px) { .options { margin: 1rem 2.6rem; } .outer{
-  padding: 1rem 1rem; } }
+  padding: 1rem 1rem; } } .accordion-item { border:none; border-bottom: 1px solid #0000003a; margin-bottom: 0.4rem;}
 </style>
 <form id="paymentForm" method="post">
   <div class="container pt-5 d-flex flex-wrap">
@@ -25,7 +25,7 @@
       </nav>
       <input type="radio" name="paymentMethod" hidden id="paymentMethodInp">
       <div class="accordion" id="accordionExample">
-        <div class="accordion-item">
+        <div class="accordion-item ">
           <h2 class="accordion-header" id="headingOne">
             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#cashOnDelivery" aria-expanded="true" aria-controls="cashOnDelivery">
             Cash On Delivery
@@ -61,7 +61,6 @@
             </div>
           </div>
         </div>
-        <hr />
         <div class="pt-5">
           <h6 class="mb-0"><a href="/address" class="text-body"><i
             class="fas fa-long-arrow-alt-left me-2"
@@ -131,8 +130,6 @@ $("#placeOrder").click(function() {
 <script>
 $("#paymentForm").submit((e) => {
   e.preventDefault();
-
-
 if($("#paymentMethodInp").val() == "paypal"){
   if ($(".paypal-success")[0]){
     alert("submitting checkout")
@@ -145,7 +142,6 @@ if($("#paymentMethodInp").val() == "paypal"){
 } else {
   submitCheckout();
 }
-  
 })
 
 function submitCheckout () {
@@ -164,7 +160,6 @@ function submitCheckout () {
           state.isConfirmed ? location.href = '/' : null;
         })
       }
-      
       else {
         razorPayment(response.res);
       }
@@ -176,13 +171,13 @@ function submitCheckout () {
 function razorPayment(order) {
     console.log(order)
   var options = {
-    "key": "rzp_test_8JLZOZRODQ9Mpc", // Enter the Key ID generated from the Dashboard
+    "key": "rzp_test_8JLZOZRODQ9Mpc",
     "amount": parseInt(order.amount), // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
     "currency": "INR",
     "name": "Homeland Spices",
     "description": "Test Transaction",
     "image": "https://example.com/your_logo",
-    "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+    "order_id": order.id, 
     "handler": function(response) {
       verifyPayment(response, order);
     },

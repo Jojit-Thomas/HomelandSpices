@@ -81,4 +81,18 @@ module.exports = {
       });
     });
   },
+  deleteAddress: (id) => {
+    return new Promise((resolve, reject) => {
+      address_model.deleteOne({_id: Types.ObjectId(id)}).then(() => {
+        resolve();
+      })
+    })
+  },
+  getAddressCount: (userId) => {
+    return new Promise((resolve, reject) => {
+      address_model.find({userId: Types.ObjectId(userId)}).count().then((count)=> {
+        resolve(count)
+      })
+    })
+  }
 };
