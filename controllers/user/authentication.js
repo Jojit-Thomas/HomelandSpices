@@ -128,7 +128,7 @@ module.exports = {
   },
   postVerifyOtp: (req, res) => {
     const { otp, phone } = req.body;
-    console.log(phone, "BODY", otp, "PRE", OTP);
+    console.log(phone, "BODY", otp);
     //twilio otp verify function
     client.verify.v2
       .services(process.env.TWILIO_SERVICE_ID)
@@ -141,21 +141,31 @@ module.exports = {
           getUser(phone).then((user) => {
             if (user) {
               console.log(user);
-              const token = jwt.sign(
-                user.toJSON(),
-                process.env.ACCESS_TOKEN_SECRET_KEY,
-                { expiresIn: "7d" }
-              );
-              res.cookie("token", token);
-              res.redirect("/");
+              let payload = {
+                username: user.name,
+                userId: user._id,
+              };
+              // signs a new jwt and store in cookie
+              signAccessToken(payload).then((token) => {
+                res.cookie("token", token, {
+                  maxAge: 24 * 60 * 60 * 1000,
+                  httpOnly: true,
+                });
+                // saves username and userId in cookie for future operations
+                res.cookie("user", payload, {
+                  maxAge: 365 * 24 * 60 * 60 * 1000,
+                  httpOnly: true,
+                });
+                res.redirect("/");
+              });
             } else {
               res
                 .status(401)
-                .send({ message: "NO user with this phone number" });
+                .json({ message: "NO user with this phone number" });
             }
           });
         } else {
-          res.status(401).send({ message: "Otp doesn't match" });
+          res.status(401).json({ message: "Otp doesn't match" });
         }
       });
   },
