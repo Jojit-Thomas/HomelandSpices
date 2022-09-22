@@ -46,14 +46,14 @@
                       class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-2 col-xxl-2 my-auto paymentMethod"
                     >
                       <h6 class="mb-0"><strong>Payment Method:</strong>
-                        <br />{{this.paymentMethod}}</h6>
+                        <br />{{this.payment_method}}</h6>
                     </div>
                     <div
                       class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-2 col-xxl-2 my-auto paymentMethod"
                     >
                       <h6 class="mb-0"><strong>Payment Status:</strong></h6>
                         <select name="paymentStatus" class="border border-0 " id="paymentStatus" onchange="changePaymentStatus('{{_id}}')">
-                            <option value="" id="paymentStatusSelected">{{paymentStatus}}</option>
+                            <option value="" id="paymentStatusSelected">{{payment_status}}</option>
                             <option value="Pending">Pending</option>
                             <option value="Received">Received</option>
                             <option value="Refunded">Refunded</option>
@@ -174,7 +174,7 @@
                       <hr />
                       <div class="d-flex justify-content-between w-100">
                         <p class="text-purple">TOTAL</p>
-                        <p class="text-purple" id="total">₹{{orderDetails.totalAmount}}</p>
+                        <p class="text-purple" id="total">₹{{orderDetails.total_amount}}</p>
                       </div>
                     </div>
                   </div>

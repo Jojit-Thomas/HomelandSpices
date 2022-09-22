@@ -132,7 +132,6 @@ $("#paymentForm").submit((e) => {
   e.preventDefault();
 if($("#paymentMethodInp").val() == "paypal"){
   if ($(".paypal-success")[0]){
-    alert("submitting checkout")
     submitCheckout();
 } else {
   Swal.fire("Sorry", "Please complete the paypal payment or choose any other payment", "error").then((state) => {
@@ -255,13 +254,6 @@ function razorPayment(order) {
                 );
                 var transaction =
                   orderData.purchase_units[0].payments.captures[0];
-                alert(
-                  "Transaction " +
-                    transaction.status +
-                    ": " +
-                    transaction.id +
-                    "\n\nSee console for all available details"
-                );
                 $(document).ready(function (){
                 $("#paypal").addClass("paypal-success");
                 $("#placeOrder").trigger("click");//After completing the payment submitting the order

@@ -14,13 +14,10 @@ module.exports = {
         products_model
           .findOne({ _id: Types.ObjectId(productId) })
           .then((product) => {
-            if(!product) {
-              reject(createHttpError.NotFound())
-            }
-            resolve(product);
+            product ? resolve(product) : reject(createHttpError.NotFound());//
           })
       } else {
-        reject(createHttpError.NotFound());
+        reject(createHttpError.NotFound());//If the provided productId is not a valid ObjectId
       }
     });
   },
@@ -57,11 +54,15 @@ module.exports = {
       });
     });
   },
-  getUser: (id) => {
+  getUser: (userId) => {
     return new Promise((resolve, reject) => {
-      user_model.findOne({ _id: Types.ObjectId(id) }).then((user) => {
-        resolve(user);
-      });
+      if( mongoose.Types.ObjectId.isValid(userId)){
+        user_model.findOne({ _id: Types.ObjectId(userId) }).then((user) => {
+          user ? resolve(user) : reject(createHttpError.NotFound())// If the user does not exist, reject the request
+        });
+      } else {
+        reject(createHttpError.NotFound());//If the provided userId is not a valid ObjectId, reject the request
+      }
     });
   },
   updateUser: (id, body) => {

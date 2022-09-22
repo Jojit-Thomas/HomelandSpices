@@ -63,8 +63,8 @@ router.post("/editProduct/:id", adminAuth, postEditProduct);
 //=============================User Management=============================
 router.get("/users", adminAuth, getUsers);
 router.get("/deleteUser/:id", adminAuth, getdeleteUser);
-router.get("/editUser/:id", adminAuth, getEditUser);
-router.post("/editUser/:id", adminAuth, postEditUser);
+router.get("/user/edit/:id", adminAuth, getEditUser);
+router.post("/user/edit/:id", adminAuth, postEditUser);
 router.get("/addUser", adminAuth, getAddUser);
 router.post("/addUser", adminAuth, postAddUser);
 router.get("/blockUser/:id", adminAuth, getBlockUser);
@@ -73,7 +73,7 @@ router.get("/category", adminAuth, getCategoriesPage);
 router.get("/category/add", adminAuth, getAddCategory);
 router.post("/category/add", adminAuth, postAddCategory);
 router.get("/category/delete/:id", adminAuth, getDeleteCategory);
-router.get("/category/edit/:categoryId", adminAuth, getEditCategory);
+router.get("/category/edit/:categoryId", adminAuth, getEditCategory); 
 router.post("/category/edit/:categoryId", adminAuth, postEditCategory);
 //=================================Orders=================================
 router.get("/orders", adminAuth, getOrderPage);

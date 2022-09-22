@@ -22,11 +22,13 @@ module.exports = {
       }
     });
   },
-  getEditUser: (req, res) => {
+  getEditUser: (req, res, next) => {
     getUser(req.params.id).then((user) => {
       console.log(user);
       res.render("admin/edit_user", {admin: true, user: user });
-    });
+    }).catch((err) => {
+      next(err);
+    })
   },
   postEditUser: (req, res) => {
     console.log(req.body);

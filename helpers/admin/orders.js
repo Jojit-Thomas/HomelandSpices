@@ -7,7 +7,13 @@ const {
 const order_model = require("../../model/order_model");
 
 module.exports = {
-  getOrders: () => {
+  getOrders: (limit, offset, sort, sortValue) => {
+    limit = parseInt(limit);
+    offset = parseInt(offset);
+    sort = parseInt(sort);
+    let query = {};
+    query[ sortValue.toLowerCase() ] = sort
+    console.log(query);
     return new Promise((resolve, reject) => {
       order_model
         .aggregate([
@@ -20,17 +26,24 @@ module.exports = {
             },
           },
           {
-            $sort: {date: -1}
+            $sort: query
           },
           {
             $set: {
               date: {
                 $dateToString: { format: "%d/%m/%Y -- %H:%M", date: "$date", timezone: "+05:30" },
-              },
+              },  
             },
           },
+          {
+            $skip : offset
+          },
+          {
+            $limit: limit
+          }
         ])
         .then((data) => {
+          console.log(data);
           resolve(data);
         });
     });
@@ -142,7 +155,7 @@ module.exports = {
                [400, {$year: "$date"}]
              }
           ]},   
-          totalAmount: { $sum: "$totalAmount" },
+          total_amount: { $sum: "$total_amount" },
           date: {$min: "$date"}
         }
       },
@@ -154,12 +167,12 @@ module.exports = {
       }
       ]).then((data) => {
         let date =[]
-        let totalAmount =[]
+        let total_amount =[]
         data.forEach((item) => {
           date.push(item.date.toDateString())
-          totalAmount.push(item.totalAmount)
+          total_amount.push(item.total_amount)
         })
-        data = {date : date, totalAmount: totalAmount}
+        data = {date : date, total_amount: total_amount}
         console.log(data)
         resolve(data);
       })

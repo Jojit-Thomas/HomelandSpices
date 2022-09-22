@@ -20,7 +20,7 @@
     success: function(response) {
       console.log(response);
       var xValues =response.date;
-      var yValues = response.totalAmount;
+      var yValues = response.total_amount;
       new Chart("myChart", {
         type: "line",
         data: {

@@ -11,7 +11,7 @@
     </ul>
     <div class="col-sm-9 col-9 mx-auto">
       {{#with user}}
-      <form id="editUser" action="/admin/edituser/{{this._id}}" method="post">
+      <form id="editUser" action="/admin/user/edit/{{this._id}}" method="post">
         <p for="name">Full Name</p>
         <input required
           class="form-control py-2 px-3 mb-3"

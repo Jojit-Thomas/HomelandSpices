@@ -1,3 +1,4 @@
+const { DataSessionList } = require("twilio/lib/rest/wireless/v1/sim/dataSession");
 const {
   getOrders,
   updateOrderStatus,
@@ -7,8 +8,9 @@ const {
 
 module.exports = {
   getOrderPage: (req, res) => {
-    getOrders().then((orders) => {
-      res.render("admin/orders", { orders: orders, admin: true });
+    let {limit = 50, offset = 0, sort = 1, sortValue = 'date'} = req.query;
+    getOrders(limit, offset, sort, sortValue).then((orders) => {
+      res.render("admin/orders", { orders: orders, admin: true, limit: limit, offset: offset });
     });
   },
   getOrderDetailsPage: (req, res) => {
