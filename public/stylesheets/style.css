@@ -30,6 +30,9 @@
 .vh-25 {
   height: 25vh;
 }
+.w-10 {
+  width: 10%;
+}
 .dropdown {
   border: none;
   background-color: #0004;

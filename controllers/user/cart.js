@@ -54,7 +54,7 @@ module.exports = {
     cartProducts(user.userId).then((data) => {
       let outOfStock ;
       for(x in data.cartItems) {
-        let remains = data.cart[x].stocks - data.cartItems[x].quantity
+        let remains = (data.cart[x].stocks + 1) - data.cartItems[x].quantity// (1 + 1) - 1 = 1//this is to avoid the case where the stock is 1 and get the error out of stock
         console.log("remains : ",remains)
         if(remains <= 0){
           outOfStock = true;

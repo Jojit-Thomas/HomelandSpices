@@ -49,9 +49,9 @@ module.exports = {
     //soft delete the product 
     deleteProduct(req.params.id).then((result) => {
       if (result) {
-        res.redirect("/admin/products");
+        res.status(200).json({success: true});
       } else {
-        res.send("something went wrong");
+        res.status().json("something went wrong");
       }
     });
   },

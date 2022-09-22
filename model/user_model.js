@@ -21,6 +21,10 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
   },
   wallet: Number,
+  date:{
+    type: Date, 
+    default: new Date(),
+  },
 });
 
 module.exports = mongoose.model("users", userSchema, USER_COLLECTION);

@@ -146,7 +146,9 @@ module.exports = {
         date: date,
       };
       order_model.create(orderObj).then((cart) => {
-       if(!data.paymentMethod === "razorPay"){
+        console.log(data.paymentMethod)
+        if(data.paymentMethod !== "razorPay"){
+          console.log("deleting the cart items")
         cart_model
         .deleteOne({
           userId: Types.ObjectId(data.userId),
@@ -190,7 +192,7 @@ module.exports = {
           {
             $set: {
               date: {
-                $dateToString: { format: "%d/%m/%Y -- %H:%M", date: "$date" },
+                $dateToString: { format: "%d/%m/%Y -- %H:%M", date: "$date", timezone: "+05:30" },
               },
             },
           },

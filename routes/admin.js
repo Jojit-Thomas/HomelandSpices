@@ -57,7 +57,7 @@ router.get("/stats/sales", adminAuth, getSalesStatsDate)
 router.get("/products", adminAuth, getProducts); //Products_page
 router.get("/addProduct", adminAuth, getAddProducts); //Add_products_page
 router.post("/addProduct", adminAuth, postAddProducts);
-router.get("/deleteProduct/:id", adminAuth, deleteProduct);
+router.delete("/product/delete/:id", adminAuth, deleteProduct);
 router.get("/editproduct/:id", adminAuth, getEditProduct);
 router.post("/editProduct/:id", adminAuth, postEditProduct);
 //=============================User Management=============================

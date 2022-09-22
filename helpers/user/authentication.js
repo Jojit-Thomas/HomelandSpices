@@ -20,6 +20,8 @@ module.exports = {
         } else {
             let password = await generateBcrypt(data.password);
             delete data.confirmPassword;
+            const date = new Date();
+            console.log("Date offset : ",date.getTimezoneOffset())
             user_model
               .create({
                 name: name,
@@ -27,6 +29,8 @@ module.exports = {
                 phone: phone,
                 password: password,
                 isAllowed: true,
+                wallet: 0,
+                date: date,
               })
               .then((result) => {
                 console.log(result);

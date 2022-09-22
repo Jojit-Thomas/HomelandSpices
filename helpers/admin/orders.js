@@ -13,30 +13,24 @@ module.exports = {
         .aggregate([
           {
             $lookup: {
-              from: USER_COLLECTION,
-              localField: "userId",
+              from: ORDER_ADDRESS_COLLECTION,
+              localField: "deliveryDetails",
               foreignField: "_id",
-              as: "user",
-            },
-          },
-          {
-            $unwind: "$user",
-          },
-          {
-            $set: {
-              date: {
-                $dateToString: { format: "%d/%m/%Y -- %H:%M", date: "$date" },
-              },
+              as: "address",
             },
           },
           {
             $sort: {date: -1}
-          }
+          },
+          {
+            $set: {
+              date: {
+                $dateToString: { format: "%d/%m/%Y -- %H:%M", date: "$date", timezone: "+05:30" },
+              },
+            },
+          },
         ])
         .then((data) => {
-          // console.log(data);
-          // data[0] ? data[0].date = data[0].date.toLocaleString() : console.log("cannot set date");
-          // data[0].date = data[0].date.toLocaleString()
           resolve(data);
         });
     });
@@ -68,9 +62,17 @@ module.exports = {
             },
           },
           {
+            $lookup: {
+              from: USER_COLLECTION,
+              localField: "userId",
+              foreignField: "_id",
+              as: "user",
+            },
+          },
+          {
             $set: {
               date: {
-                $dateToString: { format: "%d/%m/%Y -- %H:%M", date: "$date" },
+                $dateToString: { format: "%d/%m/%Y -- %H:%M", date: "$date", timezone: "+05:30" },
               },
             },
           },

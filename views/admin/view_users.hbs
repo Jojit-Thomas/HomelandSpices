@@ -1,35 +1,139 @@
-<section>
-  <div class="container-fluid">
-    <div class="container-fluid">
-      <div class="row">
-        <a href="/admin/addUser" class="my-4"><div
+
+
+<style>
+  .table> :not(:last-child)> :last-child>* {
+  border: none !important;
+}
+
+.h6-none {
+  margin: 0 !important;
+}
+
+.nos {
+  font-size: 0.625rem;
+  font-weight: 500;
+}
+
+.search {
+  width: 70%;
+  border-radius: 0.4rem;
+  border: 1px solid #5541db;
+}
+
+#search {
+  border: none;
+  background-color: transparent;
+  resize: none;
+  outline:
+    none;
+}
+
+table {
+  display: table;
+  border-spacing: 0px 0.2rem;
+  border-collapse:
+    separate;
+}
+
+table .desc,
+table .title {
+  width: 18%;
+}
+
+.table-container {
+  width: 100%;
+  overflow: scroll;
+}
+</style>
+
+<section class="container-fluid">
+  <nav class="navbar navbar-expand-lg navbar-light flex-wrap">
+    <a class="navbar-brand col-lg-12" href="#">
+      <h3 class="ms-4">Customers List</h3>
+    </a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul
+        class="navbar-nav me-auto mb-2 mb-lg-0 list-group-horizontal flex-wrap"
+      >
+        <li class="nav-item">
+          <a class="nav-link active mx-3" aria-current="page" href="#">All Customers<span
+              class="count"
+            >(10)</span></a>
+        </li>
+        <li class="nav-item mx-3">
+          <a class="nav-link" href="#">Last 30 days
+            <span class="count">(10)</span></a>
+        </li>
+        <li class="nav-item mx-3">
+          <a class="nav-link" href="#">Last 60 days
+            <span class="count">(10)</span></a>
+        </li>
+        <li class="nav-item mx-3">
+          <a href="/admin/addUser" class="my-4"><div
             class="float-end btn text-white"
             style="background-color: var(--blurple);"
           >Add User</div></a>
-      </div>
+        </li>
+        
+      </ul>
     </div>
-    <div class="container-fluid" style="overflow-x:auto;">
-      <table class="table" id="user-table">
-        <thead>
-          <tr>
-            <th class="" scope="col">#</th>
-            <th class="" scope="col">Name</th>
-            <th class="" scope="col">Email</th>
-            <th class="" scope="col">Phone</th>
-            <th class="" scope="col">Password</th>
-            <th class="" scope="col">Options</th>
-          </tr>
-        </thead>
-        <tbody>
-          {{#each users}}
-            <tr>
-              <th class="" scope="row">{{inc @index}}</th>
-              <td class="">{{this.name}}</td>
-              <td class="">{{this.email}}</td>
-              <td class="">{{this.phone}}</td>
-              <td class="" style="overflow-x:auto;">{{this.password}}</td>
-              {{! <td class=""><a href="/admin/delete-user"><img src="/images/trash.svg" alt="delete" width="25px" height="25px" ></a></td> }}
-              <td class="" style="white-space: nowrap;">
+  </nav>
+  <div class="table-container">
+    <table class="table mt-4 p-4">
+      <thead class="bg-white">
+        <tr>
+          <th scope="col" class="m-auto text-center align-middle">S.no</th>
+
+          <th scope="col" class="d-flex justify-content-center">
+            <div class="search d-flex p-2">
+              <i class="fa fa-search my-auto mx-1" aria-hidden="true"></i>
+              <form action="">
+                <input
+                  type="text"
+                  placeholder="Search Here..."
+                  id="search"
+                  style="border: none; width: 100%"
+                />
+              </form>
+            </div>
+          </th>
+          {{! <th scope="col" class="m-auto text-center align-middle">Name</th> }}
+          <th
+            scope="col desc"
+            class="m-auto text-center align-middle"
+          >Email</th>
+          {{!-- <th scope="col" class="m-auto text-center align-middle">Date</th> --}}
+          <th scope="col" class="m-auto text-center align-middle">
+            Phone
+          </th>
+          <th scope="col" class="m-auto text-center align-middle">Password</th>
+          <th scope="col" class="m-auto text-center align-middle">Date</th>
+          <th scope="col" class="m-auto text-center align-middle">Wallet</th>
+          <th scope="col" class="m-auto text-center align-middle">Options</th>
+        </tr>
+      </thead>
+      <tbody class="mt-3 m-auto text-center align-middle" id="table">
+        {{#each users}}
+          <tr class="bg-white">
+            <th class="" scope="row">{{inc @index}}</th>
+            <td class="title">{{this.name}}</td>
+            <td class="desc">{{this.email}}</td>
+            <td class="">{{this.phone}}</td>
+            <td class="">{{this.password}}</td>
+            <td class="">{{this.date}}</td>
+            <td class="">{{this.wallet}}</td>
+            <td class="" style="white-space: nowrap;">
                 <a
                   class="btn bg-blurple text-white m-1"
                   href="/admin/editUser/{{this._id}}"
@@ -52,11 +156,25 @@
                   onclick="return confirm('Are you sure you want to unblock {{this.name}} user?');"
                 >Unblock</a>{{/if}}
               </td>
-            </tr>
-          {{/each}}
-        </tbody>
-      </table>
-    </div>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
   </div>
 </section>
-<link rel="stylesheet" href="/stylesheets/datatable.css" />
+
+
+<script>
+  $(document).ready(function () {
+    $("#search").on("keyup", function () {
+      var value = $(this).val().toLowerCase();
+      $("#table tr").filter(function () {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+    });
+  });
+</script>
+
+
+
+{{! <link rel="stylesheet" href="/stylesheets/datatable.css"> }}

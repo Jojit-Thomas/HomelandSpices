@@ -1,41 +1,165 @@
-<section>
-	<div class='container'>
-		<div class='container'>
+<style>
+  .table> :not(:last-child)> :last-child>* {
+  border: none !important;
+}
 
-		</div>
-		<table class='table'>
-			<thead>
-				<tr>
-					<th class='' scope='col'>#</th>
-					<th class='' scope='col'>Name</th>
-					<th class='' scope='col'>Address</th>
-					<th class='' scope='col'>Total</th>
-					<th class='' scope='col'>Date</th>
-					<th class='' scope='col'>Payment</th>
-					<th class='' scope='col'>Payment</th>
-					<th class='' scope='col'>Option</th>
-				</tr>
-			</thead>
-			<tbody>
-				{{#each orders}}
-					<tr>
-						<th class='' scope='row'>{{@index}}</th>
-						<td class=''>{{this.user.name}}</td>
-						<td class=''>{{this.deliveryDetails.address}}</td>
-						<td class=''>{{this.totalAmount}}</td>
-						<td> {{this.date}}</td>
-						<td> {{this.paymentMethod}}</td>
-						<td>{{this.paymentStatus}}</td>
-						<td class=''>
-							<a
-								class='btn btn-primary'
-								href='/admin/order/details/{{this._id}}'
-							>Details</a>
-						</td>
-					</tr>
-				{{/each}}
+.h6-none {
+  margin: 0 !important;
+}
 
-			</tbody>
-		</table>
-	</div>
+.nos {
+  font-size: 0.625rem;
+  font-weight: 500;
+}
+
+.search {
+  width: 70%;
+  border-radius: 0.4rem;
+  border: 1px solid #5541db;
+}
+
+#search {
+  border: none;
+  background-color: transparent;
+  resize: none;
+  outline:
+    none;
+}
+
+table {
+  display: table;
+  border-spacing: 0px 0.2rem;
+  border-collapse:
+    separate;
+}
+
+table .desc,
+table .title {
+  width: 18%;
+}
+
+.table-container {
+  width: 100%;
+  overflow: scroll;
+}
+</style>
+
+<section class="container-fluid">
+  <nav class="navbar navbar-expand-lg navbar-light flex-wrap">
+    <a class="navbar-brand col-lg-12" href="#">
+      <h3 class="ms-4">Order List</h3>
+    </a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul
+        class="navbar-nav me-auto mb-2 mb-lg-0 list-group-horizontal flex-wrap"
+      >
+        <li class="nav-item">
+          <a class="nav-link active mx-3" aria-current="page" href="#">All Items<span
+              class="count"
+            >(10)</span></a>
+        </li>
+        <li class="nav-item mx-3">
+          <a class="nav-link" href="#">Processing
+            <span class="count">(10)</span></a>
+        </li>
+        <li class="nav-item mx-3">
+          <a class="nav-link" href="#">Dispatched
+            <span class="count">(10)</span></a>
+        </li>
+        <li class="nav-item mx-3">
+          <a class="nav-link" href="#">Shipment
+            <span class="count">(10)</span></a>
+        </li>
+        <li class="nav-item mx-3">
+          <a class="nav-link" href="#">Delivered
+            <span class="count">(10)</span></a>
+        </li>
+        <li class="nav-item mx-3">
+          <a class="nav-link" href="#">Cancel Request
+            <span class="count">(10)</span></a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="table-container">
+    <table class="table mt-4 p-4">
+      <thead class="bg-white">
+        <tr>
+          <th scope="col" class="m-auto text-center align-middle">S.no</th>
+
+          <th scope="col" class="d-flex justify-content-center">
+            <div class="search d-flex p-2">
+              <i class="fa fa-search my-auto mx-1" aria-hidden="true"></i>
+              <form action="">
+                <input
+                  type="text"
+                  placeholder="Search Here..."
+                  id="search"
+                  style="border: none; width: 100%"
+                />
+              </form>
+            </div>
+          </th>
+          {{! <th scope="col" class="m-auto text-center align-middle">Name</th> }}
+          <th
+            scope="col desc"
+            class="m-auto text-center align-middle"
+          >Address</th>
+          <th scope="col" class="m-auto text-center align-middle">Date</th>
+          <th scope="col" class="m-auto text-center align-middle">
+            Payment Method
+          </th>
+          <th scope="col" class="m-auto text-center align-middle">Payment Status</th>
+          <th scope="col" class="m-auto text-center align-middle">Total</th>
+          <th scope="col" class="m-auto text-center align-middle">Options</th>
+        </tr>
+      </thead>
+      <tbody class="mt-3 m-auto text-center align-middle" id="table">
+        {{#each orders}}
+          <tr class="bg-white">
+            <th class="" scope="row">{{inc @index}}</th>
+            <td class="title">{{this.address.[0].name}}</td>
+            <td class="desc">{{this.address.[0].locality}}, {{this.address.[0].postOffice}}, {{this.address.[0].pincode}}</td>
+            <td class="">{{this.date}}</td>
+            <td class="">{{this.paymentMethod}}</td>
+            <td class="">{{this.paymentStatus}}</td>
+            <td class="">{{this.totalAmount}}</td>
+            <td class="">
+              <a
+                class="btn btn-primary"
+                href="/admin/order/details/{{this._id}}"
+              >Details</a>
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
 </section>
+
+
+<script>
+  $(document).ready(function () {
+    $("#search").on("keyup", function () {
+      var value = $(this).val().toLowerCase();
+      $("#table tr").filter(function () {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+    });
+  });
+</script>
+
+
+
+{{! <link rel="stylesheet" href="/stylesheets/datatable.css"> }}

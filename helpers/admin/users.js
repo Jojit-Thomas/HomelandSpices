@@ -4,7 +4,13 @@ const user_model = require("../../model/user_model");
 module.exports = {
   getAllUsers: () => {
     return new Promise((resolve, reject) => {
-      user_model.find().then((users) => {
+      user_model.aggregate([{
+        $set: {
+          date: {
+            $dateToString: { format: "%d/%m/%Y -- %H:%M", date: "$date", timezone: "+05:30"  },
+          },
+        },
+      },]).then((users) => {
         resolve(users);
       });
     });

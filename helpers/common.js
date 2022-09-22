@@ -1,24 +1,41 @@
-const { Types } = require("mongoose");
+const { Types, default: mongoose } = require("mongoose");
 const bcrypt = require("bcrypt");
 const products_model = require("../model/products_model");
 const category_model = require("../model/category_model");
 const user_model = require("../model/user_model");
 const { generateBcrypt } = require("./bcrypt");
+const createHttpError = require("http-errors");
 
 
 module.exports = {
   getProduct: (productId) => {
     return new Promise((resolve, reject) => {
-      products_model
-        .findOne({ _id: Types.ObjectId(productId) })
-        .then((product) => {
-          resolve(product);
-        });
+      if( mongoose.Types.ObjectId.isValid(productId)){
+        products_model
+          .findOne({ _id: Types.ObjectId(productId) })
+          .then((product) => {
+            if(!product) {
+              reject(createHttpError.NotFound())
+            }
+            resolve(product);
+          })
+      } else {
+        reject(createHttpError.NotFound());
+      }
     });
   },
   getAllProducts: () => {
     return new Promise((resolve, reject) => {
-      products_model.find({ isDeleted: { $ne: true } }).then((products) => {
+      products_model.aggregate([
+        {$match:{ isDeleted: { $ne: true }} },
+        {
+          $set: {
+            date: {
+              $dateToString: { format: "%d/%m/%Y", date: "$date", timezone: "+05:30" },
+            },
+          },
+        }
+      ]).then((products) => {
         // console.log(products);
         resolve(products);
       });

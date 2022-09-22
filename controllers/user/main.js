@@ -28,11 +28,14 @@ module.exports = {
       categories: categories,
     });
   },
-  getProductPage: (req, res) => {
+  getProductPage: (req, res, next) => {
+    console.log(req.headers['referer'])
     getProduct(req.params.id).then((product) => {
       let user = req.cookies.user ? req.cookies.user : null;
       res.render("user/product_detail_view", { product: product, user: user });
-    });
+    }).catch((err) => {
+      next(err)
+    })
   },
   getSortCategory: (req, res) => {
     let user = req.cookies.user ? req.cookies.user : null;
