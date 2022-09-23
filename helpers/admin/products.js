@@ -34,7 +34,7 @@ module.exports = {
     });
   },
   updateProduct: (productId, body, img_ext) => {
-    const { title, description, category, price, stocks } = body;
+    const { title, description, category, price, stocks, max_price, discount } = body;
     console.log(stocks)
     console.log(Number(stocks))
     return new Promise((resolve, reject) => {
@@ -45,9 +45,11 @@ module.exports = {
             title: title,
             desc: description,
             category: category,
-            price: Number(price),
             stocks: Number(stocks),
             img_ext: img_ext,
+            price: Number(price),
+            max_price : Number(max_price),
+            discount: Number(discount),
           },
         }
       ).then((result) => {

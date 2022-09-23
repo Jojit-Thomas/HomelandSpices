@@ -139,10 +139,10 @@ module.exports = {
       let orderObj = {
         deliveryDetails: Types.ObjectId(data.addressId),
         userId: Types.ObjectId(data.userId),
-        paymentMethod: data.paymentMethod,
+        payment_method: data.paymentMethod,
         products: products,
-        totalAmount: total,
-        paymentStatus: status,
+        total_amount: total,
+        payment_status: status,
         date: date,
       };
       order_model.create(orderObj).then((cart) => {

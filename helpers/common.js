@@ -6,36 +6,40 @@ const user_model = require("../model/user_model");
 const { generateBcrypt } = require("./bcrypt");
 const createHttpError = require("http-errors");
 
-
 module.exports = {
   getProduct: (productId) => {
     return new Promise((resolve, reject) => {
-      if( mongoose.Types.ObjectId.isValid(productId)){
-        products_model
-          .findOne({ _id: Types.ObjectId(productId) })
-          .then((product) => {
-            product ? resolve(product) : reject(createHttpError.NotFound());//
-          })
-      } else {
-        reject(createHttpError.NotFound());//If the provided productId is not a valid ObjectId
+      if (!mongoose.Types.ObjectId.isValid(productId)) {
+        reject(createHttpError.BadRequest()); //If the provided productId is not a valid ObjectId
       }
+      products_model
+        .findOne({ _id: Types.ObjectId(productId) })
+        .then((product) => {
+          product ? resolve(product) : reject(createHttpError.NotFound()); //
+        });
     });
   },
   getAllProducts: () => {
     return new Promise((resolve, reject) => {
-      products_model.aggregate([
-        {$match:{ isDeleted: { $ne: true }} },
-        {
-          $set: {
-            date: {
-              $dateToString: { format: "%d/%m/%Y", date: "$date", timezone: "+05:30" },
+      products_model
+        .aggregate([
+          { $match: { isDeleted: { $ne: true } } },
+          {
+            $set: {
+              date: {
+                $dateToString: {
+                  format: "%d/%m/%Y",
+                  date: "$date",
+                  timezone: "+05:30",
+                },
+              },
             },
           },
-        }
-      ]).then((products) => {
-        // console.log(products);
-        resolve(products);
-      });
+        ])
+        .then((products) => {
+          // console.log(products);
+          resolve(products);
+        });
     });
   },
   getAllCategories: () => {
@@ -56,12 +60,12 @@ module.exports = {
   },
   getUser: (userId) => {
     return new Promise((resolve, reject) => {
-      if( mongoose.Types.ObjectId.isValid(userId)){
+      if (mongoose.Types.ObjectId.isValid(userId)) {
         user_model.findOne({ _id: Types.ObjectId(userId) }).then((user) => {
-          user ? resolve(user) : reject(createHttpError.NotFound())// If the user does not exist, reject the request
+          user ? resolve(user) : reject(createHttpError.NotFound()); // If the user does not exist, reject the request
         });
       } else {
-        reject(createHttpError.NotFound());//If the provided userId is not a valid ObjectId, reject the request
+        reject(createHttpError.BadRequest()); //If the provided userId is not a valid ObjectId, reject the request
       }
     });
   },
@@ -81,6 +85,7 @@ module.exports = {
         if (password) {
           password = await generateBcrypt(password);
         }
+        console.log("Password is : ",password);
         user_model
           .updateOne(
             { _id: Types.ObjectId(id) },
@@ -101,17 +106,42 @@ module.exports = {
       }
     });
   },
+  changePassword: (userId, password) => {
+    return new Promise((resolve, reject) => {
+      if (!mongoose.Types.ObjectId.isValid(userId)) {
+        reject(createHttpError.BadRequest()); //If the provided userId is not a valid ObjectId
+      }
+      user_model
+        .updateOne(
+          {
+            _id: Types.ObjectId(userId),
+          },
+          {
+            $set: {
+              password: password,
+            },
+          }
+        )
+        .then(() => {
+          resolve();
+        });
+    });
+  },
   addToWallet: (userId, amount) => {
     return new Promise((resolve, reject) => {
-      user_model.updateOne(
-        { _id: Types.ObjectId(userId) },
-        {
-          $inc: { wallet: Number(amount) }, 
-        }
-      ).then((data) => {
-        console.log(data);
-        resolve();
-      })
+      if (!mongoose.Types.ObjectId.isValid(userId)) {
+        reject(createHttpError.BadRequest()); //If the provided userId is not a valid ObjectId
+      }
+      user_model
+        .updateOne(
+          { _id: Types.ObjectId(userId) },
+          {
+            $inc: { wallet: Number(amount) },
+          }
+        )
+        .then((data) => {
+          resolve();
+        });
     });
-  }, 
+  },
 };

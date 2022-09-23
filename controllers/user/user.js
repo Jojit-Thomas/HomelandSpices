@@ -1,6 +1,8 @@
-const bcrypt = require('bcrypt');
-const { getUser, updateUser } = require("../../helpers/common");
+const bcrypt = require("bcrypt");
+const { getUser, updateUser, changePassword } = require("../../helpers/common");
 const { getAddress } = require("../../helpers/user/address");
+const { generateBcrypt } = require("../../helpers/bcrypt");
+const createHttpError = require("http-errors");
 
 module.exports = {
   getProfilePage: async (req, res) => {
@@ -16,27 +18,28 @@ module.exports = {
   },
   postEditUser: (req, res) => {
     let user = req.cookies.user ? req.cookies.user : null;
-    console.log(req.body)
-    req.body.password = ''
+    console.log(req.body);
+    req.body.password = "";
     updateUser(user.userId, req.body).then((user) => {
-      res.status(200).json({success: true})
-    })
+      res.status(200).json({ success: true });
+    });
   },
   getChangePassword: (req, res) => {
     let user = req.cookies.user ? req.cookies.user : null;
-    res.render("user/authentication/changePassword", {user: user})
+    res.render("user/authentication/changePassword", { user: user });
   },
-  postChangePassword: (req, res) => {
+  postChangePassword: async (req, res) => {
     let user = req.cookies.user ? req.cookies.user : null;
-    getUser(user.userId).then(async(user) => {
-      let valid = bcrypt.compare(req.body.oldPassword, user.password)
-      if(valid){
-        // updateUser(user.userId, req.body).then((user) => {
-        //   res.status(200).json({success: true})
-        // })
-      } else {
-        res.status(401).json({message: "Old password is wrong"})
-      }
-    })
-  }
+    let { oldPassword, password } = req.body;
+    let existing_user = await getUser(user.userId);
+    let valid = await bcrypt.compare(oldPassword, existing_user.password);
+    if (valid) {
+      password = await generateBcrypt(password);
+      changePassword(user.userId, password).then(() => {
+        res.status(200).json({ success: true });
+      });
+    } else {
+      res.status(401).json({ message: "You'r old password is wrong" });
+    }
+  },
 };

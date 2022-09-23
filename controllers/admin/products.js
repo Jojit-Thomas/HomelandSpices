@@ -58,6 +58,7 @@ module.exports = {
   getEditProduct: (req, res) => {
     getProduct(req.params.id).then((result) => {
       if (result) {
+        console.log(result)
         res.render("admin/edit_product", { admin: true, product: result });
       } else {
         res.send("Unable to find a product");
@@ -65,28 +66,18 @@ module.exports = {
     });
   },
   postEditProduct: (req, res) => {
-    // check if the image is changed
-    if (req.files) {
-      try {
-        // if changed delete old image
-        fs.unlinkSync(
-          path.join(
-            __dirname,
-            `../../public/product_images/${req.params.id}.${req.query.img_ext}`
-          )
-        );
-        console.log("File is deleted.");
-      } catch (error) {
-        console.log(error);
-      }
-      var img_ext = req.files.image.name.split(".").pop(); // getting the file extension of the old file
+    if(req.files) { // check if the image is changed
+      var img_ext = req.files?.image.name.split(".").pop(); // getting the file extension of the old file
     }
+      let {max_price, discount } = req.body; 
+    req.body.price = Math.round(max_price - ( discount / 100) * max_price)
+    console.log(req.body.price)
     updateProduct(req.params.id, req.body, img_ext).then((result) => {
       console.log(result);
       if (result) {
         // if image is changed add new image to the folder
         if (req.files) {
-          const image = req.files.image;
+          const image = req.files?.image;
           image.mv(
             `./public/product_images/${req.params.id}.${img_ext}`,
             (err, done) => {

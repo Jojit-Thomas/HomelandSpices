@@ -9,10 +9,33 @@ module.exports = {
       // console.log(arg1 + "=" + arg2);
       return arg1 == arg2 ? options.fn(this) : options.inverse(this);
     });
-    handlebars.registerHelper("ifLess", function (arg1, arg2, options) {
-      // console.log(arg1 + "<" + arg2);
-      return arg1 < arg2 ? options.fn(this) : options.inverse(this);
-    });
+    handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
+
+      switch (operator) {
+          case '==':
+              return (v1 == v2) ? options.fn(this) : options.inverse(this);
+          case '===':
+              return (v1 === v2) ? options.fn(this) : options.inverse(this);
+          case '!=':
+              return (v1 != v2) ? options.fn(this) : options.inverse(this);
+          case '!==':
+              return (v1 !== v2) ? options.fn(this) : options.inverse(this);
+          case '<':
+              return (v1 < v2) ? options.fn(this) : options.inverse(this);
+          case '<=':
+              return (v1 <= v2) ? options.fn(this) : options.inverse(this);
+          case '>':
+              return (v1 > v2) ? options.fn(this) : options.inverse(this);
+          case '>=':
+              return (v1 >= v2) ? options.fn(this) : options.inverse(this);
+          case '&&':
+              return (v1 && v2) ? options.fn(this) : options.inverse(this);
+          case '||':
+              return (v1 || v2) ? options.fn(this) : options.inverse(this);
+          default:
+              return options.inverse(this);
+      }
+  });
     handlebars.registerHelper("divide", function (arg1, arg2, options) {
       // console.log(arg1 + "<" + arg2);
       return Math.floor(arg1 / arg2) ? options.fn(this) : options.inverse(this);

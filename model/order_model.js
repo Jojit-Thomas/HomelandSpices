@@ -8,10 +8,10 @@ const orderSchema = new mongoose.Schema({
   },
   deliveryDetails: mongoose.Schema.Types.ObjectId,
   products: Array,
-  totalAmount: Number,
+  total_amount: Number,
   status: String,
-  paymentMethod: String,
-  paymentStatus: String,
+  payment_method: String,
+  payment_status: String,
   date: Date,
 });
 

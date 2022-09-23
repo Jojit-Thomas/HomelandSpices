@@ -9,6 +9,8 @@ const productsSchema = new mongoose.Schema({
   stocks: Number,
   img_ext: String,
   isDeleted: Boolean,
+  discount: Number,
+  max_price: Number,
   date:{
     type: Date, 
     default: new Date(),

@@ -7,6 +7,7 @@ module.exports = {
             category_model.create({
                 title: name,
                 desc: desc,
+                date: new Date(),
             }).then((state) => {
                 resolve(state)
             })

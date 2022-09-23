@@ -35,12 +35,27 @@
           placeholder="Category"
           value="{{category}}"
         />
-        <input required
-          type="number"
+        <input required 
+          type="text"
           class="w-100 p-2 m-2 form-control"
           name="price"
           placeholder="Price"
           value="{{price}}"
+        />
+        
+        <input required
+          type="number"
+          class="w-100 p-2 m-2 form-control"
+          name="max_price"
+          placeholder="Max Price"
+          value="{{max_price}}"
+        />
+        <input required
+          type="number"
+          class="w-100 p-2 m-2 form-control"
+          name="discount"
+          placeholder="Discount % "
+          value="{{discount}}"
         />
         <input required
           type="number"
@@ -56,7 +71,7 @@
           srcset=""
         />
         <input  type="file" class="w-100 p-2 m-2 form-control" name="image" />
-        <input required type="submit" class="btn btn-success p-2 m-2 float-end" />
+        <input type="submit" value="submit" class="btn btn-success p-2 m-2 float-end" />
       </form>
     </div>
   </div>

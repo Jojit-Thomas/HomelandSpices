@@ -1,4 +1,4 @@
-// $(document).ready(function () {
+f// $(document).ready(function () {
 //     console.log("started");
 //     $("#editProduct").validate({
 //       rules: {
