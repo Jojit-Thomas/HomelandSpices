@@ -55,15 +55,14 @@ module.exports = {
       }
     });
   },
-  getEditProduct: (req, res) => {
-    getProduct(req.params.id).then((result) => {
-      if (result) {
-        console.log(result)
-        res.render("admin/edit_product", { admin: true, product: result });
-      } else {
-        res.send("Unable to find a product");
-      }
-    });
+  getEditProduct: (req, res, next) => {
+    getProduct(req.params.id).then(async (result) => {
+        let categories = await getAllCategories()
+        res.render("admin/edit_product", { admin: true, product: result,categories: categories });
+    }).catch((err) => {
+      next(err);
+    })
+    
   },
   postEditProduct: (req, res) => {
     if(req.files) { // check if the image is changed

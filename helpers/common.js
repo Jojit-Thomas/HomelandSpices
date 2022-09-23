@@ -5,6 +5,7 @@ const category_model = require("../model/category_model");
 const user_model = require("../model/user_model");
 const { generateBcrypt } = require("./bcrypt");
 const createHttpError = require("http-errors");
+const { CATEGORIES_COLLECTION } = require("../config/collections");
 
 module.exports = {
   getProduct: (productId) => {
@@ -13,9 +14,12 @@ module.exports = {
         reject(createHttpError.BadRequest()); //If the provided productId is not a valid ObjectId
       }
       products_model
-        .findOne({ _id: Types.ObjectId(productId) })
+        .aggregate([
+          { $match: { _id: Types.ObjectId(productId) } },
+          { $lookup: { from: CATEGORIES_COLLECTION, localField: "category", foreignField: "_id", as: "category_details" } },
+        ])
         .then((product) => {
-          product ? resolve(product) : reject(createHttpError.NotFound()); //
+          product?.[0] ? resolve(product?.[0]) : reject(createHttpError.NotFound()); //
         });
     });
   },
@@ -85,7 +89,7 @@ module.exports = {
         if (password) {
           password = await generateBcrypt(password);
         }
-        console.log("Password is : ",password);
+        console.log("Password is : ", password);
         user_model
           .updateOne(
             { _id: Types.ObjectId(id) },

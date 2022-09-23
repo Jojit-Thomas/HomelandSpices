@@ -2,7 +2,7 @@
   <div class="container mt-4">
     <div class="row d-flex justify-content-center">
       <form
-        action="/admin/editProduct/{{_id}}?img_ext={{img_ext}}"
+        action="/admin/product/edit/{{_id}}?img_ext={{img_ext}}"
         method="post"
         enctype="multipart/form-data"
         id="editProduct"
@@ -22,19 +22,12 @@
           placeholder="Description"
           value="{{desc}}"
         />
-        {{!-- <select class="form-select" aria-label="Default select example">
-          <option selected>Open this select menu</option>
-          <option value="1">One</option>
-          <option value="2">Two</option>
-          <option value="3">Three</option>
-        </select> --}}
-        <input required
-          type="text"
-          class="w-100 p-2 m-2 form-control"
-          name="category"
-          placeholder="Category"
-          value="{{category}}"
-        />
+        <select class="w-100 p-2 m-2 form-select" name="category" aria-label="Default select example">
+          <option selected value="{{category_details.[0]._id}}">{{category_details.[0].title}}</option>
+          {{#each ../categories}}
+          <option value="{{this._id}}">{{this.title}}</option>
+          {{/each}}
+        </select>
         <input required 
           type="text"
           class="w-100 p-2 m-2 form-control"
@@ -42,7 +35,6 @@
           placeholder="Price"
           value="{{price}}"
         />
-        
         <input required
           type="number"
           class="w-100 p-2 m-2 form-control"

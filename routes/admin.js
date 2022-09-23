@@ -58,8 +58,8 @@ router.get("/products", adminAuth, getProducts); //Products_page
 router.get("/addProduct", adminAuth, getAddProducts); //Add_products_page
 router.post("/addProduct", adminAuth, postAddProducts);
 router.delete("/product/delete/:id", adminAuth, deleteProduct);
-router.get("/editproduct/:id", adminAuth, getEditProduct);
-router.post("/editProduct/:id", adminAuth, postEditProduct);
+router.get("/product/edit/:id", adminAuth, getEditProduct);
+router.post("/product/edit/:id", adminAuth, postEditProduct);
 //=============================User Management=============================
 router.get("/users", adminAuth, getUsers);
 router.get("/deleteUser/:id", adminAuth, getdeleteUser);
