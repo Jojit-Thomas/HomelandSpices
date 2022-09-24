@@ -27,12 +27,12 @@ module.exports = {
     res.render("admin/add_category", { admin: true });
   },
   postAddCategory: async (req, res, next) => {
-    let { name, desc } = req.body;
+    let { name, desc, discount } = req.body;
     name = name.trim();
     try {
       let exist = await isCategoryExist(name);
       var img_ext = req.files?.image.name.split(".").pop(); // getting the file extension of the old file & if image exists
-      let { _id } = await AddCategory(name, desc, img_ext);
+      let { _id } = await AddCategory(name, desc, img_ext, discount);
       if (req.files) {
         const image = req.files.image;
         image.mv(`./public/categories/${_id}.${img_ext}`, (err, done) => {
@@ -49,9 +49,25 @@ module.exports = {
       next(err);
     }
   },
-  getDeleteCategory: (req, res) => {
-    deleteCategory(req.params.id).then(() => {
-      res.redirect("/admin/category");
+  getDeleteCategory: (req, res, next) => {
+    const { categoryId } = req.params;
+    // Deleting the image of the category
+    getCategoryById(categoryId).then((result) => {
+      fs.unlink(
+        path.join(
+          __dirname,
+          `../../public/categories/${categoryId}.${result.img_ext}`
+        ),
+        async (err) => {
+          if (err) {
+            next(createHttpError.InternalServerError());
+          } else {
+            console.log("success");
+            await deleteCategory(categoryId);
+            res.redirect("/admin/category");
+          }
+        }
+      );
     });
   },
   getEditCategory: (req, res) => {

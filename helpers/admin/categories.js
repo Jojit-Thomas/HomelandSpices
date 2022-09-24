@@ -3,13 +3,14 @@ const { Types, default: mongoose } = require("mongoose");
 const category_model = require("../../model/category_model");
 
 module.exports = {
-  AddCategory: (name, desc, img_ext) => {
+  AddCategory: (name, desc, img_ext, discount) => {
     return new Promise((resolve, reject) => {
       category_model
         .create({
           title: name,
           desc: desc,
           img_ext: img_ext,
+          discount : discount,
           date: new Date(),
         })
         .then((category) => {

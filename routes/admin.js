@@ -72,7 +72,7 @@ router.get("/blockUser/:id", adminAuth, getBlockUser);
 router.get("/category", adminAuth, getCategoriesPage);
 router.get("/category/add", adminAuth, getAddCategory);
 router.post("/category/add", adminAuth, postAddCategory);
-router.get("/category/delete/:id", adminAuth, getDeleteCategory);
+router.get("/category/delete/:categoryId", adminAuth, getDeleteCategory);
 router.get("/category/edit/:categoryId", adminAuth, getEditCategory); 
 router.post("/category/edit/:categoryId", adminAuth, postEditCategory);
 //=================================Orders=================================
