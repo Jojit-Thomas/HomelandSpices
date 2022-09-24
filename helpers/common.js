@@ -16,10 +16,35 @@ module.exports = {
       products_model
         .aggregate([
           { $match: { _id: Types.ObjectId(productId) } },
-          { $lookup: { from: CATEGORIES_COLLECTION, localField: "category", foreignField: "_id", as: "category_details" } },
+          {
+            $lookup: {
+              from: CATEGORIES_COLLECTION,
+              localField: "category",
+              foreignField: "_id",
+              as: "category_details",
+            },
+          },
+          // {
+          //   $set: {
+          //     total_discount: {$sum : [ "$category_details.discount", "$discount"]} // this does not work 
+          //   }
+          // },
+          {
+            $set: {
+              total_discount: {$sum : [ "$category_details.discount"]}
+            }
+          },
+          {
+            $set: {
+              total_discount: {$sum : [ "$discount", "$total_discount"]}
+            }
+          },
         ])
         .then((product) => {
-          product?.[0] ? resolve(product?.[0]) : reject(createHttpError.NotFound()); //
+          console.log(product[0])
+          product?.[0]
+            ? resolve(product?.[0])
+            : reject(createHttpError.NotFound()); //
         });
     });
   },
@@ -48,16 +73,30 @@ module.exports = {
   },
   getAllCategories: () => {
     return new Promise((resolve, reject) => {
-      category_model.find().then((category) => {
-        resolve(category);
-      });
+      category_model
+        .aggregate([
+          {
+            $set: {
+              date: {
+                $dateToString: {
+                  format: "%d/%m/%Y",
+                  date: "$date",
+                  timezone: "+05:30",
+                },
+              },
+            }, 
+          },
+        ])
+        .then((category) => {
+          resolve(category);
+        });
     });
   },
-  getCategory: (id) => {
+  getCategoryProduct: (id) => {
     return new Promise((resolve, reject) => {
       console.log(id);
       products_model.find({ category: Types.ObjectId(id) }).then((category) => {
-        console.log("IN category helper", category);
+        // console.log("IN category helper", category);
         resolve(category);
       });
     });

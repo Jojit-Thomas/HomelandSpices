@@ -5,7 +5,8 @@ const productsSchema = new mongoose.Schema({
   title: String,
   desc: String,
   category: mongoose.Schema.Types.ObjectId,
-  price: Number,
+  pd_price: Number,
+  cd_price: Number,
   stocks: Number,
   img_ext: String,
   isDeleted: Boolean,
@@ -15,6 +16,7 @@ const productsSchema = new mongoose.Schema({
     type: Date, 
     default: new Date(),
   },
+  total_discount: Number,
 });
 
 module.exports = mongoose.model("products", productsSchema, PRODUCT_COLLECTION);

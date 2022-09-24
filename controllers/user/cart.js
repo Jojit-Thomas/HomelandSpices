@@ -22,9 +22,9 @@ module.exports = {
     let user = req.cookies.user ? req.cookies.user : null;
     getCart(user.userId).then((data) => {
       let user = req.cookies.user ? req.cookies.user : null;
-      getTotalAmount(user.userId).then((total) => {
-        console.log(total)
-        res.render("user/cart", { data: data, total: total, user: user });
+      getTotalAmount(user.userId).then((amount) => {
+        console.log(amount)
+        res.render("user/cart", { data: data, order: amount, user: user });
       });
     });
   },  

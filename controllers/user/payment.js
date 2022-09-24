@@ -12,8 +12,8 @@ var instance = new Razorpay({
 module.exports = {
   getPaymentPage: async (req, res) => {
     let user = req.cookies.user ? req.cookies.user : null;
-    let total = await getTotalAmount(user.userId);
-    res.render("user/payment", { user: user, total: total });
+    let amount = await getTotalAmount(user.userId);
+    res.render("user/payment", { user: user, order: amount });
   },
   generateRazorpay: (orderId, totalAmount) => {
     return new Promise((resolve, reject) => {

@@ -93,7 +93,7 @@ module.exports = {
                   $multiply: [
                     "$cartItems.quantity",
                     {
-                      $toInt: "$cart.price",
+                      $toInt: "$cart.cd_price",
                     },
                   ],
                 },
@@ -103,7 +103,9 @@ module.exports = {
               $project: {
                 cartItems: 1,
                 total: 1,
-                "cart.price": 1,
+                "cart.cd_price": 1,
+                "cart.max_price": 1,
+                "cart.total_discount": 1,
               },
             },
           ])
@@ -113,6 +115,8 @@ module.exports = {
               item.cartItems.total = item.total;
               item.cartItems.finalTotal = item.total;
               item.cartItems.price = item.cart.price;
+              item.cartItems.max_price = item.cart.max_price;
+              item.cartItems.total_discount = item.cart.total_discount;
               item.cartItems.status = "Order Placed";
             });
             let products = [];
@@ -127,9 +131,9 @@ module.exports = {
       }
     });
   },
-  placeOrder: (data, products, total) => {
+  placeOrder: (data, products, order) => {
     return new Promise((resolve, reject) => {
-      console.log(products, total);
+      console.log(products, order);
       let status = data.paymentMethod === "paypal" ? "Received" : "Pending";
       try{
         var date = new Date().toLocaleString();
@@ -141,7 +145,9 @@ module.exports = {
         userId: Types.ObjectId(data.userId),
         payment_method: data.paymentMethod,
         products: products,
-        total_amount: total,
+        total_amount: order.total_amount,
+        total_max: order.total_max,
+        total_discount: order.total_discount,
         payment_status: status,
         date: date,
       };

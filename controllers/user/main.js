@@ -2,8 +2,8 @@ const {
   getAllProducts,
   getProduct,
   getAllCategories,
-  getCategory,
   getUser,
+  getCategoryProduct,
 } = require("../../helpers/common");
 const { getAddress } = require("../../helpers/user/address");
 const { getBannerImage } = require("../../helpers/user/banners");
@@ -32,6 +32,7 @@ module.exports = {
     console.log(req.headers['referer'])
     getProduct(req.params.id).then((product) => {
       let user = req.cookies.user ? req.cookies.user : null;
+      console.log(product)
       res.render("user/product_detail_view", { product: product, user: user });
     }).catch((err) => {
       next(err)
@@ -39,7 +40,7 @@ module.exports = {
   },
   getSortCategory: (req, res) => {
     let user = req.cookies.user ? req.cookies.user : null;
-    getCategory(req.params.categoryId).then((products) => {
+    getCategoryProduct(req.params.categoryId).then((products) => {
       getAllCategories().then((categories) => {
         res.render("user/shop", { products: products, categories, user });
       });

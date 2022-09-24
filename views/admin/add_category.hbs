@@ -1,7 +1,9 @@
+
+
 <div class="container mt-4">
   <div class="row d-flex justify-content-center">
     <form
-      action="/admin/category/edit/{{category._id}}"
+      action="/admin/category/add"
       id="addCategory"
       method="post"
       class="loginBox col-md-6"
@@ -13,7 +15,6 @@
         class="w-100 p-2 m-2 form-control"
         name="name"
         placeholder="Name"
-        value="{{category.title}}"
       />
       <input
         required
@@ -21,7 +22,6 @@
         class="w-100 p-2 m-2 form-control"
         name="desc"
         placeholder="Description"
-        value="{{category.desc}}"
       />
       <input
         required
@@ -29,16 +29,16 @@
         class="w-100 p-2 m-2 form-control"
         name="discount"
         placeholder="Discount"
-        value="{{category.discount}}"
       />
       <input
+      required
         accept="image/*"
         type="file"
         class="w-100 p-2 m-2 form-control"
         name="image"
         id="image"
       />
-      <input required type="submit" value="Save" class="btn btn-success p-2 m-2 float-end" />
+      <input type="submit" value="Save" class="btn btn-success p-2 m-2 float-end" />
     </form>
   </div>
 </div>

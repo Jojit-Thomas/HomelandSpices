@@ -35,11 +35,11 @@ module.exports = {
   getAddressPage: (req, res) => {
     let user = req.cookies.user ? req.cookies.user : null;
     // console.log(user);
-    getTotalAmount(user.userId).then((total) => {
+    getTotalAmount(user.userId).then((amount) => {
       getAddress(user.userId).then((address) => {
         console.log(address);
         res.render("user/address", {
-          total: total,
+          order: amount,
           address: address,
           user: user,
         });

@@ -34,13 +34,13 @@ module.exports = {
     console.log("products is " , products)
     // let orderProducts = await addOrderProducts(user.userId, products[0])
     // console.log("orderProducts is : ", orderProducts);
-    let total = await getTotalAmount(user.userId);
+    let order = await getTotalAmount(user.userId);
     const data = {
       userId: user.userId,
       addressId: orderAddress._id,
       paymentMethod: paymentMethod,
     };
-    placeOrder(data, products, total).then((state) => {
+    placeOrder(data, products, order).then((state) => {
       if (paymentMethod === "cashOnDelivery"){
         res.send({method: "cod"});
       } else if (paymentMethod === "razorPay"){

@@ -9,6 +9,8 @@ const orderSchema = new mongoose.Schema({
   deliveryDetails: mongoose.Schema.Types.ObjectId,
   products: Array,
   total_amount: Number,
+  total_max: Number,
+  total_discount: Number,
   status: String,
   payment_method: String,
   payment_status: String,

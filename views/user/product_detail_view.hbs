@@ -37,18 +37,23 @@
           </ol>
         </nav>
         <p class="p-name">{{title}}</p>
-        {{#ifCond discount '>' '0' }}
+        {{#ifCond total_discount '>' '0' }}
         <div class="d-flex">
-          <p class="price mt-auto mb-0">₹{{price}}</p>
+          <p class="price mt-auto mb-0">₹{{cd_price}}</p>
           <p class="ms-3 mt-auto" style="margin-bottom: 0.3rem;"><del>₹{{max_price}}</del></p>
-          <p class="ms-3 mt-auto text-success fw-bold" style="margin-bottom: 0.3rem;">{{discount}}% off</p>
+          <p class="ms-3 mt-auto text-success fw-bold" style="margin-bottom: 0.3rem;">{{total_discount}}% off</p>
         </div>
         {{else}}
-          <p class="price mt-auto mb-0">₹{{price}}</p>
+          <p class="price mt-auto mb-0">₹{{cd_price}}</p>
         {{/ifCond}} 
         {{#ifCond stocks '<=' "10"}}
+        {{#ifCond stocks '==' '0'}}
+        <p class="text-danger">Currently Unavailable!</p>
+        {{else}}
         <p class="text-danger">Hurry, Only {{stocks}} left!</p>
         {{/ifCond}}
+        {{/ifCond}}
+
         <p class="lorem w-50">
           {{desc}}
         </p>
@@ -61,7 +66,7 @@
             max="10"
           />
           <span class="input-number-increment">+</span>
-          <div onclick="addToCart('{{_id}}')" class="cart btn bg-btn">Add to cart</div>
+          <div onclick="addToCart('{{_id}}','{{stocks}}')" class="cart btn bg-btn">Add to cart</div>
         </div>
         <span>Free 2-5 days shipping </span><span>• Replacement</span>
         <span>• Refund</span>
@@ -74,19 +79,30 @@
 {{!-- toastr cdn links  --}}
 <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-
+{{!-- sweet alert cdn link  --}}
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
   $(document).ready(function() {
     $("#zoom").imagezoomsl({});
   });
-    function addToCart(productId) {
+    function addToCart(productId, stocks) {
        toastr.options = {
       "progressBar": true,
       "positionClass": "toast-bottom-center",
       "timeOut": "2000",
       "hideDuration": "1",
     };
-    $.ajax({
+    if(stocks <= 0 ) {
+       Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: "Product is currently unavailable. Please try again later.",
+          timer: 3000
+        }).then((state) => {
+          state.isConfirmed ? location.href = '/cart' : null;
+        })
+    } else {
+      $.ajax({
       type: "POST",
       url: "/cart/add",
       data: {
@@ -100,6 +116,7 @@
         console.log(data);
       }
     });
+    }
   }
 </script>
 

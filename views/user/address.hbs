@@ -83,11 +83,11 @@
       <h3 class="mb-4">Order Summary</h3>
       <div class="d-flex justify-content-between w-100">
         <p>Price</p>
-        <p>₹{{total}}</p>
+        <p>₹{{order.total_max}}</p>
       </div>
       <div class="d-flex justify-content-between w-100">
         <p>Discount</p>
-        <p>- ₹0.00</p>
+        <p>- ₹{{order.total_discount}}</p>
       </div>
       <div class="d-flex justify-content-between w-100">
         <p>Shipping</p>
@@ -100,7 +100,7 @@
       <hr />
       <div class="d-flex justify-content-between w-100">
         <p class="">TOTAL</p>
-        <p class="">₹{{total}}</p>
+        <p class="">₹{{order.total_amount}}</p>
       </div>
       <p>Estimated Delivery by <span class="fw-bold">01 Aug 2022</span></p>
       {{!-- <input type="text" name="coupon" class="form-control" placeholder="Coupon Code" /> --}}

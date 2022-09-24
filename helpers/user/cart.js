@@ -146,14 +146,20 @@ module.exports = {
             {
               $group: {
                 _id: null,
-                total: {
+                total_max: {
+                  $sum: "$cart.max_price"
+                },
+                total_amount: {
                   $sum: {
                     $multiply: [
                       "$cartItems.quantity",
-                      { $toInt: "$cart.price" },
+                      { $toInt: "$cart.cd_price" },
                     ],
                   },
                 },
+                total_discount: {
+                  $sum: {$subtract:["$cart.max_price",{ $toInt: "$cart.cd_price" }]},
+                }
               },
             },
             {
@@ -162,7 +168,7 @@ module.exports = {
           ])
           .then((data) => {
             console.log(data[0]);
-            let val = data[0] ? data[0].total : "0";
+            let val = data[0] ? data[0] : {total : 0};
             resolve(val);
           });
       } catch (error) {
