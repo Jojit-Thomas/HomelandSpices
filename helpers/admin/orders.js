@@ -133,7 +133,7 @@ module.exports = {
       },
       {
         $set: {
-          paymentStatus: paymentStatus,
+          payment_status: paymentStatus,
         }
       }).then(() => {
         resolve();

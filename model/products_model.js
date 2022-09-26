@@ -5,13 +5,28 @@ const productsSchema = new mongoose.Schema({
   title: String,
   desc: String,
   category: mongoose.Schema.Types.ObjectId,
-  pd_price: Number,
-  cd_price: Number,
-  stocks: Number,
+  pd_price: {
+    type: Number,
+    default : 0,
+  },
+  cd_price: {
+    type: Number,
+    default : 0,
+  },
+  stocks: {
+    type: Number,
+    default : 0,
+  },
   img_ext: String,
   isDeleted: Boolean,
-  discount: Number,
-  max_price: Number,
+  discount: {
+    type: Number,
+    default : 0,
+  },
+  max_price: {
+    type: Number,
+    default : 0,
+  },
   date:{
     type: Date, 
     default: new Date(),

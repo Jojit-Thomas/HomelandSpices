@@ -99,7 +99,7 @@
           text: "Product is currently unavailable. Please try again later.",
           timer: 3000
         }).then((state) => {
-          state.isConfirmed ? location.href = '/cart' : null;
+          state.isConfirmed ? location.href = `/product/${productId}` : null;
         })
     } else {
       $.ajax({

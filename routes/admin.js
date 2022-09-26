@@ -20,6 +20,7 @@ const {
   getEditCategory,
   postEditCategory,
 } = require("../controllers/admin/categories");
+const { getCouponPage, getAddCouponPage, addCoupon, deleteCoupon } = require("../controllers/admin/coupon");
 const { getHome, getLogout, getSalesStatsDate } = require("../controllers/admin/main");
 const {
   getOrderPage,
@@ -55,8 +56,8 @@ router.get("/stats/sales", adminAuth, getSalesStatsDate)
 
 //===========================Product Management============================
 router.get("/products", adminAuth, getProducts); //Products_page
-router.get("/addProduct", adminAuth, getAddProducts); //Add_products_page
-router.post("/addProduct", adminAuth, postAddProducts);
+router.get("/product/add", adminAuth, getAddProducts); //Add_products_page
+router.post("/product/add", adminAuth, postAddProducts);
 router.delete("/product/delete/:id", adminAuth, deleteProduct);
 router.get("/product/edit/:id", adminAuth, getEditProduct);
 router.post("/product/edit/:id", adminAuth, postEditProduct);
@@ -87,5 +88,11 @@ router.get("/banners/add", adminAuth, getAddBanner);
 router.post("/banners/add", adminAuth, postAddBanner);
 router.post("/banners/edit", adminAuth, postEditPosition);
 router.get("/banners/delete/:bannerId", adminAuth, getdeleteBanner);
+//=================================Coupons=================================
+router.get("/coupon", adminAuth, getCouponPage)
+router.get("/coupon/add", adminAuth, getAddCouponPage)
+router.post("/coupon/add", adminAuth, addCoupon)
+router.delete("/coupon/delete/:couponId", adminAuth, deleteCoupon)
+
 
 module.exports = router;

@@ -13,29 +13,53 @@ module.exports = {
           quantity: 1,
         };
         //checking the existence of the cart document
-        cart_model.findOne({ userId: Types.ObjectId(userId) }).then(async (cart) => {
-          if (cart) {
-            // checking the existence of the product in the cart
-            let state = await cart_model.findOne({ userId: Types.ObjectId(userId), "cartItems.productId": Types.ObjectId(productId) });
-            if (state) {
-              // if already exist increment the quantity
-              cart_model
-                .updateOne(
-                  {
-                    userId: Types.ObjectId(userId),
-                    "cartItems.productId": Types.ObjectId(productId),
-                  },
-                  {
-                    $inc: {
-                      "cartItems.$.quantity": 1,
+        cart_model
+          .findOne({ userId: Types.ObjectId(userId) })
+          .then(async (cart) => {
+            if (cart) {
+              // checking the existence of the product in the cart
+              let state = await cart_model.findOne({
+                userId: Types.ObjectId(userId),
+                "cartItems.productId": Types.ObjectId(productId),
+              });
+              if (state) {
+                // if already exist increment the quantity
+                cart_model
+                  .updateOne(
+                    {
+                      userId: Types.ObjectId(userId),
+                      "cartItems.productId": Types.ObjectId(productId),
                     },
-                  }
-                )
-                .then((status) => {
-                  resolve(status);
-                });
+                    {
+                      $inc: {
+                        "cartItems.$.quantity": 1,
+                      },
+                    }
+                  )
+                  .then((status) => {
+                    resolve(status);
+                  });
+              } else {
+                //if not exist add to cartItems array
+                cart_model
+                  .updateOne(
+                    {
+                      userId: Types.ObjectId(userId),
+                    },
+                    {
+                      $push: {
+                        cartItems: productObj,
+                      },
+                    },
+                    {
+                      upsert: true,
+                    }
+                  )
+                  .then((status) => {
+                    resolve(status);
+                  });
+              }
             } else {
-              //if not exist add to cartItems array
               cart_model
                 .updateOne(
                   {
@@ -54,26 +78,7 @@ module.exports = {
                   resolve(status);
                 });
             }
-          } else {
-            cart_model
-              .updateOne(
-                {
-                  userId: Types.ObjectId(userId),
-                },
-                {
-                  $push: {
-                    cartItems: productObj,
-                  },
-                },
-                {
-                  upsert: true,
-                }
-              )
-              .then((status) => {
-                resolve(status);
-              });
-          }
-        });
+          });
       } catch (error) {
         console.error(error);
       }
@@ -147,7 +152,12 @@ module.exports = {
               $group: {
                 _id: null,
                 total_max: {
-                  $sum: "$cart.max_price"
+                  $sum: {
+                    $multiply: [
+                      "$cartItems.quantity",
+                      { $toInt: "$cart.max_price" },
+                    ],
+                  },
                 },
                 total_amount: {
                   $sum: {
@@ -158,8 +168,18 @@ module.exports = {
                   },
                 },
                 total_discount: {
-                  $sum: {$subtract:["$cart.max_price",{ $toInt: "$cart.cd_price" }]},
-                }
+                  $sum: {
+                    $multiply: [
+                      "$cartItems.quantity",
+                      {
+                        $subtract: [
+                          "$cart.max_price",
+                          { $toInt: "$cart.cd_price" },
+                        ],
+                      },
+                    ],
+                  }, //
+                },
               },
             },
             {
@@ -168,7 +188,7 @@ module.exports = {
           ])
           .then((data) => {
             console.log(data[0]);
-            let val = data[0] ? data[0] : {total : 0};
+            let val = data[0] ? data[0] : { total: 0 };
             resolve(val);
           });
       } catch (error) {
@@ -181,60 +201,67 @@ module.exports = {
     count = Number(count);
     return new Promise((resolve, reject) => {
       cart_model
-        .updateOne({
-          _id: Types.ObjectId(cartId),
-          'cartItems.productId': Types.ObjectId(productId)
-        }, {
-          $inc: {
-            'cartItems.$.quantity': count
+        .updateOne(
+          {
+            _id: Types.ObjectId(cartId),
+            "cartItems.productId": Types.ObjectId(productId),
           },
-        })
+          {
+            $inc: {
+              "cartItems.$.quantity": count,
+            },
+          }
+        )
         .then((status) => {
-
           resolve(status);
         });
-    })
+    });
   },
   removeFromCart: (cartId, productId) => {
     return new Promise((resolve, reject) => {
       cart_model
-        .updateOne({
-          _id: Types.ObjectId(cartId),
-          'cartItems.productId': Types.ObjectId(productId)
-        }, {
-          $pull: {
-            'cartItems': {'productId':Types.ObjectId(productId)  }
+        .updateOne(
+          {
+            _id: Types.ObjectId(cartId),
+            "cartItems.productId": Types.ObjectId(productId),
+          },
+          {
+            $pull: {
+              cartItems: { productId: Types.ObjectId(productId) },
+            },
           }
-        })
-        .then((status) => { 
-          console.log(status)
+        )
+        .then((status) => {
+          console.log(status);
           resolve(status);
         });
-    })
+    });
   },
-  cartProducts: (userId,quantity) => {
+  cartProducts: (userId, quantity) => {
     return new Promise((resolve, reject) => {
-      cart_model.aggregate([
-        {
-          $match: {
-            userId: Types.ObjectId(userId),
+      cart_model
+        .aggregate([
+          {
+            $match: {
+              userId: Types.ObjectId(userId),
+            },
           },
-        },
-        {
-          $lookup: {
-            from: PRODUCT_COLLECTION,
-            localField: "cartItems.productId",
-            foreignField: "_id",
-            as: "cart",
+          {
+            $lookup: {
+              from: PRODUCT_COLLECTION,
+              localField: "cartItems.productId",
+              foreignField: "_id",
+              as: "cart",
+            },
           },
-        },
-        // {
-        //   $unset: "cartItems"
-        // },
-      ]).then((data) => {
-        console.log(data[0])
-        resolve(data[0]);
-      })
-    })
-  }
+          // {
+          //   $unset: "cartItems"
+          // },
+        ])
+        .then((data) => {
+          console.log(data[0]);
+          resolve(data[0]);
+        });
+    });
+  },
 };

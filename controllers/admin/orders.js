@@ -8,7 +8,7 @@ const {
 
 module.exports = {
   getOrderPage: (req, res) => {
-    let {limit = 50, offset = 0, sort = 1, sortValue = 'date'} = req.query;
+    let {limit = 50, offset = 0, sort = -1, sortValue = 'date'} = req.query;
     getOrders(limit, offset, sort, sortValue).then((orders) => {
       res.render("admin/orders", { orders: orders, admin: true, limit: limit, offset: offset });
     });

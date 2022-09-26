@@ -97,7 +97,6 @@ module.exports = {
       var img_ext = req.files?.image.name.split(".").pop(); // getting the file extension  of the old file & if image exists
       await editCategory(categoryId, name, desc, img_ext, discount);
       let categoryProducts = await getCategoryProduct(categoryId); //get all products with this categoryId
-      console.log(categoryProducts);
       categoryProducts.forEach(async (products) => {
         cd_price = Math.round(
           Number(products.pd_price - (products.pd_price * discount) / 100)

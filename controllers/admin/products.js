@@ -68,9 +68,8 @@ module.exports = {
     if(req.files) { // check if the image is changed
       var img_ext = req.files?.image.name.split(".").pop(); // getting the file extension of the old file
     }
-      let {max_price, discount } = req.body; 
+    let {max_price, discount } = req.body; 
     req.body.price = Math.round(max_price - ( discount / 100) * max_price)
-    console.log(req.body.price)
     updateProduct(req.params.id, req.body, img_ext).then((result) => {
       console.log(result);
       if (result) {

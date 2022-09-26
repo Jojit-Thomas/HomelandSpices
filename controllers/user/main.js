@@ -2,7 +2,6 @@ const {
   getAllProducts,
   getProduct,
   getAllCategories,
-  getUser,
   getCategoryProduct,
 } = require("../../helpers/common");
 const { getAddress } = require("../../helpers/user/address");
@@ -52,4 +51,5 @@ module.exports = {
     let categories = await getAllCategories()
     res.render("user/shop", { user: user, products: products, categories: categories });
   },
+ 
 };

@@ -12,7 +12,7 @@ module.exports = {
           },
           {
             $set: {
-              paymentStatus: "Received",
+              payment_status: "Received",
             },
           }
         )
