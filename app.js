@@ -4,8 +4,9 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 
-const indexRouter = require("./routes/index");
 const adminRouter = require("./routes/admin");
+const indexRouter = require("./routes/index");
+const errorRouter = require("./routes/error");
 const mongoose = require("mongoose");
 const hbs = require("hbs");
 const fileUpload = require("express-fileupload");
@@ -37,6 +38,7 @@ mongoose.connect(
 
 app.use("/admin", adminRouter);
 app.use("/", indexRouter);
+app.use("/error", errorRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -50,7 +52,8 @@ app.use(function (err, req, res, next) {
   res.locals.error = req.app.get("env") === "development" ? err : {};
   if(err.status === 404) {
     res.send("Page not found")
-  }
+  } 
+  console.log(err)
   // render the error page
   res.status(err.status || 500);
   res.render("error");
