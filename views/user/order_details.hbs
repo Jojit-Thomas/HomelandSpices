@@ -1,11 +1,37 @@
 <style>
-  @media screen and (min-width: 768px) { .outer { padding: 3rem; } } @media
-  screen and (max-width: 768px) { .outer { padding: 0.3rem; } .proImg { width:
-  70% !important; margin-left: 10% !important; } .title { font-size: 1rem;
-  word-wrap: break-word; } .desc { font-size: 0.8rem; word-wrap: break-word; } }
-  @media screen and (max-width: 576px) { .payment { margin-top: 1.5rem
-  !important; } } @media screen and (min-width: 370px) and (max-width: 576px) {
-  .address { width: 60% !important; } }
+  @media screen and (min-width: 768px) {
+    .outer {
+      padding: 3rem;
+    }
+  }
+  @media screen and (max-width: 768px) {
+    .outer {
+      padding: 0.3rem;
+    }
+    .proImg {
+      width:
+        70% !important;
+      margin-left: 10% !important;
+    }
+    .title {
+      font-size: 1rem;
+      word-wrap: break-word;
+    }
+    .desc {
+      font-size: 0.8rem;
+      word-wrap: break-word;
+    }
+  }
+  @media screen and (max-width: 576px) {
+    .payment {
+      margin-top: 1.5rem !important;
+    }
+  }
+  @media screen and (min-width: 370px) and (max-width: 576px) {
+    .address {
+      width: 60% !important;
+    }
+  }
 </style>
 <div class="container-fluid h-100">
   <div class="row d-flex justify-content-center align-items-center h-100">
@@ -15,118 +41,83 @@
           <div class="row g-0">
             <div class="col-lg-12 col-sm-12 col-12 outer">
               <div class="outer">
-                <div
-                  class="d-flex justify-content-between align-items-center mb-5"
-                >
-                  <h1
-                    class="fw-bold mb-0 text-black"
-                  >Order Details</h1>
+                <div class="d-flex justify-content-between align-items-center mb-5">
+                  <h1 class="fw-bold mb-0 text-black">Order Details</h1>
                   {{!-- <h6 class="mb-0 text-muted">{{orders.length}} items</h6> --}}
                 </div>
                 <hr class="my-4" />
                 {{#with orders}}
-                  <div class="d-flex justify-content-between flex-wrap">
-                    <div
-                      class="col-12 col-sm-5 col-md-6 col-lg-6 col-xl-5 col-xxl-4 my-auto address"
-                    >
-                      <h5 class="text-dark title">{{address.[0].name}}</h5>
-                      <p
-                        class="text-muted mb-0 desc"
-                      >{{address.[0].houseName}},
-                        {{address.[0].postOffice}}
-                        P.O.,
-                        {{address.[0].locality}},
-                        {{address.[0].city}},
-                        {{address.[0].landmark}}, Pincode :
-                        {{address.[0].pincode}}</p>
-                      <small>Phone : {{address.[0].phone}}</small>
+                <div class="d-flex justify-content-between flex-wrap">
+                  <div class="col-12 col-sm-5 col-md-6 col-lg-6 col-xl-5 col-xxl-4 my-auto address">
+                    <h5 class="text-dark title">{{address.[0].name}}</h5>
+                    <p class="text-muted mb-0 desc">{{address.[0].houseName}},
+                      {{address.[0].postOffice}}
+                      P.O.,
+                      {{address.[0].locality}},
+                      {{address.[0].city}},
+                      {{address.[0].landmark}}, Pincode :
+                      {{address.[0].pincode}}</p>
+                    <small>Phone : {{address.[0].phone}}</small>
 
-                    </div>
-                    <div
-                      class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-2 col-xxl-2 my-auto payment"
-                    >
-                      <h6 class="mb-0"><strong>Payment Method:</strong>
-                        <br />{{payment_method}}</h6>
-                    </div>
-                    <div
-                      class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-2 col-xxl-2 my-auto payment"
-                    >
-                      <h6 class="mb-0"><strong>Payment Status:</strong></h6>
-                        <span>{{payment_status}}</span>
-                    </div>
                   </div>
-                  <hr class="my-4" />
-                  {{! ==========================================ORDER DETAILS ========================================== }}
-                  {{#each productDetails}}
-                  <div class="d-flex ">
-                    <div
-                      class="col-sm-4 col-md-4 col-lg-5 col-xl-3 col-4 m-auto"
-                    >
-                      <a
-                        href="/product/{{this._id}}"
-                        class="text-decoration-none"
-                      ><img
-                          src="/product_images/{{this._id}}.{{this.img_ext}}"
-                          class="imgCrop m-auto ms-4 proImg"
-                          class="card-img-bottom"
-                          alt="product Image"
-                        /></a>
+                  <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-2 col-xxl-2 my-auto payment">
+                    <h6 class="mb-0"><strong>Payment Method:</strong>
+                      <br />{{payment_method}}</h6>
+                  </div>
+                  <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-2 col-xxl-2 my-auto payment">
+                    <h6 class="mb-0"><strong>Payment Status:</strong></h6>
+                    <span>{{payment_status}}</span>
+                  </div>
+                </div>
+                <hr class="my-4" />
+                {{! ==========================================ORDER DETAILS ========================================== }}
+                {{#each productDetails}}
+                <div class="d-flex ">
+                  <div class="col-sm-4 col-md-4 col-lg-5 col-xl-3 col-4 m-auto">
+                    <a href="/product/{{this._id}}" class="text-decoration-none"><img
+                        src="/product_images/{{this._id}}.{{this.img_ext}}" class="imgCrop m-auto ms-4 proImg"
+                        class="card-img-bottom" alt="product Image" /></a>
+                  </div>
+                  <div class="d-flex justify-content-between col-8 col-sm-8 flex-wrap my-auto">
+                    <div class="col-10 col-sm-8 col-md-10 col-lg-10 col-xl-5 my-auto">
+                      <a href="/product/{{this._id}}" class="text-decoration-none">
+                        <h5 class="text-dark title">{{this.title}}</h5>
+                      </a>
+                      <a href="/product/{{this._id}}" class="text-decoration-none">
+                        <p class="text-muted mb-0 desc">{{this.desc}}</p>
+                      </a>
+                      <small class="text-muted mb-0 desc">Expected delivery on
+                        : 06-OCT-2023</small>
                     </div>
-                    <div
-                      class="d-flex justify-content-between col-8 col-sm-8 flex-wrap my-auto"
-                    >
-                      <div
-                        class="col-10 col-sm-8 col-md-10 col-lg-10 col-xl-5 my-auto"
-                      >
-                        <a
-                          href="/product/{{this._id}}"
-                          class="text-decoration-none"
-                        ><h5
-                            class="text-dark title"
-                          >{{this.title}}</h5></a>
-                        <a
-                          href="/product/{{this._id}}"
-                          class="text-decoration-none"
-                        ><p
-                            class="text-muted mb-0 desc"
-                          >{{this.desc}}</p></a>
-                        <small class="text-muted mb-0 desc">Expected delivery on
-                          : 06-OCT-2023</small>
+                    <div class="col-sm-2 col-md-4 col-lg-4 col-xl-2 my-auto d-none d-lg-block">
+                      <div class="d-flex">
+                        {{#ifCond this.cd_price '<' this.max_price}}
+                        <h6 class="mb-3">₹{{this.cd_price}}</h6>
+                        <h6 class="mb-3 ms-3"><del>₹{{this.max_price}}</del></h6>
+                        {{else}}
+                        <h6 class="mb-3 ms-3">₹{{this.max_price}}</h6>
+                        {{/ifCond}}
                       </div>
-                      <div
-                        class="col-sm-2 col-md-4 col-lg-4 col-xl-2 my-auto d-none d-lg-block"
-                      >
-                        <h6 class="mb-3">₹{{index_of ../products @index "total"}}</h6>
-                        <h6 class="mb-0">Qty : {{index_of ../products @index "quantity"}}</h6>
-                      </div>
-                      <div
-                        class="col-sm-2 col-md-4 col-lg-4 col-xl-2 my-auto d-none d-lg-block"
-                      >
-                        <h6 class="mb-0">{{index_of ../products @index "status"}}</h6>
-                      </div>
-                      <i
-                        class="fa-solid fa-angle-right d-block d-lg-none col-sm-2 col-md-2 col-lg-2 col-xl-2 my-auto"
-                      ></i>
-                      <div class="d-flex justify-content-center">
-                        {{#ifEquals products.status "cancelled"}}
-                        <a
-                          href="#"
-                          class="btn btn-primary m-auto"
-                          style="opacity: 0.5;"
-                        >Cancel</a>
+                      <h6 class="mb-0">Qty : {{index_of ../products @index "quantity"}}</h6>
+                    </div>
+                    <div class="col-sm-2 col-md-4 col-lg-4 col-xl-2 my-auto d-none d-lg-block">
+                      <h6 class="mb-0">{{index_of ../products @index "status"}}</h6>
+                    </div>
+                    <i
+                      class="fa-solid fa-angle-right d-block d-lg-none col-sm-2 col-md-2 col-lg-2 col-xl-2 my-auto"></i>
+                    <div class="d-flex justify-content-center">
+                      {{#ifEquals products.status "cancelled"}}
+                      <a href="#" class="btn btn-primary m-auto" style="opacity: 0.5;">Cancel</a>
                       {{else}}
-                        <a
-                          href="/orders/cancel/{{../_id}}/{{this._id}}"
-                          class="btn btn-primary m-auto"
-                          style="height: 2rem;"
-                          onclick="return confirm('Do you sure want to cancel this order?');"
-                        >Cancel</a>
-                      {{/ifEquals}} 
-                      </div>
+                      <a href="/orders/cancel/{{../_id}}/{{this._id}}" class="btn btn-primary m-auto"
+                        style="height: 2rem;"
+                        onclick="return confirm('Do you sure want to cancel this order?');">Cancel</a>
+                      {{/ifEquals}}
                     </div>
                   </div>
-                  <hr class="my-4" />
-                  {{/each}}
+                </div>
+                <hr class="my-4" />
+                {{/each}}
                 {{/with}}
                 <div class="pt-5">
                   <div class=" w-100 " style="height: 20rem;">
@@ -136,13 +127,13 @@
                       {{#each productDetails}}
                       <div class="d-flex justify-content-between w-100">
                         <p class="w-50 overflow-none">{{this.title}}</p>
-                        <p id="price">₹{{index_of ../products @index "total"}}</p>
+                        <p id="price">₹{{index_of ../products @index "max_price"}}</p>
                       </div>
                       {{/each}}
                       {{/with}}
                       <div class="d-flex justify-content-between w-100">
                         <p>Discount</p>
-                        <p>- ₹49.00</p>
+                        <p>- ₹{{#if orders.total_discount}}{{orders.total_discount}}{{else}}0.00{{/if}}</p>
                       </div>
                       <div class="d-flex justify-content-between w-100">
                         <p>Shipping</p>
@@ -150,7 +141,7 @@
                       </div>
                       <div class="d-flex justify-content-between w-100">
                         <p>Coupon Applied</p>
-                        <p>₹0.00</p>
+                        <p>- ₹{{#if orders.coupon}}{{orders.coupon}}{{else}}0.00{{/if}}</p>
                       </div>
                       <hr />
                       <div class="d-flex justify-content-between w-100">
@@ -160,10 +151,10 @@
                     </div>
                   </div>
                   <hr class="mb-4" />
-                <div class="pt-5">
-                  <h6 class="mb-0"><a href="/" class="text-body"><i
-                        class="fas fa-long-arrow-alt-left me-2"
-                      ></i>Back to shop</a></h6>
+                  <div class="pt-5">
+                    <h6 class="mb-0"><a href="/" class="text-body"><i class="fas fa-long-arrow-alt-left me-2"></i>Back
+                        to shop</a></h6>
+                  </div>
                 </div>
               </div>
             </div>
@@ -172,13 +163,25 @@
       </div>
     </div>
   </div>
-</div>
 
-<script>
-  function changeStatus(orderId, productId) { console.log(orderId, productId)
-  let val = $(`#status${productId}`).val() console.log(val) $.ajax({ type:
-  "POST", url: "/admin/order/changeStatus", data: { orderId: orderId, productId:
-  productId, status: val, }, success: function (data) { console.log('success')
-  $(`#${productId}`).text(val) }, error: function (error) { console.log(error) }
-  }) }
-</script>
+  <script>
+    function changeStatus(orderId, productId) {
+      console.log(orderId, productId)
+      let val = $(`#status${productId}`).val() console.log(val) $.ajax({
+        type: "POST",
+        url: "/admin/order/changeStatus",
+        data: {
+          orderId: orderId,
+          productId: productId,
+          status: val,
+        },
+        success: function (data) {
+          console.log('success')
+          $(`#${productId}`).text(val)
+        },
+        error: function (error) {
+          console.log(error)
+        }
+      })
+    }
+  </script>

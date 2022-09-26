@@ -67,7 +67,14 @@
                         <div
                           class="col-sm-2 col-md-4 col-lg-4 col-xl-2 my-auto d-none d-lg-block"
                         >
-                          <h6 class="mb-3">₹{{index_of ../products @index "price"}}</h6>
+                        <div class="d-flex">
+                          {{#ifCond (index_of ../products @index "cd_price") '<' (index_of ../products @index "max_price")}}
+                          <h6 class="mb-3">₹{{index_of ../products @index "cd_price"}}</h6>
+                            <h6 class="mb-3 ms-3"><del>₹{{index_of ../products @index "max_price"}}</del></h6>
+                            {{else}}
+                            <h6 class="mb-3 ms-3">₹{{index_of ../products @index  "max_price"}}</h6>
+                          {{/ifCond}}
+                        </div>
                           <h6 class="mb-0">Qty : {{index_of ../products @index "quantity"}}</h6>
                         </div>
                         <div

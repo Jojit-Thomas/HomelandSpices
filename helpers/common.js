@@ -2,6 +2,7 @@ const { Types, default: mongoose } = require("mongoose");
 const bcrypt = require("bcrypt");
 const products_model = require("../model/products_model");
 const category_model = require("../model/category_model");
+const coupon_model = require("../model/coupon_model");
 const user_model = require("../model/user_model");
 const { generateBcrypt } = require("./bcrypt");
 const createHttpError = require("http-errors");
@@ -187,4 +188,12 @@ module.exports = {
         });
     });
   },
+  validateCoupon: (coupon) => {//parameters must be in uppercase letters
+    return new Promise((resolve, reject) => {
+      coupon_model.findOne({coupon_code: coupon}).then((coupon) => {
+        console.log(coupon);
+        coupon ? resolve(coupon) : reject(createHttpError.Unauthorized());
+      })
+    })
+  }
 };

@@ -1,14 +1,64 @@
-
 <style>
-  .bg_purple { background-color: #9155fd; } .purple { color: #766edb; } 
-  .a-none { text-decoration: none; } input[type="radio"] {
-  width: 18px; height: 18px; } .breadcrumb-item + .breadcrumb-item::before {
-  margin: 0 1vw; content: var(--bs-breadcrumb-divider, " > "); }
-  .breadcrumb-item { font-size: large; font-weight: 700; } .address { word-wrap:
-  break-word; /* overflow-wrap: break-word; */ } @media screen and (min-width:
-  768px) { .options { margin: auto 0; } .outer{ padding: 1rem 3rem; } } @media
-  screen and (max-width: 768px) { .options { margin: 1rem 2.6rem; } .outer{
-  padding: 1rem 1rem; } } .accordion-item { border:none; border-bottom: 1px solid #0000003a; margin-bottom: 0.4rem;}
+  .bg_purple {
+    background-color: #9155fd;
+  }
+
+  .purple {
+    color: #766edb;
+  }
+
+  .a-none {
+    text-decoration: none;
+  }
+
+  input[type="radio"] {
+    width: 18px;
+    height: 18px;
+  }
+
+  .breadcrumb-item+.breadcrumb-item::before {
+    margin: 0 1vw;
+    content:
+      var(--bs-breadcrumb-divider, " > ");
+  }
+
+  .breadcrumb-item {
+    font-size: large;
+    font-weight: 700;
+  }
+
+  .address {
+    word-wrap: break-word;
+    /* overflow-wrap:
+  break-word; */
+  }
+
+  @media screen and (min-width: 768px) {
+    .options {
+      margin:
+        auto 0;
+    }
+
+    .outer {
+      padding: 1rem 3rem;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .options {
+      margin: 1rem 2.6rem;
+    }
+
+    .outer {
+      padding: 1rem 1rem;
+    }
+  }
+
+  .accordion-item {
+    border: none;
+    border-bottom: 1px solid #0000003a;
+    margin-bottom: 0.4rem;
+  }
 </style>
 <form id="paymentForm" method="post">
   <div class="container pt-5 d-flex flex-wrap">
@@ -16,22 +66,24 @@
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb py-4">
           <a class="breadcrumb-item text-muted" href="/address" aria-current="page">
-          Address
+            Address
           </a>
-          <li  class="breadcrumb-item ">
+          <li class="breadcrumb-item">
             Payment
           </li>
         </ol>
       </nav>
-      <input type="radio" name="paymentMethod" hidden id="paymentMethodInp">
+      <input type="radio" name="paymentMethod" hidden id="paymentMethodInp" />
       <div class="accordion" id="accordionExample">
-        <div class="accordion-item ">
+        <div class="accordion-item">
           <h2 class="accordion-header" id="headingOne">
-            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#cashOnDelivery" aria-expanded="true" aria-controls="cashOnDelivery">
-            Cash On Delivery
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#cashOnDelivery"
+              aria-expanded="true" aria-controls="cashOnDelivery">
+              Cash On Delivery
             </button>
           </h2>
-          <div id="cashOnDelivery" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+          <div id="cashOnDelivery" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+            data-bs-parent="#accordionExample">
             <div class="accordion-body">
               <h6>Cash on Delivery</h6>
             </div>
@@ -39,11 +91,13 @@
         </div>
         <div class="accordion-item">
           <h2 class="accordion-header" id="headingTwo">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#razorPay" aria-expanded="false" aria-controls="razorPay">
-            Razor Pay
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+              data-bs-target="#razorPay" aria-expanded="false" aria-controls="razorPay">
+              Razor Pay
             </button>
           </h2>
-          <div id="razorPay" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+          <div id="razorPay" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+            data-bs-parent="#accordionExample">
             <div class="accordion-body">
               <h6>Razor Pay</h6>
             </div>
@@ -51,35 +105,33 @@
         </div>
         <div class="accordion-item">
           <h2 class="accordion-header" id="headingThree">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#paypal" aria-expanded="false" aria-controls="paypal">
-            Paypal
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#paypal"
+              aria-expanded="false" aria-controls="paypal">
+              Paypal
             </button>
           </h2>
-          <div id="paypal" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+          <div id="paypal" class="accordion-collapse collapse" aria-labelledby="headingThree"
+            data-bs-parent="#accordionExample">
             <div class="accordion-body">
               <div id="paypal-button-container"></div>
             </div>
           </div>
         </div>
         <div class="pt-5">
-          <h6 class="mb-0"><a href="/address" class="text-body"><i
-            class="fas fa-long-arrow-alt-left me-2"
-            ></i>Back to Address</a></h6>
+          <h6 class="mb-0"><a href="/address" class="text-body"><i class="fas fa-long-arrow-alt-left me-2"></i>Back to
+              Address</a></h6>
         </div>
       </div>
     </div>
-    <div
-      class="col-lg-3 col-sm-12 col-12 p-4 mt-5 border border-1"
-      style="height: 500px"
-      >
+    <div class="col-lg-3 col-sm-12 col-12 p-4 mt-5 border border-1" style="height: 520px">
       <h3 class="mb-4">Order Summary</h3>
       <div class="d-flex justify-content-between w-100">
         <p>Price</p>
-        <p>₹{{order.total_max}}</p>
+        <p>₹<span id="sub_total">{{order.total_max}}</span></p>
       </div>
       <div class="d-flex justify-content-between w-100">
         <p>Discount</p>
-        <p>- ₹{{order.total_discount}}</p>
+        <p>- ₹<span id="discount">{{order.total_discount}}</span></p>
       </div>
       <div class="d-flex justify-content-between w-100">
         <p>Shipping</p>
@@ -87,36 +139,82 @@
       </div>
       <div class="d-flex justify-content-between w-100">
         <p>Coupon Applied</p>
-        <p>₹0.00</p>
+        <p>- ₹<span id="coupon_discount">0.00</span></p>
       </div>
       <hr />
       <div class="d-flex justify-content-between w-100">
         <p class="text-purple">TOTAL</p>
-        <p class="text-purple">₹{{order.total_amount}}</p>
+        <p class="text-purple">₹<span id="total_amount">{{order.total_amount}}</span></p>
       </div>
       <p>Estimated Delivery by <span class="fw-bold">01 Aug 2022</span></p>
-      <input type="text" name="coupon" class="form-control" placeholder="Coupon Code" />
-      <button class="btn bg_purple text-white w-100 mt-3" id="placeOrder">PLACE ORDER</button>
+      <input type="text" style="text-transform: uppercase;" name="coupon" class="form-control" id="coupon"
+        placeholder="Coupon Code" />
+      <div class="w-100 d-flex justify-content-center">
+        <span class="" id="coupon_msg"></span>
+      </div>
+      <button class="btn bg_purple text-white w-100 mt-3" id="placeOrder">PLACE
+        ORDER</button>
     </div>
   </div>
 </form>
+
+
+<script>
+  $("#coupon").change(function () {
+    let coupon = $("#coupon").val()
+    coupon = coupon.trim()
+    console.log("changing")
+    if (coupon !== "") {
+      $.ajax({
+        url: `/coupon/validate/${coupon}`,
+        method: "GET",
+        data: '',
+        success: function (data) {
+          couponValid = true;
+          console.log(couponValid)
+          $("#coupon_msg").removeClass()
+          $("#coupon_msg").addClass("text-success text-center mt-2")
+          $("#coupon_msg").text("Coupon is valid");
+          let discount = data.discount;
+          let total = $("#total_amount").text();
+          total = parseInt(total) - parseInt(discount);
+          $("#total_amount").text(total);
+          $("#coupon_discount").text(discount);
+          $("#total_amount").text();
+        },
+        error: function (error) {
+          error = jQuery.parseJSON(error.responseText);
+          $("#coupon_msg").removeClass()// Removing the class in coupon_msg For not getting an error te
+          $("#coupon_msg").addClass("text-danger text-center mt-2")//Making the coupon msg to red color
+          $("#coupon_msg").text(error);//Showing the error message
+          $("#coupon_discount").text("0.00");//Setting the coupon discount to 0.00
+          $("#total_amount").text(parseInt($("#sub_total").text()) - parseInt($("#discount").text()));//Calculate the total amount by subtracting sub_total by th discount
+        }
+      })
+    } else {
+      $("#coupon_msg").removeClass()
+      $("#coupon_msg").text("")
+    }
+  })
+</script>
 
 
 
 
 
 <script>
-  $(document).ready(function() {
-    $("#paymentMethodInp").trigger("click");//click the radio button with id paymentMethodInp 
-    $("#paymentMethodInp").val($(".show").attr("id"))//on window load reads the id of the div with class "show" 
+  $(document).ready(function () {
+    $("#paymentMethodInp").trigger("click"); //click the radio button with id paymentMethodInp 
+    $("#paymentMethodInp").val($(".show").attr("id")) //on window load reads the id of the div with class "show" 
     console.log($("#paymentMethodInp").val());
   })
-  $(".accordion-button").click(function() {
-    setTimeout(function() {
-      $(".show").attr("id") ? 
-    $("#paymentMethodInp").val($(".show").attr("id")) : null //if any accordion is Chosen the id of the div is set as the value of the input field "paymentMethodInp"
-    console.log($("#paymentMethodInp").val());
-    },500)
+  $(".accordion-button").click(function () {
+    setTimeout(function () {
+      $(".show").attr("id") ?
+        $("#paymentMethodInp").val($(".show").attr("id")) :
+        null //if any accordion is Chosen the id of the div is set as the value of the input field "paymentMethodInp"
+      console.log($("#paymentMethodInp").val());
+    }, 500)
   })
 </script>
 
@@ -124,138 +222,184 @@
 {{!-- sweet alert cdn link  --}}
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-$("#paymentForm").submit((e) => {
-  e.preventDefault();
-if($("#paymentMethodInp").val() == "paypal"){
-  if ($(".paypal-success")[0]){
-    submitCheckout();
-} else {
-  Swal.fire("Sorry", "Please complete the paypal payment or choose any other payment", "error").then((state) => {
-          state.isConfirmed ? location.reload() : null;
-        })
-}
-} else {
-  submitCheckout();
-}
-})
-
-function submitCheckout () {
-  $.ajax({
-    url: '/checkout',
-    method: 'post',
-    data: $("#paymentForm").serialize(),
-    success: (response) => {
-      console.log("response is :  ", response);
-      if (response.method == "cod") {
-        Swal.fire("Hurray !", "Your order has been placed", "success").then((state) => {
-          state.isConfirmed ? location.href = '/' : null;
-        })
-      } else if (response.method == "paypal") {
-        Swal.fire("Hurray !", "Your order has been placed", "success").then((state) => {
-          state.isConfirmed ? location.href = '/' : null;
-        })
+  $("#paymentForm").submit((e) => {
+    e.preventDefault();
+    if ($("#paymentMethodInp").val() == "paypal") {
+      if ($(".paypal-success")[0]) {
+        submitCheckout();
+      } else {
+        Swal.fire("Sorry", "Please complete the paypal payment or choose any other payment", "error").then((
+          state) => {
+            state.isConfirmed ? location.reload() : null;
+          })
       }
-      else {
-        razorPayment(response.res);
-      }
-
+    } else {
+      submitCheckout();
     }
   })
-}
 
-function razorPayment(order) {
-    console.log(order)
-  var options = {
-    "key": "rzp_test_8JLZOZRODQ9Mpc",
-    "amount": parseInt(order.amount), // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-    "currency": "INR",
-    "name": "Homeland Spices",
-    "description": "Test Transaction",
-    "image": "https://example.com/your_logo",
-    "order_id": order.id, 
-    "handler": function(response) {
-      verifyPayment(response, order);
-    },
-    "prefill": {
-      "name": "Jojit Thomas",
-      "email": "jojitthomas.info@gmail.com",
-      "contact": "9947337790"
-    },
-    "notes": {
-      "address": "Razorpay Corporate Office"
-    },
-    "theme": {
-      "color": "#3399cc"
-    }
-  };
-  var rzp1 = new Razorpay(options);
-  rzp1.open();
 
-  function verifyPayment(response, order) {
+
+  function checkout() {
     $.ajax({
-      url: "/payment/verify",
-      data: {
-        response,
-        order
-      },
+      url: '/checkout',
       method: 'post',
+      data: $("#paymentForm").serialize(),
       success: (response) => {
-        console.log("verifyPayment");
-        if (response.status) {
+        console.log("response is :  ", response);
+        if (response.method == "cod") {
           Swal.fire("Hurray !", "Your order has been placed", "success").then((state) => {
-          state.isConfirmed ? location.href = '/' : null;
-        })
+            state.isConfirmed ? location.href = '/' : null;
+          })
+        } else if (response.method == "paypal") {
+          Swal.fire("Hurray !", "Your order has been placed", "success").then((state) => {
+            state.isConfirmed ? location.href = '/' : null;
+          })
         } else {
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Something went wrong!',
-        }).then((state) => {
-          state.isConfirmed ? location.href = '/' : null;
-        })
+          razorPayment(response.res);
+        }
+      },
+      error: function (error) {
+        if (error.status == 401) {
+          location.href = '/error/bad_request'
         }
       }
     })
   }
-}
-  </script>
-  <script src="https://www.paypal.com/sdk/js?client-id=AQVb1x9c8x-8KRWAB7HMhWnn7QVr2wFOjNXRiEvK7duoDBVWvFo3sPewxuRTES51JAdNV9FOkDbxVXQU&currency=USD"  data-namespace="paypal_sdk"></script>
-    <!-- Set up a container element for the button -->
-    
-    <script>
-       paypal_sdk
-        .Buttons({
-          // Sets up the transaction when a payment button is clicked
-          createOrder: function (data, actions) {
-            return fetch("/api/orders", {
-              method: "post",
-              // use the "body" param to optionally pass additional order information
-              // like product ids or amount
+
+
+  function submitCheckout() {
+    let couponValid = false;
+    let couponNull = false;
+    let coupon = $("#coupon").val()
+    if (coupon !== "") {
+      $.ajax({
+        url: `/coupon/validate/${coupon}`,
+        method: "GET",
+        data: '',
+        success: function (data) {
+          couponValid = true;
+          console.log(couponValid)
+          $("#coupon_msg").removeClass()
+          $("#coupon_msg").addClass("text-success text-center mt-2")
+          $("#coupon_msg").text("Coupon is valid");
+          let discount = data.discount;
+          let total = $("#total_amount").text();
+          console.log(discount, total)
+          total = parseInt(total) - parseInt(discount);
+          $("#total_amount").text(total);
+          $("#coupon_discount").text(discount);
+          checkout();
+        },
+        error: function (error) {
+          error = jQuery.parseJSON(error.responseText);
+          $("#coupon_msg").removeClass()
+          $("#coupon_msg").addClass("text-danger text-center mt-2")
+          $("#coupon_msg").text(error);
+          Swal.fire("Coupon Invalid", "Coupon is Invalid", "error")
+        }
+      })
+    } else {
+      checkout();
+    }
+  }
+
+  function razorPayment(order) {
+    console.log(order)
+    var options = {
+      "key": "rzp_test_8JLZOZRODQ9Mpc",
+      "amount": parseInt(order
+      .amount), // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+      "currency": "INR",
+      "name": "Homeland Spices",
+      "description": "Test Transaction",
+      "image": "https://example.com/your_logo",
+      "order_id": order.id,
+      "handler": function (response) {
+        verifyPayment(response, order);
+      },
+      "prefill": {
+        "name": "Jojit Thomas",
+        "email": "jojitthomas.info@gmail.com",
+        "contact": "9947337790"
+      },
+      "notes": {
+        "address": "Razorpay Corporate Office"
+      },
+      "theme": {
+        "color": "#3399cc"
+      }
+    };
+    var rzp1 = new Razorpay(options);
+    rzp1.open();
+
+    function verifyPayment(response, order) {
+      $.ajax({
+        url: "/payment/verify",
+        data: {
+          response,
+          order
+        },
+        method: 'post',
+        success: (response) => {
+          console.log("verifyPayment");
+          if (response.status) {
+            Swal.fire("Hurray !", "Your order has been placed", "success").then((state) => {
+              state.isConfirmed ? location.href = '/' : null;
             })
-              .then((response) => response.json())
-              .then((order) => order.id);
-          },
-          // Finalize the transaction after payer approval
-          onApprove: function (data, actions) {
-            return fetch(`/api/orders/${data.orderID}/capture`, {
-              method: "post",
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Something went wrong!',
+            }).then((state) => {
+              state.isConfirmed ? location.href = '/' : null;
             })
-              .then((response) => response.json())
-              .then((orderData) => {
-                // Successful capture! For dev/demo purposes:
-                console.log(
-                  "Capture result",
-                  orderData,
-                  JSON.stringify(orderData, null, 2)
-                );
-                var transaction =
-                  orderData.purchase_units[0].payments.captures[0];
-                $(document).ready(function (){
-                $("#paypal").addClass("paypal-success");
-                $("#placeOrder").trigger("click");//After completing the payment submitting the order
-                })
-              });
-          },
-        })
-        .render("#paypal-button-container");
-    </script>
+          }
+        }
+      })
+    }
+  }
+</script>
+<script
+  src="https://www.paypal.com/sdk/js?client-id=AQVb1x9c8x-8KRWAB7HMhWnn7QVr2wFOjNXRiEvK7duoDBVWvFo3sPewxuRTES51JAdNV9FOkDbxVXQU&currency=USD"
+  data-namespace="paypal_sdk"></script>
+<!-- Set up a container element for the button -->
+
+<script>
+  paypal_sdk
+    .Buttons({
+      // Sets up the transaction when a payment button is clicked
+      createOrder: function (data, actions) {
+        return fetch("/api/orders", {
+            method: "post",
+            // use the "body" param to optionally pass additional order information
+            // like product ids or amount
+          })
+          .then((response) => response.json())
+          .then((order) => order.id);
+      },
+      // Finalize the transaction after payer approval
+      onApprove: function (data, actions) {
+        return fetch(`/api/orders/${data.orderID}/capture`, {
+            method: "post",
+          })
+          .then((response) => response.json())
+          .then((orderData) => {
+            // Successful capture! For dev/demo purposes:
+            console.log(
+              "Capture result",
+              orderData,
+              JSON.stringify(orderData, null, 2)
+            );
+            var transaction =
+              orderData.purchase_units[0].payments.captures[0];
+            $(document).ready(function () {
+              $("#paypal").addClass("paypal-success");
+              $("#placeOrder").trigger("click"); //After completing the payment submitting the order
+            })
+          });
+      },
+    })
+    .render("#paypal-button-container");
+</script>

@@ -1,0 +1,62 @@
+
+
+<div class="container mt-4">
+  <div class="row d-flex justify-content-center">
+    <form
+      id="add_coupon_form"
+      method="post"
+      class="loginBox col-md-6"
+      enctype="multipart/form-data"
+    >
+      <input
+        required
+        type="text"
+        class="w-100 p-2 m-2 form-control"
+        name="title"
+        placeholder="Title"
+      />
+      <input
+        required
+        type="text"
+        class="w-100 p-2 m-2 form-control"
+        name="desc"
+        placeholder="Description"
+      />
+      <input
+        required
+        type="number"
+        class="w-100 p-2 m-2 form-control"
+        name="discount"
+        placeholder="Discount ₹"
+      />
+      <input
+        required
+        type="text"
+        class="w-100 p-2 m-2 form-control"
+        name="coupon_code"
+        style="text-transform: uppercase;"
+        placeholder="Coupon Code"
+      />
+      <span class="text-danger" id="error"></span>
+      <input type="submit" value="Save" class="btn btn-success p-2 m-2 float-end" />
+    </form>
+  </div>
+</div>
+
+<script>
+    $("#add_coupon_form").submit(function(e) {
+        e.preventDefault();
+        $.ajax({
+            url : "/admin/coupon/add",
+            data : $("#add_coupon_form").serialize(),
+            method : "POST",
+            success: function(data) {
+                location.href = "/admin/coupon"
+            },
+            error: function (err) {
+              err = jQuery.parseJSON(err.responseText);
+              $("#error").text(err);
+            }
+        })
+    })
+</script>

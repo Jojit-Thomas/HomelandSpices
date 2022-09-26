@@ -7,7 +7,6 @@ const cart_model = require("../../model/cart_model");
 const order_model = require("../../model/order_model");
 const products_model = require("../../model/products_model");
 
-
 module.exports = {
   // placeOrder: (order, products, total) => {
   //   return new Promise((resolve, reject) => {
@@ -41,16 +40,21 @@ module.exports = {
   //       });
   //   });
   // },
-  reduceStock: (productId,quantity) => {
+  reduceStock: (productId, quantity) => {
     return new Promise((resolve, reject) => {
-      products_model.updateOne({
-        _id: Types.ObjectId(productId),
-      },{
-        $inc: { stocks : -quantity}
-      }).then(() => {
-        resolve();
-      })
-    })
+      products_model
+        .updateOne(
+          {
+            _id: Types.ObjectId(productId),
+          },
+          {
+            $inc: { stocks: -quantity },
+          }
+        )
+        .then(() => {
+          resolve();
+        });
+    });
   },
   getCartProdutDetails: (userId) => {
     console.log(userId);
@@ -112,9 +116,9 @@ module.exports = {
           .then((data) => {
             console.log("total is : ", data);
             data.map((item) => {
-              item.cartItems.total = item.total;
-              item.cartItems.finalTotal = item.total;
-              item.cartItems.price = item.cart.price;
+              // item.cartItems.cd_price = item.total;
+              // item.cartItems.finalTotal = item.total;
+              item.cartItems.cd_price = item.cart.cd_price;
               item.cartItems.max_price = item.cart.max_price;
               item.cartItems.total_discount = item.cart.total_discount;
               item.cartItems.status = "Order Placed";
@@ -133,40 +137,41 @@ module.exports = {
   },
   placeOrder: (data, products, order) => {
     return new Promise((resolve, reject) => {
-      console.log(products, order);
-      let status = data.paymentMethod === "paypal" ? "Received" : "Pending";
-      try{
-        var date = new Date().toLocaleString();
-      } catch (error) {
-        console.log(error)
-      }
+      var date = new Date().toLocaleString();
+      const { paymentMethod, addressId, coupon, userId } = data;
+      let { total_amount, total_max, total_discount} = order;
+      total_amount = total_amount - coupon
+      console.log("total_amount: " + total_amount + "coupon: " + coupon)
+      let status = paymentMethod === "paypal" ? "Received" : "Pending";
       let orderObj = {
-        deliveryDetails: Types.ObjectId(data.addressId),
-        userId: Types.ObjectId(data.userId),
-        payment_method: data.paymentMethod,
+        deliveryDetails: Types.ObjectId(addressId),
+        userId: Types.ObjectId(userId),
+        payment_method: paymentMethod,
         products: products,
-        total_amount: order.total_amount,
-        total_max: order.total_max,
-        total_discount: order.total_discount,
+        total_amount: total_amount,
+        total_max: total_max,
+        total_discount: total_discount,
+        coupon: Number(coupon),
         payment_status: status,
         date: date,
       };
       order_model.create(orderObj).then((cart) => {
-        console.log(data.paymentMethod)
-        if(data.paymentMethod !== "razorPay"){
-          console.log("deleting the cart items")
-        cart_model
-        .deleteOne({
-          userId: Types.ObjectId(data.userId),
-        })
-        .then(() => {
-          console.log("order created data : ",cart)
-          resolve({id: cart._id, total: cart.totalAmount});
-        });
-       } else {
-        resolve({id: cart._id, total: cart.totalAmount});
-       }
-      })
+        console.log(data.paymentMethod);
+        console.log(cart);
+        if (data.paymentMethod !== "razorPay") {
+          console.log("deleting the cart items");
+          cart_model
+            .deleteOne({
+              userId: Types.ObjectId(data.userId),
+            })
+            .then(() => {
+              console.log("order created data : ", cart);
+              resolve({ id: cart._id, total: cart.total_amount });
+            });
+        } else {
+          resolve({ id: cart._id, total: cart.total_amount });
+        }
+      });
     });
   },
   getOrders: (userId) => {
@@ -198,21 +203,27 @@ module.exports = {
           {
             $set: {
               date: {
-                $dateToString: { format: "%d/%m/%Y -- %H:%M", date: "$date", timezone: "+05:30" },
+                $dateToString: {
+                  format: "%d/%m/%Y -- %H:%M",
+                  date: "$date",
+                  timezone: "+05:30",
+                },
               },
             },
           },
           {
             $set: {
-              productDetails : {$sortArray: { input: "$productDetails", sortBy: { _id: 1 } }}
-            }
+              productDetails: {
+                $sortArray: { input: "$productDetails", sortBy: { _id: 1 } },
+              },
+            },
           },
           {
-            $sort: { date: -1 }
-          }, 
+            $sort: { date: -1 },
+          },
         ])
         .then((data) => {
-          console.log(data)
+          console.log(data);
           resolve(data);
         });
     });
@@ -237,8 +248,10 @@ module.exports = {
           },
           {
             $set: {
-              productDetails : {$sortArray: { input: "$productDetails", sortBy: { _id: 1 } }}
-            }
+              productDetails: {
+                $sortArray: { input: "$productDetails", sortBy: { _id: 1 } },
+              },
+            },
           },
           {
             $lookup: {
@@ -268,26 +281,29 @@ module.exports = {
             $set: {
               "products.$.status": "cancelled",
               "products.$.finalTotal": "0",
-            }, 
+            },
           }
         )
         .then((data) => {
-          console.log("cancel ",data);
+          console.log("cancel ", data);
           resolve();
         });
     });
   },
   getOrderProductPrice: (orderId, productId) => {
     return new Promise((resolve, reject) => {
-      order_model.findOne({
-        _id: Types.ObjectId(orderId),
-        "products.productId": Types.ObjectId(productId),
-      }).then((data) => {
-        // console.log("price is : " + data?.products?.[0]?.price)
-        resolve(data?.products?.[0]?.price);
-      })
-    })
-  }
+      order_model
+        .findOne({
+          _id: Types.ObjectId(orderId),
+          "products.productId": Types.ObjectId(productId),
+        })
+        .then((data) => {
+          console.log("price is : " + data?.products?.[0])
+          console.log(data.products[0].cd_price)
+          resolve(data?.products?.[0]?.cd_price);
+        });
+    });
+  },
   // totalOrderAmount: (orderId) => {
   //   return new Promise((resolve, reject) => {
   //     console.log(orderId);
@@ -308,9 +324,9 @@ module.exports = {
   //   });
   // },
 
-  // addOrderProducts: (userId, products) => { 
+  // addOrderProducts: (userId, products) => {
   //   return new Promise((resolve, reject) => {
-  //     delete products._id; 
+  //     delete products._id;
   //     products.userId = userId;
   //     console.log("Products in addorderproducts is : ",products);
   //     order_products_model.create(products).then((data) => {

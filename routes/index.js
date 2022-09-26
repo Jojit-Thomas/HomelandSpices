@@ -45,6 +45,7 @@ const {
 
 const paypal = require("../controllers/paypal");
 const { getTotalAmount } = require("../helpers/user/cart");
+const { validateCoupon } = require("../controllers/coupon");
 
 router.use((req, res, next) => {  
   res.set("Cache-Control", "no-store"); 
@@ -94,15 +95,16 @@ router.get("/orders/cancel/:orderId/:productId", verifyLogin, getCancelProduct);
 router.get("/orders/details/:orderId/:productId", verifyLogin, getOrderDetailsPage);
 router.get("/payment", verifyLogin, getPaymentPage)
 router.post("/checkout", verifyLogin, postCheckout);
-router.post("/payment/verify", verifyLogin, verifyPayment)
-
+router.post("/payment/verify", verifyLogin, verifyPayment);
+router.get("/coupon/validate/:couponId", verifyLogin, validateCoupon)
+  
 
 
 router.post("/api/orders", async (req, res) => {
   try {
     let user = req.cookies.user ? req.cookies.user : null;
     let total = await getTotalAmount(user.userId);
-    const order = await paypal.createOrder(total);
+    const order = await paypal.createOrder(total.total_amount);
     console.log(order);
     res.json(order);
   } catch (err) {

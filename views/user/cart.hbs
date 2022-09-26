@@ -92,7 +92,7 @@
         </div>
         <div class="d-flex justify-content-between w-100">
           <p>Discount</p>
-          <p>- ₹{{order.total_discount}}</p>
+          <p id="discount" >- ₹{{order.total_discount}}</p>
         </div>
         <div class="d-flex justify-content-between w-100">
           <p>Shipping</p>
@@ -165,8 +165,10 @@ function changeQuantity(cartId, productId, userId, count) {
         },
         method: "POST",
         success: function(data) {
-            $("#price").text(`₹${data.total}`);
-            $("#total").text(`₹${data.total}`);
+          console.log(data )
+            $("#price").text(`₹${data.total.total_max}`);
+            $("#total").text(`₹${data.total.total_amount}`);
+            $("#discount").text(`₹${data.total.total_discount}`);
             val = val + count;
             document.getElementById(productId).value = val;
             if (val <= 1) {

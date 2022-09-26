@@ -16,34 +16,36 @@ const {
   reduceStock,
   getOrderProductPrice,
 } = require("../../helpers/user/order");
-const { addToWallet } = require("../../helpers/common");
+const { addToWallet, validateCoupon } = require("../../helpers/common");
 module.exports = {
-  postCheckout: async (req, res) => {
+  postCheckout: async (req, res, next) => {
     console.log(req.body);
+   try{
     let user = req.cookies.user ? req.cookies.user : null;
     let addrs = req.cookies.address ? req.cookies.address : null;
     //getting the address and adding it into order address collection to make it immutable
     let address = await getAddressById(addrs);
     let orderAddress = await addCheckoutAddress(address);
-    const { paymentMethod } = req.body
+    let { paymentMethod, coupon } = req.body
+    coupon = await validateCoupon(coupon.toUpperCase())// this function returns coupon details if coupon not present it returns a error 401 && argument must be in uppercase letters
+    coupon ? coupon : 0
     // fetching product details and total amount
     let products = await getCartProdutDetails(user.userId);
-    products.forEach(async (product) => {
+    products.forEach(async (product) => {//Reducing the stock from each products
       await reduceStock(product.productId, product.quantity)
     })
-    console.log("products is " , products)
-    // let orderProducts = await addOrderProducts(user.userId, products[0])
-    // console.log("orderProducts is : ", orderProducts);
     let order = await getTotalAmount(user.userId);
     const data = {
       userId: user.userId,
       addressId: orderAddress._id,
       paymentMethod: paymentMethod,
+      coupon: coupon.discount,
     };
     placeOrder(data, products, order).then((state) => {
       if (paymentMethod === "cashOnDelivery"){
         res.send({method: "cod"});
       } else if (paymentMethod === "razorPay"){
+        console.log(state)
         generateRazorpay(state.id, state.total * 100).then((response) => {
           let state = {
             method: "razorPay",
@@ -56,6 +58,13 @@ module.exports = {
         res.send({method: "paypal"});
       }
     });
+   } catch(err){
+    if(err.status === 401) {
+      res.status(401).json("Bad Request");
+    } else {
+      next(err);
+    }
+   }
   },
   getOrderPage: (req, res) => {
     let user = req.cookies.user ? req.cookies.user : null;
