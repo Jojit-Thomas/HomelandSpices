@@ -117,7 +117,7 @@ table .title {
           <th scope="col" class="m-auto text-center align-middle">
             Phone
           </th>
-          <th scope="col" class="m-auto text-center align-middle">Password</th>
+          {{!-- <th scope="col" class="m-auto text-center align-middle">Password</th> --}}
           <th scope="col" class="m-auto text-center align-middle">Date</th>
           <th scope="col" class="m-auto text-center align-middle">Wallet</th>
           <th scope="col" class="m-auto text-center align-middle">Options</th>
@@ -130,7 +130,7 @@ table .title {
             <td class="title">{{this.name}}</td>
             <td class="desc">{{this.email}}</td>
             <td class="">{{this.phone}}</td>
-            <td class="">{{this.password}}</td>
+            {{!-- <td class="">{{this.password}}</td> --}}
             <td class="">{{this.date}}</td>
             <td class="">{{this.wallet}}</td>
             <td class="" style="white-space: nowrap;">
@@ -160,6 +160,15 @@ table .title {
         {{/each}}
       </tbody>
     </table>
+    <div class="d-flex justify-content-center">
+      <ul class="pagination">
+      <li class="page-item"><a class="page-link" href="?page={{math currentPage '+' '-1'}}">Previous</a></li>
+       {{#times '1' pageLimit}}
+       <li class="page-item"><a class="page-link" href="?page={{this}}">{{this}}</a></li>
+       {{/times}}
+       <li class="page-item"><a class="page-link" href="?page={{inc currentPage}}">Next</a></li>
+    </ul>
+    </div>
   </div>
 </section>
 

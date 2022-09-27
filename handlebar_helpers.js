@@ -9,6 +9,21 @@ module.exports = {
       // console.log(arg1 + "=" + arg2);
       return arg1 == arg2 ? options.fn(this) : options.inverse(this);
     });
+    handlebars.registerHelper('math', function (v1, operator, v2, options) {
+      console.log(v1 + operator + v2);
+      switch (operator) {
+          case '+':
+              return parseInt(v1) + parseInt(v2);
+          case '-':
+              return parseInt(v1) - parseInt(v2);
+          case '*':
+              return parseInt(v1) * parseInt(v2);
+          case '/':
+              return parseInt(v1) / parseInt(v2);
+          default:
+              return options.inverse(this);
+      }
+  });
     handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
 
       switch (operator) {

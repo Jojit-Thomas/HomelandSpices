@@ -2,15 +2,30 @@ const { Types, trusted } = require("mongoose");
 const user_model = require("../../model/user_model");
 
 module.exports = {
-  getAllUsers: () => {
+  getAllUsers: (offset, limit, sort, sortValue) => {
     return new Promise((resolve, reject) => {
+      limit = parseInt(limit);
+      offset = parseInt(offset);
+      sort = parseInt(sort);
+      let query = {};
+      query[ sortValue.toLowerCase() ] = sort
       user_model.aggregate([{
         $set: {
           date: {
             $dateToString: { format: "%d/%m/%Y -- %H:%M", date: "$date", timezone: "+05:30"  },
           },
         },
-      },]).then((users) => {
+      },
+      {
+        $sort: query
+      },
+      {
+        $skip : offset
+      },
+      {
+        $limit: limit
+      }
+    ]).then((users) => {
         resolve(users);
       });
     });
@@ -73,4 +88,9 @@ module.exports = {
       });
     });
   },
+  getUserCount: () => {
+    return new Promise((resolve, reject) => {
+      user_model.countDocuments().then((count) => resolve(count))
+    })
+  }
 };

@@ -5,13 +5,18 @@ const {
   AddProduct,
   deleteProduct,
   updateProduct,
+  getProductCount,
 } = require("../../helpers/admin/products");
 const { getAllProducts, getProduct, getAllCategories } = require("../../helpers/common");
 module.exports = {
-  getProducts: (req, res) => {
-    getAllProducts().then((products) => {
-      res.render("admin/view_products", { admin: true, products: products });
-    });
+  getProducts: async (req, res) => {
+  let {limit = 10, page = 1, sort = -1, sortValue = 'date'} = req.query;
+  let orderCount = await getProductCount()//get the total number of documents ordered
+  let pageLimit = Math.ceil(orderCount / limit)//divide total number of order document / limit 
+  page = (page < 1) ? 1 : (page > pageLimit) ? pageLimit : page; // if the page is less than 1 then make it 1 and if the page is greater than pageLimit then make it pageLimit
+  const offset = (page - 1) * limit;//the start index of the document
+  let products = await getAllProducts(offset, limit, sort, sortValue)//fetch document from the server
+    res.render("admin/view_products", { admin: true, products: products, pageLimit : pageLimit, currentPage: page,limit : limit });
   },
   getAddProducts: (req, res) => {
     getAllCategories().then((categories) => {

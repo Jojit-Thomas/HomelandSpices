@@ -80,4 +80,12 @@ module.exports = {
       }).catch((err) => {console.log(err);})
     })
   },
+  getProductCount: () => {
+    return new Promise((resolve, reject) => {
+      products_model.countDocuments().then((count) => {
+        console.log(count);
+        resolve(count);
+      })
+    })
+  }
 };

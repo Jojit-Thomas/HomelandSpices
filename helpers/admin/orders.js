@@ -7,7 +7,7 @@ const {
 const order_model = require("../../model/order_model");
 
 module.exports = {
-  getOrders: (limit, offset, sort, sortValue) => {
+  getOrders: (offset, limit, sort, sortValue) => {
     limit = parseInt(limit);
     offset = parseInt(offset);
     sort = parseInt(sort);
@@ -43,10 +43,14 @@ module.exports = {
           }
         ])
         .then((data) => {
-          console.log(data);
           resolve(data);
         });
     });
+  },
+  getOrderCount: () => {
+    return new Promise((resolve, reject) => {
+      order_model.find().count().then((count) => resolve(count));
+    })
   },
   getOrderDetails: (orderId) => {
     return new Promise((resolve, reject) => {

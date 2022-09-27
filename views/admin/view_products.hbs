@@ -101,7 +101,7 @@
       <tbody class="mt-3 m-auto text-center align-middle" id="table">
         {{#each products}}
         <tr class="bg-white" id="product{{this._id}}">
-          <th class="" scope="row">{{inc @index}}</th>
+          <th class="" scope="row">{{math (math (math ../currentPage '-' '1') '*' ../limit) '+' (inc @index)}}</th>
           <td class="title">{{this.title}}</td>
           <td class="desc" >{{this.desc}}</td>
           <td class="" >{{this.category_details.[0].title}}</td>
@@ -120,6 +120,15 @@
         {{/each}}
       </tbody>
     </table>
+    <div class="d-flex justify-content-center">
+      <ul class="pagination">
+      <li class="page-item"><a class="page-link" href="?page={{math currentPage '+' '-1'}}">Previous</a></li>
+       {{#times '1' pageLimit}}
+       <li class="page-item"><a class="page-link" href="?page={{this}}">{{this}}</a></li>
+       {{/times}}
+       <li class="page-item"><a class="page-link" href="?page={{inc currentPage}}">Next</a></li>
+    </ul>
+    </div>
   </div>
 </section>
 

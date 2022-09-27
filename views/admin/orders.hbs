@@ -128,7 +128,7 @@ table .title {
       <tbody class="mt-3 m-auto text-center align-middle" id="table">
         {{#each orders}}
           <tr class="bg-white">
-            <th class="" scope="row">{{inc @index}}</th>
+            <th class="" scope="row">{{math (math (math ../currentPage '-' '1') '*' ../limit) '+' (inc @index)}}</th>{{!-- --}}
             <td class="title">{{this.address.[0].name}}</td>
             <td class="desc">{{this.address.[0].locality}}, {{this.address.[0].postOffice}}, {{this.address.[0].pincode}}</td>
             <td class="">{{this.date}}</td>
@@ -145,17 +145,20 @@ table .title {
         {{/each}}
       </tbody>
     </table>
-<nav aria-label="Page navigation example">
+    <div class="d-flex justify-content-center">
+      <nav>
   <ul class="pagination">
-    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-    <li class="page-item"><a class="page-link" href="#">1</a></li>
-    <li class="page-item"><a class="page-link" href="#">2</a></li>
-    <li class="page-item"><a class="page-link" href="#">3</a></li>
-    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+    <li class="page-item"><a class="page-link" href="?page={{math currentPage '+' '-1'}}">Previous</a></li>
+    {{#times '1' pageLimit}}
+    <li class="page-item"><a class="page-link" href="?page={{this}}">{{this}}</a></li>
+    {{/times}}
+    <li class="page-item"><a class="page-link" href="?page={{inc currentPage}}">Next</a></li>
   </ul>
 </nav>
+    </div>
   </div>
 </section>
+
 
 
 <script>
@@ -170,7 +173,3 @@ table .title {
 
 </script>
 
-
-
-
-{{! <link rel="stylesheet" href="/stylesheets/datatable.css"> }}

@@ -27,30 +27,35 @@ module.exports = {
           },
           // {
           //   $set: {
-          //     total_discount: {$sum : [ "$category_details.discount", "$discount"]} // this does not work 
+          //     total_discount: {$sum : [ "$category_details.discount", "$discount"]} // this does not work
           //   }
           // },
           {
             $set: {
-              total_discount: {$sum : [ "$category_details.discount"]}
-            }
+              total_discount: { $sum: ["$category_details.discount"] },
+            },
           },
           {
             $set: {
-              total_discount: {$sum : [ "$discount", "$total_discount"]}
-            }
+              total_discount: { $sum: ["$discount", "$total_discount"] },
+            },
           },
         ])
         .then((product) => {
-          console.log(product[0])
+          console.log(product[0]);
           product?.[0]
             ? resolve(product?.[0])
             : reject(createHttpError.NotFound()); //
         });
     });
   },
-  getAllProducts: () => {
+  getAllProducts: (offset, limit, sort, sortValue) => {
     return new Promise((resolve, reject) => {
+      limit = parseInt(limit);
+      offset = parseInt(offset);
+      sort = parseInt(sort);
+      let query = {};
+      query[ sortValue.toLowerCase() ] = sort
       products_model
         .aggregate([
           { $match: { isDeleted: { $ne: true } } },
@@ -71,7 +76,16 @@ module.exports = {
               localField: "category",
               foreignField: "_id",
               as: "category_details",
-            }
+            },
+          },
+          {
+            $sort: query
+          },
+          {
+            $skip : offset
+          },
+          {
+            $limit: limit
           }
         ])
         .then((products) => {
@@ -93,7 +107,7 @@ module.exports = {
                   timezone: "+05:30",
                 },
               },
-            }, 
+            },
           },
         ])
         .then((category) => {
@@ -196,12 +210,32 @@ module.exports = {
         });
     });
   },
-  validateCoupon: (coupon) => {//parameters must be in uppercase letters
+  validateCoupon: (coupon) => {
+    //parameters must be in uppercase letters
     return new Promise((resolve, reject) => {
-      coupon_model.findOne({coupon_code: coupon}).then((coupon) => {
+      coupon_model.findOne({ coupon_code: coupon }).then((coupon) => {
         console.log(coupon);
         coupon ? resolve(coupon) : reject(createHttpError.Unauthorized());
-      })
-    })
-  }
+      });
+    });
+  },
+  incCoupon: (coupon) => {
+    return new Promise((resolve, reject) => {
+      coupon_model
+        .updateOne(
+          { coupon_code: coupon },
+          {
+            $inc: {
+              total_coupon_used: 1,
+            },
+          }
+        )
+        .then((data) => {
+          resolve();
+        }).catch((err) => {
+          console.log(err);
+          reject(createHttpError.InternalServerError());
+        })
+    });
+  },
 };

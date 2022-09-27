@@ -3,15 +3,19 @@ const {
   deleteUser,
   addUser,
   blockUnblock,
+  getUserCount,
 } = require("../../helpers/admin/users");
 const bcrypt = require("bcrypt");
 const { getUser, updateUser } = require("../../helpers/common");
 module.exports = {
-  getUsers: (req, res) => {
-    getAllUsers().then((users) => {
-      console.log(users);
-      res.render("admin/view_users", { admin: true, users: users });
-    });
+  getUsers: async (req, res) => {
+    let {limit = 10, page = 1, sort = -1, sortValue = 'date'} = req.query;
+    let orderCount = await getUserCount()//get the total number of documents ordered
+    let pageLimit = Math.ceil(orderCount / limit)//divide total number of order document / limit 
+    page = (page < 1) ? 1 : (page > pageLimit) ? pageLimit : page; // if the page is less than 1 then make it 1 and if the page is greater than pageLimit then make it pageLimit
+    const offset = (page - 1) * limit;//the start index of the document
+    let users = await getAllUsers(offset, limit, sort, sortValue)//fetch document from the server
+    res.render("admin/view_users", { admin: true, users: users, pageLimit : pageLimit, currentPage: page,limit : limit  });
   },
   getdeleteUser: (req, res) => {
     deleteUser(req.params.id).then((done) => {

@@ -4,14 +4,18 @@ const {
   updateOrderStatus,
   getOrderDetails,
   updatePaymentStatus,
+  getOrderCount,
 } = require("../../helpers/admin/orders");
 
 module.exports = {
-  getOrderPage: (req, res) => {
-    let {limit = 50, offset = 0, sort = -1, sortValue = 'date'} = req.query;
-    getOrders(limit, offset, sort, sortValue).then((orders) => {
-      res.render("admin/orders", { orders: orders, admin: true, limit: limit, offset: offset });
-    });
+  getOrderPage: async (req, res) => {
+    let {limit = 10, page = 1, sort = -1, sortValue = 'date'} = req.query;
+    let orderCount = await getOrderCount()//get the total number of documents ordered
+    let pageLimit = Math.ceil(orderCount / limit)//divide total number of order document / limit 
+    page = (page < 1) ? 1 : (page > pageLimit) ? pageLimit : page; // if the page is less than 1 then make it 1 and if the page is greater than pageLimit then make it pageLimit
+    offset = (page - 1) * limit;//the start index of the document
+    let orders = await getOrders(offset, limit, sort, sortValue)//fetch document from the server
+    res.render("admin/orders", { orders: orders, admin: true, pageLimit : pageLimit, currentPage: page, limit: limit});
   },
   getOrderDetailsPage: (req, res) => {
     getOrderDetails(req.params.id).then((orders) => {
