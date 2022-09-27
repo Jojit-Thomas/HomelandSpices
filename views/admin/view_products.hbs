@@ -63,7 +63,7 @@
           <a class="nav-link" href="#">Out of Stock <span class="count">(10)</span></a>
         </li>
         <li class=" float-end">
-          <a href="/admin/addProduct">
+          <a href="/admin/product/add">
             <div class="float-end btn text-white" style="background-color: var(--blurple);">Add Product</div>
           </a>
         </li>
@@ -86,8 +86,11 @@
           </th>
           {{!-- <th scope="col" class="m-auto text-center align-middle">Name</th> --}}
           <th scope="col desc" class="m-auto text-center align-middle">Description</th>
+          <th scope="col" class="m-auto text-center align-middle">Category</th>
           <th scope="col" class="m-auto text-center align-middle ">Date</th>
+          <th scope="col" class="m-auto text-center align-middle">MRP</th>
           <th scope="col" class="m-auto text-center align-middle">Price</th>
+          <th scope="col" class="m-auto text-center align-middle">Final Price</th>
           <th scope="col" class="m-auto text-center align-middle">Stocks</th>
           <th scope="col" class="m-auto text-center align-middle">
             Image
@@ -100,11 +103,14 @@
         <tr class="bg-white" id="product{{this._id}}">
           <th class="" scope="row">{{inc @index}}</th>
           <td class="title">{{this.title}}</td>
-          <td class="desc">{{this.desc}}</td>
+          <td class="desc" >{{this.desc}}</td>
+          <td class="" >{{this.category_details.[0].title}}</td>
           <td class="">{{this.date}}</td>
+          <td class="">{{this.max_price}}</td>
           <td class="">{{this.pd_price}}</td>
+          <td class="">{{this.cd_price}}</td>
           <td class="">{{this.stocks}}</td>
-          <td class=""><img src="/product_images/{{this._id}}.{{img_ext}}" width="50px" alt="" /></td>
+          <td class=""><img src="/product_images/{{this._id}}-1.{{img_ext}}" width="50px" alt="" /></td>
           <td class="" style="white-space: nowrap;">
             <a class="btn btn-primary" href="/admin/product/edit/{{this._id}}">Edit
             </a>

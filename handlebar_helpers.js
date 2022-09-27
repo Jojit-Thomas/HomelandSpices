@@ -43,6 +43,12 @@ module.exports = {
     handlebars.registerHelper('index_of', function(context,ndx,property) {
       return context[ndx][property];
     });
+    handlebars.registerHelper('times', function(from, n, block) {
+      var accum = '';
+      for(var i = from; i <= n; ++i)
+          accum += block.fn(i);
+      return accum;
+  });
     next();
   },
 };

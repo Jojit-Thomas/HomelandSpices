@@ -2,7 +2,7 @@ const products_model = require("../../model/products_model");
 const { Types } = require("mongoose");
 module.exports = {
   AddProduct: (product, img_ext) => {
-    const { title, description, category, price, stocks } = product;
+    const { title, description, category, max_price, cd_price, pd_price, stocks, discount } = product;
     return new Promise((resolve, reject) => {
       console.log(product);
       try {
@@ -11,15 +11,16 @@ module.exports = {
             title: title,
             desc: description,
             category: Types.ObjectId(category),
-            max_price: Number(price),
-            cd_price: Number(price),
-            pd_price: Number(price),
+            max_price: Number(max_price),
+            cd_price: Number(cd_price),
+            pd_price: Number(pd_price),
             stocks: Number(stocks),
+            discount: Number(discount),
             img_ext: img_ext,
             isDeleted: false,
           })
           .then((result) => {
-            resolve(result);
+            resolve(result)
           });
       } catch (err) {
         console.log(err);
@@ -36,7 +37,7 @@ module.exports = {
     });
   },
   updateProduct: (productId, body, img_ext) => {
-    const { title, description, category, price, stocks, max_price, discount } =
+    const { title, description, category, pd_price, cd_price, stocks, max_price, discount } =
       body;
     console.log(stocks);
     console.log(Number(stocks));
@@ -51,7 +52,8 @@ module.exports = {
               category: category,
               stocks: Number(stocks),
               img_ext: img_ext,
-              pd_price: Number(price),
+              pd_price: Number(pd_price),
+              cd_price: Number(cd_price),
               max_price: Number(max_price),
               discount: Number(discount),
             },
