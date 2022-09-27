@@ -138,7 +138,7 @@ module.exports = {
   placeOrder: (data, products, order) => {
     return new Promise((resolve, reject) => {
       var date = new Date().toLocaleString();
-      const { paymentMethod, addressId, coupon, userId } = data;
+      const { paymentMethod, addressId, coupon, coupon_code, userId } = data;
       let { total_amount, total_max, total_discount} = order;
       total_amount = total_amount - coupon
       console.log("total_amount: " + total_amount + "coupon: " + coupon)
@@ -151,6 +151,7 @@ module.exports = {
         total_amount: total_amount,
         total_max: total_max,
         total_discount: total_discount,
+        coupon_code: coupon_code,
         coupon: Number(coupon),
         payment_status: status,
         date: date,
@@ -221,6 +222,7 @@ module.exports = {
           {
             $sort: { date: -1 },
           },
+          
         ])
         .then((data) => {
           console.log(data);

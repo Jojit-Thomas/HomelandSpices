@@ -11,6 +11,7 @@ const orderSchema = new mongoose.Schema({
   total_amount: Number,
   total_max: Number,
   total_discount: Number,
+  coupon_code: String,
   coupon: Number,
   status: String,
   payment_method: String,

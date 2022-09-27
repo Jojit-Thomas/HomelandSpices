@@ -211,8 +211,7 @@
   $(".accordion-button").click(function () {
     setTimeout(function () {
       $(".show").attr("id") ?
-        $("#paymentMethodInp").val($(".show").attr("id")) :
-        null //if any accordion is Chosen the id of the div is set as the value of the input field "paymentMethodInp"
+        $("#paymentMethodInp").val($(".show").attr("id")) : $("#paymentMethodInp").val("cashOnDelivery") //if any accordion is Chosen the id of the div is set as the value of the input field "paymentMethodInp"
       console.log($("#paymentMethodInp").val());
     }, 500)
   })

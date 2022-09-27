@@ -16,7 +16,7 @@ const {
   reduceStock,
   getOrderProductPrice,
 } = require("../../helpers/user/order");
-const { addToWallet, validateCoupon } = require("../../helpers/common");
+const { addToWallet, validateCoupon, incCoupon } = require("../../helpers/common");
 module.exports = {
   postCheckout: async (req, res, next) => {
     console.log(req.body);
@@ -27,8 +27,14 @@ module.exports = {
     let address = await getAddressById(addrs);
     let orderAddress = await addCheckoutAddress(address);
     let { paymentMethod, coupon } = req.body
-    coupon = await validateCoupon(coupon.toUpperCase())// this function returns coupon details if coupon not present it returns a error 401 && argument must be in uppercase letters
-    coupon ? coupon : 0
+    coupon = coupon.trim().toUpperCase()//trims the white spaces and transform text into uppercase
+    console.log(coupon)
+    let coupon_details;
+    if(coupon) {
+      coupon_details = await validateCoupon(coupon)// this function returns coupon details if coupon not present it returns a error 401 && argument must be in uppercase letters
+      await incCoupon(coupon)// This function increment the field total_coupon_used
+      console.log(coupon)
+    }
     // fetching product details and total amount
     let products = await getCartProdutDetails(user.userId);
     products.forEach(async (product) => {//Reducing the stock from each products
@@ -39,7 +45,8 @@ module.exports = {
       userId: user.userId,
       addressId: orderAddress._id,
       paymentMethod: paymentMethod,
-      coupon: coupon.discount,
+      coupon: coupon_details ? coupon_details.discount : 0,
+      coupon_code: coupon_details ? coupon_details.coupon_code : null,
     };
     placeOrder(data, products, order).then((state) => {
       if (paymentMethod === "cashOnDelivery"){

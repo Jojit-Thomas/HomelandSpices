@@ -4,7 +4,7 @@ module.exports = {
     validateCoupon: (req, res, next) => {
         let {couponId} = req.params;
         console.log(couponId)
-        couponId = couponId.toUpperCase();
+        couponId = couponId.toUpperCase().trim()
         validateCoupon(couponId).then((coupon) => {
           res.status(200).json(coupon)
         }).catch((err) => {
