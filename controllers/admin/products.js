@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const { getCategoryById } = require("../../helpers/admin/categories");
 const {
   AddProduct,
   deleteProduct,
@@ -18,21 +19,30 @@ module.exports = {
       res.render("admin/add_product", { admin: true, categories: categories });
     });
   },
-  postAddProducts: (req, res) => {
-    const img_ext = req.files.image.name.split(".").pop(); // to get the extension of the file
+    postAddProducts: async (req, res) => {
+    let {max_price, category } = req.body; 
+    pd_discount = parseInt(req.body.discount)// Product discount value
+    req.body.pd_price = Math.round(max_price - ( pd_discount / 100) * max_price)//calculating the price && pd_price - product discount 
+    let { discount } = await getCategoryById(category)// Fetching the discount value of category
+    req.body.cd_price = Math.round(req.body.pd_price - (discount / 100) * req.body.pd_price)//this is the final price && pd_price - category discount
+    // req.body.discount = discount + parseInt(pd_discount)//THis is the total discount && product discount + category discount
+    // console.log(pd_discount , " == ", discount, " == ", req.body.discount )
+    let img_ext = req.files.image1.name.split(".").pop(); // to get the extension of the file
     AddProduct(req.body, img_ext).then((result) => {
-      console.log(result);
-      if (result) {
-        const image = req.files.image;
-        image.mv(
-          `./public/product_images/${result._id}.${result.img_ext}`, // adding image of product to the product images file
-          (err, done) => {
-            if (!err) res.redirect("/admin/products");
-            else console.log(err);
-          }
-        );
-      } else {
-        console.log("error");
+      for(let i = 1; i <= 4; i++) {
+        var img_ext = req.files[`image${i}`].name.split(".").pop(); // to get the extension of the file
+        const image = req.files[`image${i}`];
+          image.mv(
+            `./public/product_images/${result._id}-${i}.${img_ext}`, // adding image of product to the product images file
+            (err, done) => {
+              if (!err){
+                 if(i === 4){
+                  res.redirect("/admin/products")
+                } 
+              }
+              else console.log(err);
+            }
+          );
       }
     });
   },
@@ -64,25 +74,37 @@ module.exports = {
     })
     
   },
-  postEditProduct: (req, res) => {
+  postEditProduct: async (req, res) => {
+    //pd_price = Product Discounted Price
+    //cd_price = Category Discounted Price
     if(req.files) { // check if the image is changed
-      var img_ext = req.files?.image.name.split(".").pop(); // getting the file extension of the old file
+      var img_ext = req.files?.image1.name.split(".").pop(); // getting the file extension of the old file
     }
-    let {max_price, discount } = req.body; 
-    req.body.price = Math.round(max_price - ( discount / 100) * max_price)
+    let {max_price, category } = req.body; 
+    pd_discount = parseInt(req.body.discount)// Product discount value
+    req.body.pd_price = Math.round(max_price - ( pd_discount / 100) * max_price)//calculating the price && pd_price - product discount 
+    let { discount } = await getCategoryById(category)// Fetching the discount value of category
+    req.body.cd_price = Math.round(req.body.pd_price - (discount / 100) * req.body.pd_price)//this is the final price && pd_price - category discount
+    // req.body.discount = discount + parseInt(discount)//THis is the total discount && product discount + category discount
     updateProduct(req.params.id, req.body, img_ext).then((result) => {
-      console.log(result);
       if (result) {
         // if image is changed add new image to the folder
         if (req.files) {
-          const image = req.files?.image;
-          image.mv(
-            `./public/product_images/${req.params.id}.${img_ext}`,
-            (err, done) => {
-              if (!err) res.redirect("/admin/products");
-              else console.log(err);
-            }
-          );
+          for(let i = 1; i <= 4; i++) {//Moving each image to the folder
+            var img_ext = req.files[`image${i}`].name.split(".").pop(); // to get the extension of the file
+            const image = req.files[`image${i}`];
+              image.mv(
+                `./public/product_images/${req.params.id}-${i}.${img_ext}`, // adding image of product to the product images file
+                (err, done) => {
+                  if (!err){
+                     if(i === 4){
+                      res.redirect("/admin/products")
+                    }
+                  }
+                  else console.log(err);
+                }
+              );
+          }
         }
         //if image not changed redirect to products
         else {

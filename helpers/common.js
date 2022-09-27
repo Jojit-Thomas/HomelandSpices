@@ -65,6 +65,14 @@ module.exports = {
               },
             },
           },
+          {
+            $lookup: {
+              from: CATEGORIES_COLLECTION,
+              localField: "category",
+              foreignField: "_id",
+              as: "category_details",
+            }
+          }
         ])
         .then((products) => {
           // console.log(products);

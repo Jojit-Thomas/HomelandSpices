@@ -43,12 +43,11 @@ module.exports = {
     });
   },
   getCategoryById: (id) => {
-    console.log(id);
     return new Promise((resolve, reject) => {
-      category_model.findOne({ _id: Types.ObjectId(id) }).then((category) => {
+      category_model.findById(Types.ObjectId(id)).then((category) => {
         resolve(category);
-      });
-    });
+      }).catch((err) => console.log(err))
+    })
   },
   editCategory: (id, ...body) => {
     return new Promise((resolve, reject) => {
