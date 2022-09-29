@@ -60,7 +60,7 @@ $(document).ready(function () {
     const otp = $("#otp").val();
     console.log("verifyOtp clicked");
     $.ajax({
-      url: "/verifyOtp",
+      url: "/otp/verify",
       data: {
         phone: phone,
         otp: otp,

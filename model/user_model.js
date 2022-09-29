@@ -17,14 +17,22 @@ const userSchema = new mongoose.Schema({
     max: 50,
   },
   isAllowed: {
-    required: true,
     type: Boolean,
+    default: true,
   },
-  wallet: Number,
+  wallet: {
+    type : Number,
+    default: 0,
+  },
   date:{
     type: Date, 
     default: new Date(),
   },
+  refral_code: {
+    type : String,
+    required: true,
+    unique: true,
+  }
 });
 
 module.exports = mongoose.model("users", userSchema, USER_COLLECTION);

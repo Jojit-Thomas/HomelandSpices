@@ -60,7 +60,7 @@ $(document).ready(function () {
           console.log(err);
           err = jQuery.parseJSON(err.responseText);
           console.log(err.message);
-          $("#error").text(err.message);
+          $("#error").text(err);
         },
       });
     },

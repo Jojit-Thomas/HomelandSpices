@@ -49,7 +49,7 @@ module.exports = {
         });
     });
   },
-  getAllProducts: (offset, limit, sort, sortValue) => {
+  getAllProducts: (offset = 0, limit = 100, sort = 1, sortValue = "date") => {
     return new Promise((resolve, reject) => {
       limit = parseInt(limit);
       offset = parseInt(offset);

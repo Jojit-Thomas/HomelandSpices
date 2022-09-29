@@ -13,6 +13,11 @@ const {
   postGetOtp,
   postVerifyOtp,
   verifyLogin,
+  sendMail,
+  getForgotPasswordPage,
+  forgotPassword,
+  resetForgotPasswordPage,
+  resetForgotPassword,
 } = require("../controllers/user/authentication");
 const {
   getAddToCart,
@@ -60,9 +65,13 @@ router.post("/signup", stopAuthenticate, postSignUp);
 router.get("/signin", stopAuthenticate, getSignIn);
 router.post("/signin", stopAuthenticate, postSignIn);
 router.get("/blocked", stopAuthenticate, getBlocked);
+router.get("/otp", stopAuthenticate, getOtpSigninPage);
 router.post("/otp/get", stopAuthenticate, postGetOtp);
-router.post("/verifyOtp", stopAuthenticate, postVerifyOtp);
-router.get("/otpSigninPage", stopAuthenticate, getOtpSigninPage);
+router.post("/otp/verify", stopAuthenticate, postVerifyOtp);
+router.get("/password/forgot", getForgotPasswordPage);
+router.post("/password/forgot", forgotPassword);
+router.get("/password/forgot/:token", resetForgotPasswordPage)
+router.post("/password/forgot/reset", resetForgotPassword)
 //=========================MAIN ROUTES =========================
 router.get("/", verifyLogin, getHome);
 router.get("/product/:id", verifyLogin, getProductPage);
@@ -84,7 +93,7 @@ router.post("/wishlist/add", verifyLogin, getAddToWishlist);
 router.post("/wishlist/remove", verifyLogin, getRemoveFromWishlist);
 //=========================ADDRESS ROUTES =========================
 router.get("/address", verifyLogin, getAddressPage);
-router.post("/address", verifyLogin, postAddressSelection) 
+router.post("/address", verifyLogin, postAddressSelection);
 router.get("/address/add", verifyLogin, getNewAddressPage);
 router.get("/user/address/add", verifyLogin, getNewUserAddressPage);
 router.post("/address/add", verifyLogin, postNewAddress);
