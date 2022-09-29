@@ -10,7 +10,6 @@ module.exports = {
       return arg1 == arg2 ? options.fn(this) : options.inverse(this);
     });
     handlebars.registerHelper('math', function (v1, operator, v2, options) {
-      console.log(v1 + operator + v2);
       switch (operator) {
           case '+':
               return parseInt(v1) + parseInt(v2);

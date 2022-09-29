@@ -10,5 +10,6 @@ module.exports = {
   CATEGORIES_COLLECTION: "categories",
   ADMIN_CREDENTIALS: "adminCredentials",
   ORDER_ADDRESS_COLLECTION: "orderAddress",
-  ORDER_PRODUCT_COLLECTION: "orderProducts"
+  ORDER_PRODUCT_COLLECTION: "orderProducts",
+  RESET_PASSWORD_COLLECTION: "resetPasswords",
 };

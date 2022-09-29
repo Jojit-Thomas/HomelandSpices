@@ -128,7 +128,9 @@
 {{!-- This is a code to generate random avatar image using multiavatar --}}
 <script src="https://cdn.jsdelivr.net/npm/@multiavatar/multiavatar/multiavatar.min.js"></script>
 <script>
+  if($("#avatar").length > 0) {
   const random = Math.random().toString(36).substring(2,7);
   var svgCode = multiavatar(random)
   document.getElementById('avatar').innerHTML = svgCode;
+  }
 </script>

@@ -1,13 +1,21 @@
-const { response } = require("express");
 const createHttpError = require("http-errors");
 const jwt = require("jsonwebtoken");
 const twilio = require("twilio");
+var Sib = require('sib-api-v3-sdk');
 require("dotenv").config();
+const crypto = require("crypto");
 const {
   doSignUp,
   doSignIn,
   getUser,
+  createResetToken,
+  isEmailExist,
+  isResetTokenValid,
+  reset_password,
+  findUserByRefralCode,
 } = require("../../helpers/user/authentication");
+const { generateBcrypt } = require("../../helpers/bcrypt");
+const { addToWallet } = require("../../helpers/common");
 const client = new twilio(
   process.env.TWILIO_ACCOUNT_SID,
   process.env.TWILIO_AUTH_TOKEN
@@ -91,15 +99,23 @@ module.exports = {
       }
     });
   },
-  postSignUp: (req, res) => {
-    doSignUp(req.body).then((response) => {
-      console.log(response);
+  postSignUp: async (req, res) => {
+    try{
+    let refral_valid ;
+    if(req.body.refral_code) {
+      let referer = await findUserByRefralCode(req.body.refral_code)
+      if(referer) {
+        refral_valid = true;
+        await addToWallet(referer._id, 100)
+      }
+    }
+    let response = await doSignUp(req.body, refral_valid)
       if (response.status) {
         res.status(200).redirect("/signin");
-      } else {
-        res.status(404).send({ message: response.error });
       }
-    });
+    }catch(err) {
+      res.status(err.status).json(err.message)
+    }
   },
   getBlocked: (req, res) => {
     res.render("user/authentication/blocked");
@@ -175,6 +191,48 @@ module.exports = {
     res.clearCookie("user");
     res.redirect("/");
   },
+  getForgotPasswordPage: (req, res) => {
+    let user = req.cookies.user ? req.cookies.user : null;
+    res.render("user/authentication/forgot_password",{user: user})
+  },
+  forgotPassword: async (req, res) => {
+    try{
+      let user = await isEmailExist(req.body.email.trim().toLowerCase())
+      let token = await createRandomBytes(128);
+      console.log("user is : ",token)
+      await createResetToken(user.email, token);
+      await sendForgotMail(user.email, token);
+      console.log("sending response")
+      res.status(200).json(user.email)
+    } catch(err) {
+      if(err.status === 404) {
+        res.status(404).json("Email is not registered")
+      }
+    }
+  },
+  resetForgotPasswordPage: async (req, res) => {
+    let user = req.cookies.user? req.cookies.user : null;
+    try{
+      const {token} = req.params;
+      let email = req.cookies.email? req.cookies.email : createHttpError.BadRequest();
+      let reset_token = await isResetTokenValid(email, token)
+      console.log("reset_token", reset_token);
+      res.render("user/authentication/reset_forgot_password",{user: user, email: email})
+    } catch(err) {
+      if (err.status === 400) res.render("errors/reset_password_400",{user: user})
+    }
+  },
+  resetForgotPassword: async (req, res) => {
+    try{
+      let {email, password} = req.body;
+      password = await generateBcrypt(password);
+      await reset_password(email, password);
+      res.status(200).json("Password changed successfully")
+    } catch(err) {
+      console.log(err)
+    }
+  }
+
 };
 function verifyAccessToken(token) {
   return new Promise((resolve, reject) => {
@@ -222,4 +280,101 @@ function signRefreshToken(payload) {
       }
     );
   });
+}
+function createRandomBytes(length) {
+  return new Promise((resolve, reject) => {
+    crypto.randomBytes(
+      length,
+      (err, bytes) => {
+        if (err) reject(createHttpError.InternalServerError());
+        else resolve(bytes.toString('hex'));
+      }
+    );
+  })
+}
+function sendForgotMail(mail, token) {
+    return new Promise((resolve, reject) => {
+      console.log(mail, token);
+    let defaultClient = Sib.ApiClient.instance;
+    let apiKey = defaultClient.authentications['api-key'];
+    apiKey.apiKey = process.env.SENDINBLUE_API_KEY;
+    const tranEmailApi = new Sib.TransactionalEmailsApi()
+    const sender = {
+        email: 'homelandspices@outlook.com',
+        name: 'Homelandspices',
+    }
+    const receivers = [
+        {
+            email: mail,
+        },
+    ]
+    try{
+      tranEmailApi
+    .sendTransacEmail({
+        sender,
+        to: receivers,
+        subject: 'Your HomelandSpices password reset request',
+        // textContent: `
+        // This text will be replaced by the html content{{params.role}}.         params: {role: 'Frontend',},
+        // `,
+        htmlContent: `
+        <table cellspacing="0" border="0" cellpadding="0" width="100%" bgcolor="#f2f3f8" style="@import url(https://fonts.googleapis.com/css?family=Rubik:300,400,500,700|Open+Sans:300,400,600,700); font-family: 'Open Sans', sans-serif;">
+    <tr>
+      <td>
+        <table style="background-color: #f2f3f8; max-width:670px;  margin:0 auto;" width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+          <tr>
+            <td style="height:80px;">&nbsp;</td>
+          </tr>
+          <tr>
+           
+          </tr>
+          <tr>
+            <td style="height:20px;">&nbsp;</td>
+          </tr>
+          <tr>
+            <td>
+              <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0" style="max-width:670px;background:#fff; border-radius:3px; text-align:center;-webkit-box-shadow:0 6px 18px 0 rgba(0,0,0,.06);-moz-box-shadow:0 6px 18px 0 rgba(0,0,0,.06);box-shadow:0 6px 18px 0 rgba(0,0,0,.06);">
+                <tr>
+                  <td style="height:40px;">&nbsp;</td>
+                </tr>
+                <tr>
+                  <td style="padding:0 35px;">
+                    <h1 style="color:#1e1e2d; font-weight:500; margin:0;font-size:32px;font-family:'Rubik',sans-serif;">Forgot Password </h1>
+                    <span style="display:inline-block; vertical-align:middle; margin:29px 0 26px; border-bottom:1px solid #cecece; width:100px;"></span>
+                    <p style="color:#455056; font-size:15px;line-height:24px; margin:0;">
+                      A request has been received to change the password for your HomelandSpices
+                    </p>
+                    <a href="localhost:3000/password/forgot/${token}" style="background:#20e277;text-decoration:none !important; font-weight:500; margin-top:35px; color:#fff;text-transform:uppercase; font-size:14px;padding:10px 24px;display:inline-block;border-radius:50px;">Reset
+                      Password</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="height:40px;">&nbsp;</td>
+                </tr>
+              </table>
+            </td>
+          <tr>
+            <td style="height:20px;">&nbsp;</td>
+          </tr>
+          <tr>
+            <td style="height:80px;">&nbsp;</td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+                `,
+
+    })
+    .then(function(data) {
+      console.log(data);
+      resolve();
+    }, function(error) {
+      console.error(error);
+    });
+
+    } catch(err) {
+      console.log(err);
+    }
+    })
 }
