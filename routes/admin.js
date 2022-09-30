@@ -21,7 +21,7 @@ const {
   postEditCategory,
 } = require("../controllers/admin/categories");
 const { getCouponPage, getAddCouponPage, addCoupon, deleteCoupon } = require("../controllers/admin/coupon");
-const { getHome, getLogout, getSalesStatsDate } = require("../controllers/admin/main");
+const { getHome, getLogout, getSalesStatsDate, getStatsCount, getSalesStatsWeekly } = require("../controllers/admin/main");
 const {
   getOrderPage,
   getOrderDetailsPage,
@@ -52,7 +52,9 @@ router.get("/", adminAuth, getHome); //Home_page
 router.get("/signin", stopAuthenticate, getSignIn);
 router.post("/signin", stopAuthenticate, postSignIn);
 router.get("/logout", adminAuth, getLogout);
-router.get("/stats/sales", adminAuth, getSalesStatsDate)
+router.get("/stats/sales", adminAuth, getSalesStatsDate);
+router.get("/stats/sales/weekly", adminAuth, getSalesStatsWeekly);
+router.get("/stats/count", adminAuth, getStatsCount);
 
 //===========================Product Management============================
 router.get("/products", adminAuth, getProducts); //Products_page

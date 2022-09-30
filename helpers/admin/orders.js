@@ -5,6 +5,7 @@ const {
   PRODUCT_COLLECTION,
 } = require("../../config/collections");
 const order_model = require("../../model/order_model");
+const user_model = require("../../model/user_model");
 
 module.exports = {
   getOrders: (offset, limit, sort, sortValue) => {
@@ -167,13 +168,13 @@ module.exports = {
         $sort: {date: 1}
       },
       {
-        $limit: 14,
+        $limit: 16,
       }
       ]).then((data) => {
         let date =[]
         let total_amount =[]
         data.forEach((item) => {
-          date.push(item.date.toDateString())
+          date.push(item.date.toLocaleDateString())
           total_amount.push(item.total_amount)
         })
         data = {date : date, total_amount: total_amount}
@@ -181,5 +182,107 @@ module.exports = {
         resolve(data);
       })
     })
-  }
+  },
+  getStatsWeekly: (timestamp) => {
+    return new Promise((resolve, reject) => {
+      timestamp = "$"+timestamp;
+      console.log(timestamp);
+      order_model.aggregate([
+        { $group: {
+          _id: {
+            $add: [
+             { $week: "$date"}, 
+             { $multiply: 
+               [400, {$year: "$date"}]
+             }
+          ]},   
+          total_amount: { $sum: "$total_amount" },
+          date: {$min: "$date"}
+        }
+      },
+      {
+        $sort: {date: 1}
+      },
+      {
+        $limit: 16,
+      }
+      ]).then((data) => {
+        let date =[]
+        let total_amount =[]
+        data.forEach((item) => {
+          date.push(item.date.toLocaleDateString())
+          total_amount.push(item.total_amount)
+        })
+        data = {date : date, total_amount: total_amount}
+        console.log(data)
+        resolve(data);
+      })
+    })
+  },
+  userStatsCount: () => {
+    return new Promise((resolve, reject) => {
+      console.log("in stats count")
+      let current_date = new Date()
+      let date = new Date(current_date.getTime() - 7 * 24 * 60 * 60 * 1000)
+      console.log(date)
+      user_model.aggregate([
+        { $match: { date: { $gte: new Date(date) } } },
+        { $group: { _id: null, count: { $sum: 1 } } },
+        { $sort: { _id: 1} }
+      ]).then((data) => {
+        console.log("stats date count",data)
+        resolve(data?.[0].count ? data[0].count : 0);
+      })
+    })
+  },
+  orderStatsCount: () => {
+    return new Promise((resolve, reject) => {
+      console.log("in stats count")
+      let current_date = new Date()
+      let date = new Date(current_date.getTime() - 7 * 24 * 60 * 60 * 1000)
+      console.log(date)
+      order_model.aggregate([
+        { $match: { date: { $gte: new Date(date) } } },
+        { $group: { _id: null, count: { $sum: 1 } } },
+        { $sort: { _id: 1} }
+      ]).then((data) => {
+        console.log("stats date count",data)
+        resolve(data?.[0].count ? data[0].count : 0);
+      })
+    })
+  },
+  orderPendingdispatchStatsCount: () => {
+    return new Promise((resolve, reject) => {
+      console.log("in stats count")
+      let current_date = new Date()
+      let date = new Date(current_date.getTime() - 7 * 24 * 60 * 60 * 1000)
+      console.log(date)
+      order_model.aggregate([
+        { $unwind: "$products"},
+        { $match: { date: { $gte: new Date(date) }, "products.status" : {$eq: "Order Placed"} } },
+        { $project: {products : 1}},  
+        { $sort: { _id: 1} }
+      ]).then((data) => {
+        console.log("stats date asdf count",data.length)
+        resolve(data?.length ? data.length : 0);
+      })
+    })
+  },
+  orderPendingDeliveryStatsCount: () => {
+    return new Promise((resolve, reject) => {
+      console.log("in stats count")
+      let current_date = new Date()
+      let date = new Date(current_date.getTime() - 7 * 24 * 60 * 60 * 1000)
+      console.log(date)
+      order_model.aggregate([
+        { $unwind: "$products"},
+        { $match: { date: { $gte: new Date(date) }, "products.status" : {$eq: "Delivered"} } },
+        { $project: {products : 1}},  
+        { $sort: { _id: 1} }
+      ]).then((data) => {
+        console.log("stats delivered count",data.length)
+        resolve(data?.length ? data.length : 0);
+      })
+    })
+  },
 };
