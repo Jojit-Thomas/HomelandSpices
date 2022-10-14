@@ -12,7 +12,7 @@ const hbs = require("hbs");
 const fileUpload = require("express-fileupload");
 const { hbs_helpers } = require("./handlebar_helpers");
 // const { connect } = require('./config/connection');
-
+require("dotenv").config();
 const app = express();
 
 // view engine setup
@@ -30,7 +30,7 @@ app.use(fileUpload());
 app.use(hbs_helpers);
 
 mongoose.connect(
-  "mongodb://localhost:27017/HomelandSpices",
+  `mongodb+srv://jojitthomas:${process.env.MONGODB_ATLAS_PASSWORD}@cluster0.c5ggx.mongodb.net/HomelandSpices?retryWrites=true&w=majority`,
   () => console.log("db connected"),
   () => console.log("db error")
 );

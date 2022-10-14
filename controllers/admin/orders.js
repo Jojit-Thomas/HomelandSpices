@@ -11,6 +11,7 @@ module.exports = {
   getOrderPage: async (req, res) => {
     let {limit = 10, page = 1, sort = -1, sortValue = 'date'} = req.query;
     let orderCount = await getOrderCount()//get the total number of documents ordered
+    orderCount = (orderCount < 1) ? 1 : orderCount;
     let pageLimit = Math.ceil(orderCount / limit)//divide total number of order document / limit 
     page = (page < 1) ? 1 : (page > pageLimit) ? pageLimit : page; // if the page is less than 1 then make it 1 and if the page is greater than pageLimit then make it pageLimit
     offset = (page - 1) * limit;//the start index of the document

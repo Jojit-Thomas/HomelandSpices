@@ -316,13 +316,13 @@ module.exports = {
               },
             },
           },
-          {
-            $set: {
-              productDetails: {
-                $sortArray: { input: "$productDetails", sortBy: { _id: 1 } },
-              },
-            },
-          },
+          // {
+          //   $set: {
+          //     productDetails: {
+          //       $sortArray: { input: "$productDetails", sortBy: { _id: 1 } },
+          //     },
+          //   },
+          // },
           {
             $sort: { date: -1 },
           },
