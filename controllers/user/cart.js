@@ -31,11 +31,7 @@ module.exports = {
   getCartChangeQuantity: (req, res) => {
     const { cart, product, user, count } = req.body;
     changeCartQuantity(cart, product, count).then((data) => {
-      getTotalAmount(user).then((total) => {
-        data.total = total;
-        console.log(data);
-        res.status(200).json(data);
-      });
+      res.status(200).json("success");
     });
   },
   getRemoveFromCart: (req, res) => {
@@ -53,6 +49,7 @@ module.exports = {
     let user = req.cookies.user ? req.cookies.user : null;
     cartProducts(user.userId).then((data) => {
       let outOfStock ;
+     if(data) {
       for(x in data.cartItems) {
         let remains = (data.cart[x].stocks + 1) - data.cartItems[x].quantity// (1 + 1) - 1 = 1//this is to avoid the case where the stock is 1 and get the error out of stock
         console.log("remains : ",remains)
@@ -62,10 +59,16 @@ module.exports = {
           break;
         }
       }
+     }
       if(!outOfStock){
         res.status(200).json({success: true})
       }
     })
+  },
+  getCartTotalAmount: async (req, res) => {
+    let user = req.cookies.user ? req.cookies.user : null; 
+    let total = await getTotalAmount(user.userId)
+    res.status(200).json(total)
   }
 };
   

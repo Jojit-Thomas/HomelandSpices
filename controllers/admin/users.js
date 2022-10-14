@@ -18,7 +18,7 @@ module.exports = {
     res.render("admin/view_users", { admin: true, users: users, pageLimit : pageLimit, currentPage: page,limit : limit  });
   },
   getdeleteUser: (req, res) => {
-    deleteUser(req.params.id).then((done) => {
+    deleteUser(req.params.userId).then((done) => {
       if (done) {
         res.redirect("/admin/users");
       } else {
@@ -27,7 +27,7 @@ module.exports = {
     });
   },
   getEditUser: (req, res, next) => {
-    getUser(req.params.id).then((user) => {
+    getUser(req.params.userId).then((user) => {
       console.log(user);
       res.render("admin/edit_user", {admin: true, user: user });
     }).catch((err) => {
@@ -38,7 +38,7 @@ module.exports = {
     console.log(req.body);
     bcrypt.hash(req.body.password, 10).then((pass) => {
       req.body.password = pass;
-      updateUser(req.params.id, req.body).then((state) => {
+      updateUser(req.params.userId, req.body).then((state) => {
         if(state) {
           res.redirect("/admin/users");
         }
@@ -59,12 +59,8 @@ module.exports = {
     })
   },
   getBlockUser: (req, res) => {
-    blockUnblock(req.params.id).then((status) => {
-      if(status) {
+    blockUnblock(req.params.userId).then(() => {
         res.redirect("/admin/users");
-      } else {
-        
-      }
     })
   },
 };

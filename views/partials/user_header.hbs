@@ -63,9 +63,9 @@
             href="/cart"
           ><img src="/images/icons/cart.svg" width="25px" alt="" /></a>
         </li>
+          {{#if user}}
         <li class="nav-item d-flex justify-content-center " data-bs-toggle="dropdown"
           aria-expanded="false">
-          {{#if user}}
             <div class=" d-flex m-auto align-items-center">
               <div id="avatar" class="d-flex justify-content-center" style="height: 2rem;width:2rem;" >
                 <img
@@ -86,13 +86,15 @@
                 />
               </div>
             </div>
+        </li>
           {{else}}
-            <a
+            <li class="nav-item">
+              <a
               class="nav-link btn bg-btn text-white px-5 mx-3 rounded-pill"
               href="/signin"
             >Login</a>
+            </li>
           {{/if}}
-        </li>
         {{!-- <button
           class="btn btn-secondary dropdown-toggle"
           type="button"

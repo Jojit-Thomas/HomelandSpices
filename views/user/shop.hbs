@@ -69,6 +69,7 @@
           <i class="fa-solid fa-angle-down my-auto"></i>
         </span>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li><a class="dropdown-item" href="/shop">All Categories</a></li>
           {{#each categories}}
             <li><a class="dropdown-item" href="/categories/{{this._id}}">{{this.title}}</a></li>
           {{/each}}
@@ -94,16 +95,12 @@
           </a>
           <p class="pro-text">{{this.title}}</p>
           <div class="d-flex justify-content-between">
-            <span class="pro-price my-auto">From :${{this.price}}</span>
-            <img
-              onclick="addToWishlist('{{this._id}}')"
-              src="/images/icons/heart.svg"
-              loading="lazy"
-              width="20px"
-              height="20px"
-              class="me-3 mb-3"
-              alt=""
-            />
+            <span class="pro-price my-auto">From :${{this.cd_price}}</span>
+            {{#if this.wishlist}}
+              <i onclick="removeFromWishlist('{{this._id}}')" id="wish_icon_{{this._id}}" class="fa-solid fa-heart fs-5 me-3 text-danger"></i>
+            {{else}}
+              <i onclick="addToWishlist('{{this._id}}')" id="wish_icon_{{this._id}}" class="fa-regular fa-heart fs-5 me-3"></i>
+            {{/if}}
           </div>
         </div>
       {{/each}}
@@ -123,10 +120,60 @@
 />
 
 <script>
-  function addToWishlist(productId){ toastr.options = { "progressBar": true,
-  "positionClass": "toast-bottom-center", "timeOut": "2000", "hideDuration":
-  "1", } toastr.success('Successfully added to the Wishlist') $.ajax({ url:
-  "/wishlist/add", method: "POST", data: { productId: productId }, success:
-  function(data){ console.log(data); },error: function (err) { console.log(err);
-  } }) }
+  toastr.options = {
+      "progressBar": true,
+      "positionClass": "toast-bottom-center",
+      "timeOut": "2000",
+      "hideDuration": "1",
+    }
+  function addToWishlist(productId){
+    $.ajax({
+      url: "/wishlist/add",
+      method: "POST",
+      data: {
+        productId: productId
+      },
+      success: function(data){
+        toastr.success('Successfully added to the Wishlist')
+        //window.location.reload();
+        $(`#wish_icon_${productId}`).removeClass()
+        $(`#wish_icon_${productId}`).addClass("fa-solid fa-heart fs-5 me-3 text-danger")
+        $(`#wish_icon_${productId}`).attr("onclick",`removeFromWishlist('${productId}')`);
+      },error: function (err) {
+        console.log(err);
+      }
+    })
+  }
+  function removeFromWishlist(productId) {
+    $.ajax({
+      type: "POST",
+      url: "/wishlist/remove",
+      data: {
+        productId: productId
+      },
+      success: function(data) {
+        toastr.success('Successfully removed from Wishlist')
+        $(`#wish_icon_${productId}`).removeClass()
+        $(`#wish_icon_${productId}`).addClass("fa-regular fa-heart fs-5 me-3 ")
+        $(`#wish_icon_${productId}`).attr("onclick",`addToWishlist('${productId}')`);
+      },
+      error: function(data) {
+        console.log(data);
+      }
+    })
+  }
+  function search () {
+    const input = document.querySelector("#search-input");
+    const cards = document.getElementsByClassName("card");
+    let filter = input.value.toLowerCase();
+    for (let i = 0; i < cards.length; i++) {
+        let title = cards[i].querySelector(".pro-text")
+        if (title.innerText.toLowerCase().indexOf(filter) > -1) {
+            console.log(title)
+            cards[i].classList.remove("d-none")
+        } else {
+            cards[i].classList.add("d-none")
+        }
+    }
+}
 </script>

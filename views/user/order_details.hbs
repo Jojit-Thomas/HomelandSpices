@@ -167,7 +167,9 @@
   <script>
     function changeStatus(orderId, productId) {
       console.log(orderId, productId)
-      let val = $(`#status${productId}`).val() console.log(val) $.ajax({
+      let val = $(`#status${productId}`).val();
+      console.log(val);
+      $.ajax({
         type: "POST",
         url: "/admin/order/changeStatus",
         data: {

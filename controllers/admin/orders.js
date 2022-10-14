@@ -17,11 +17,13 @@ module.exports = {
     let orders = await getOrders(offset, limit, sort, sortValue)//fetch document from the server
     res.render("admin/orders", { orders: orders, admin: true, pageLimit : pageLimit, currentPage: page, limit: limit});
   },
-  getOrderDetailsPage: (req, res) => {
-    getOrderDetails(req.params.id).then((orders) => {
-      console.log("Order is : ", orders);
+  getOrderDetailsPage: async (req, res, next) => {
+    try{
+      let orders = await getOrderDetails(req.params.id)
       res.render("admin/order_details", { orderDetails: orders, admin: true });
-    });
+    } catch(err) {
+      next(err);
+    }
   },
   getChangeOrderStatus: (req, res) => {
     const { orderId, productId, status } = req.body;

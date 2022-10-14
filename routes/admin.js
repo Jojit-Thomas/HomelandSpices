@@ -20,8 +20,8 @@ const {
   getEditCategory,
   postEditCategory,
 } = require("../controllers/admin/categories");
-const { getCouponPage, getAddCouponPage, addCoupon, deleteCoupon } = require("../controllers/admin/coupon");
-const { getHome, getLogout, getSalesStatsDate, getStatsCount, getSalesStatsWeekly } = require("../controllers/admin/main");
+const { getCouponPage, getAddCouponPage, addCoupon, deleteCoupon, getEditCoupon, editCoupon } = require("../controllers/admin/coupon");
+const { getHome, getLogout, getSalesStatsDate, getStatsCount, getSalesStatsWeekly, getReportPage } = require("../controllers/admin/main");
 const {
   getOrderPage,
   getOrderDetailsPage,
@@ -65,12 +65,12 @@ router.get("/product/edit/:id", adminAuth, getEditProduct);
 router.post("/product/edit/:id", adminAuth, postEditProduct);
 //=============================User Management=============================
 router.get("/users", adminAuth, getUsers);
-router.get("/deleteUser/:id", adminAuth, getdeleteUser);
-router.get("/user/edit/:id", adminAuth, getEditUser);
-router.post("/user/edit/:id", adminAuth, postEditUser);
-router.get("/addUser", adminAuth, getAddUser);
-router.post("/addUser", adminAuth, postAddUser);
-router.get("/blockUser/:id", adminAuth, getBlockUser);
+router.get("/deleteUser/:userId", adminAuth, getdeleteUser);
+router.get("/user/edit/:userId", adminAuth, getEditUser);
+router.post("/user/edit/:userId", adminAuth, postEditUser);
+router.get("/user/add", adminAuth, getAddUser);
+router.post("/user/add", adminAuth, postAddUser);
+router.get("/user/block/:userId", adminAuth, getBlockUser);
 //================================Categories================================
 router.get("/category", adminAuth, getCategoriesPage);
 router.get("/category/add", adminAuth, getAddCategory);
@@ -94,7 +94,10 @@ router.get("/banners/delete/:bannerId", adminAuth, getdeleteBanner);
 router.get("/coupon", adminAuth, getCouponPage)
 router.get("/coupon/add", adminAuth, getAddCouponPage)
 router.post("/coupon/add", adminAuth, addCoupon)
+router.get("/coupon/edit/:couponId", adminAuth, getEditCoupon)
+router.post("/coupon/edit/:couponId", adminAuth, editCoupon)
 router.delete("/coupon/delete/:couponId", adminAuth, deleteCoupon)
 
+router.get("/report", adminAuth, getReportPage)
 
 module.exports = router;

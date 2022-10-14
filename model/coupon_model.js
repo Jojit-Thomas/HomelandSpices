@@ -10,6 +10,7 @@ const couponSchema = new mongoose.Schema({
     },
     discount: Number,
     total_coupon_used: Number,
+    min_amount: Number,
     date: {
         type : mongoose.Schema.Types.Date,
         default : new Date(),

@@ -6,7 +6,7 @@ module.exports = {
       return parseInt(value) + 1;
     });
     handlebars.registerHelper("ifEquals", function (arg1, arg2, options) {
-      // console.log(arg1 + "=" + arg2);
+      console.log(arg1 + "=" + arg2);
       return arg1 == arg2 ? options.fn(this) : options.inverse(this);
     });
     handlebars.registerHelper('math', function (v1, operator, v2, options) {
@@ -24,7 +24,7 @@ module.exports = {
       }
   });
     handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
-
+        
       switch (operator) {
           case '==':
               return (v1 == v2) ? options.fn(this) : options.inverse(this);

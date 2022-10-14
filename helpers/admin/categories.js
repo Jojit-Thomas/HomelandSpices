@@ -23,7 +23,7 @@ module.exports = {
     return new Promise((resolve, reject) => {
       var regex = new RegExp(["^", title, "$"].join(""), "i");//Creates a regex to match both uppercase and lowercase letters
       if (!mongoose.Types.ObjectId.isValid(id)) {
-        reject(createHttpError.BadRequest()); //If the provided userId is not a valid ObjectId
+        reject(createHttpError.NotFound()); //If the provided userId is not a valid ObjectId
       }
       category_model
         .findOne({
@@ -42,10 +42,13 @@ module.exports = {
       });
     });
   },
-  getCategoryById: (id) => {
+  getCategoryById: (categoryId) => {
     return new Promise((resolve, reject) => {
-      category_model.findById(Types.ObjectId(id)).then((category) => {
-        resolve(category);
+      if (!mongoose.Types.ObjectId.isValid(categoryId)) {
+        reject(createHttpError.NotFound()); //If the provided categoryId is not a valid ObjectId return an error not found
+      }
+      category_model.findById(Types.ObjectId(categoryId)).then((category) => {
+        category ? resolve(category) : reject(createHttpError.NotFound()); // If the category does not found return an error as not found
       }).catch((err) => console.log(err))
     })
   },

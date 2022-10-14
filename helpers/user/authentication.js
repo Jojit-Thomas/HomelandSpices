@@ -5,10 +5,11 @@ const { Types } = require("mongoose");
 const forgot_password = require("../../model/forgot_password.js");
 const user_model = require("../../model/user_model.js");
 const { generateBcrypt } = require("../bcrypt.js");
-const randomstring = require("randomstring")
+const randomstring = require("randomstring");
+const { addWalletTransaction } = require("../common.js");
 
 module.exports = {
-  doSignUp: (data, refral_valid = false) => {
+  doSignUp: (data) => {
     let { name, email, phone, password } = data;
     data.email = data.email.toLowerCase();
     return new Promise( (resolve, reject) => {
@@ -25,7 +26,6 @@ module.exports = {
               length: 8,
               charset: 'alphabetic'
             });
-            console.log("refral_valid", refral_valid)
             user_model
               .create({
                 name: name,
@@ -33,11 +33,11 @@ module.exports = {
                 phone: phone,
                 password: password,
                 isAllowed: true,
-                wallet: refral_valid ? 50 : 0,
+                wallet: 0,
                 date: date,
                 refral_code : refral_code,
               })
-              .then((result) => {
+              .then(async (result) => {
                 console.log(result);
                 response.result = result.insertedId;
                 response.status = true;

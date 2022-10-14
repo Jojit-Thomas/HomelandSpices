@@ -10,7 +10,7 @@
   screen and (max-width: 768px) { .options { margin: 1rem 2.6rem; } .outer{
   padding: 1rem 1rem; } }
 </style>
-<form action="/address" method="post">
+<form action="" id="address_form" method="post">
   <div class="container pt-5 d-flex flex-wrap">
     <div class="col-lg-9 col-sm-12 col-12 outer">
       <nav aria-label="breadcrumb">
@@ -24,6 +24,12 @@
           </li>
         </ol>
       </nav>
+      <input required checked hidden
+            type="radio"
+            name="address"
+            value="address_not_selected"
+            class="my-auto me-4 col-1 col-sm-1"
+          />
       <!-- ================================================================================ -->
       {{#each address}}
         <div class="d-flex justify-content-between  w-100 flex-wrap" id="address{{this._id}}">
@@ -112,6 +118,25 @@
 {{!-- Swal cdn link --}}
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+  $("#address_form").submit(function(e) {
+    e.preventDefault();
+    $.ajax({
+      url: "/address",
+      method: "POST",
+      data: $("#address_form").serialize(),
+      success: function(data) {
+        var now = new Date();
+        var time = now.getTime();
+        var expireTime = time + 1000 * 60 * 60;
+        now.setTime(expireTime);
+        document.cookie = `address=${data};expires=`+now.toUTCString();
+        location.href = "/payment"
+      },error: function(error) {
+        Swal.fire("Oops !", error.responseJSON, "error")
+      }
+    })
+  })
+
   function deleteAddress(id) {
   Swal.fire({
     icon: 'error',

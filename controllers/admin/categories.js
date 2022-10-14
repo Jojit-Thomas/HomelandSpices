@@ -13,6 +13,7 @@ const {
 const fs = require("fs");
 const path = require("path");
 const { editCategoryDiscount } = require("../../helpers/admin/products");
+const { VerificationAttemptsSummaryContext } = require("twilio/lib/rest/verify/v2/verificationAttemptsSummary");
 
 module.exports = {
   getCategoriesPage: (req, res) => {
@@ -70,11 +71,13 @@ module.exports = {
       );
     });
   },
-  getEditCategory: (req, res) => {
-    getCategoryById(req.params.categoryId).then((category) => {
-      console.log(category);
+  getEditCategory: async (req, res, next) => {
+    try{
+      let category = await getCategoryById(req.params.categoryId)
       res.render("admin/edit_category", { category: category });
-    });
+    } catch (err) {
+      next(err)
+    }
   },
   postEditCategory: async (req, res, next) => {
     let { name, desc, discount } = req.body;

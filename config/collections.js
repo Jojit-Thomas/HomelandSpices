@@ -1,6 +1,7 @@
 module.exports = {
   USER_COLLECTION: "user",
   CART_COLLECTION: "cart",
+  WALLET_COLLECTION: "wallet",
   ORDER_COLLECTION: "order",
   BANNER_COLLECTION: "banner",
   ADDRESS_COLLECTION: "address",

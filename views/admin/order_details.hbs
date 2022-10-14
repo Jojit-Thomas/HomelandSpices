@@ -228,14 +228,17 @@ function changePaymentStatus( orderId ) {
     data: {
       orderId: orderId,
       status: val,
-    },
+    }, 
     success: function(data) {
       console.log('success',val)
       $("#paymentStatusSelected").text(val)
-    },
+    }, 
     error: function(error) {
       console.log(error)
-    }
+    }  
   })
 }
+$(document).ready(function() {
+  let payment_status = $("#paymentStatusSelected").text()
+})
 </script>

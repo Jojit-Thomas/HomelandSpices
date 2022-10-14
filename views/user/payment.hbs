@@ -76,6 +76,20 @@
       <input type="radio" name="paymentMethod" hidden id="paymentMethodInp" />
       <div class="accordion" id="accordionExample">
         <div class="accordion-item">
+          <h2 class="accordion-header" id="headingTwo">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+              data-bs-target="#wallet" aria-expanded="false" aria-controls="wallet">
+              HomelandSpices Wallet
+            </button>
+          </h2>
+          <div id="wallet" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+            data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+              <h6>HomelandSpices Wallet</h6>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
           <h2 class="accordion-header" id="headingOne">
             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#cashOnDelivery"
               aria-expanded="true" aria-controls="cashOnDelivery">
@@ -175,11 +189,12 @@
           $("#coupon_msg").removeClass()
           $("#coupon_msg").addClass("text-success text-center mt-2")
           $("#coupon_msg").text("Coupon is valid");
-          let discount = data.discount;
-          let total = $("#total_amount").text();
-          total = parseInt(total) - parseInt(discount);
+          let coupon_discount = data.discount;
+          let sub_total = $("#sub_total").text();
+          let discount = $("#discount").text();
+          total = (parseInt(sub_total) - parseInt(discount)) - parseInt(coupon_discount);
           $("#total_amount").text(total);
-          $("#coupon_discount").text(discount);
+          $("#coupon_discount").text(coupon_discount);
           $("#total_amount").text();
         },
         error: function (error) {
@@ -239,14 +254,19 @@
 
 
 
-  function checkout() {
+  async function checkout() {
+    try{
+    let payment_method = $("#paymentMethodInp").val();
+    if(payment_method == "wallet") { 
+      let wallet = await validateWallet();
+    }
     $.ajax({
       url: '/checkout',
       method: 'post',
       data: $("#paymentForm").serialize(),
       success: (response) => {
         console.log("response is :  ", response);
-        if (response.method == "cod") {
+        if (response.method == "cod" || response.method == "wallet") {
           Swal.fire("Hurray !", "Your order has been placed", "success").then((state) => {
             state.isConfirmed ? location.href = '/' : null;
           })
@@ -259,11 +279,18 @@
         }
       },
       error: function (error) {
-        if (error.status == 401) {
+        err = jQuery.parseJSON(error.responseText);
+        if(error.status === 401 && err.error == "insufficient_wallet") {
+          Swal.fire("Oops !", err.message, "error").then((state) => {
+            state.isConfirmed ? location.href = '/' : null;
+          })
+        }else if (error.status == 401) {
           location.href = '/error/bad_request'
         }
       }
     })
+    } catch(err) {
+    }
   }
 
 
@@ -282,12 +309,12 @@
           $("#coupon_msg").removeClass()
           $("#coupon_msg").addClass("text-success text-center mt-2")
           $("#coupon_msg").text("Coupon is valid");
-          let discount = data.discount;
-          let total = $("#total_amount").text();
-          console.log(discount, total)
-          total = parseInt(total) - parseInt(discount);
+          let coupon_discount = data.discount;
+          let sub_total = $("#sub_total").text();
+          let discount = $("#discount").text();
+          total = (parseInt(sub_total) - parseInt(discount)) - parseInt(coupon_discount);
           $("#total_amount").text(total);
-          $("#coupon_discount").text(discount);
+          $("#coupon_discount").text(coupon_discount);
           checkout();
         },
         error: function (error) {
@@ -295,12 +322,27 @@
           $("#coupon_msg").removeClass()
           $("#coupon_msg").addClass("text-danger text-center mt-2")
           $("#coupon_msg").text(error);
-          Swal.fire("Coupon Invalid", "Coupon is Invalid", "error")
+          Swal.fire("Coupon Invalid", error, "error")
         }
       })
     } else {
       checkout();
     }
+  }
+
+  function validateWallet() {
+    return new Promise((resolve, reject) => {
+    $.ajax({
+      url: "/wallet/validate",
+      method: "GET",
+      success: function(data) {
+        resolve();
+      }, error: function(error) {
+        Swal.fire("Oops !", error.responseJSON.message, "error")
+        reject();
+      }
+    })
+    })
   }
 
   function razorPayment(order) {

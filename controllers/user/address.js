@@ -48,11 +48,11 @@ module.exports = {
   },
   postAddressSelection: (req, res) => {
     console.log(req.body);
-    res.cookie("address", req.body.address, {
-      maxAge: 24 * 60 * 60 * 1000,
-      httpOnly: true,
-    });
-    res.redirect("/payment");
+    if(req.body.address !== "address_not_selected") {
+      res.status(200).json(req.body.address);
+    } else {
+      res.status(400).json("Please select a address to proceed")
+    }
   },
   getDeleteAddress: (req, res) => {
     deleteAddress(req.params.id).then(() => {

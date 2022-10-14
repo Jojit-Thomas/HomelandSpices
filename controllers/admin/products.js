@@ -73,6 +73,14 @@ module.exports = {
   getEditProduct: (req, res, next) => {
     getProduct(req.params.id).then(async (result) => {
         let categories = await getAllCategories()
+        if(categories){
+          categories.forEach((category, i) => {
+            console.log("category is : ",category, result.category)
+            if(category._id.toString() === result.category.toString()){
+              delete categories[i]
+            }
+          })
+        }
         res.render("admin/edit_product", { admin: true, product: result,categories: categories });
     }).catch((err) => {
       next(err);

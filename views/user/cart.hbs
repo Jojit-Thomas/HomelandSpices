@@ -88,11 +88,11 @@
         <h3 class="mb-4">Order Summary</h3>
         <div class="d-flex justify-content-between w-100">
           <p>Price</p>
-          <p id="price">₹{{order.total_max}}</p>
+          <p>₹<span id="sub_total">{{order.total_max}}</span></p>
         </div>
         <div class="d-flex justify-content-between w-100">
           <p>Discount</p>
-          <p id="discount" >- ₹{{order.total_discount}}</p>
+          <p>- ₹<span id="discount" >{{order.total_discount}}</span></p>
         </div>
         <div class="d-flex justify-content-between w-100">
           <p>Shipping</p>
@@ -105,7 +105,7 @@
         <hr />
         <div class="d-flex justify-content-between w-100">
           <p class="">TOTAL</p>
-          <p class="" id="total">₹{{order.total_amount}}</p>
+          <p class="" >₹<span id="total">{{order.total_amount}}</span></p>
         </div>
         <p>Estimated Delivery by <span class="fw-bold">01 Aug 2022</span></p>
         <form id="address">
@@ -131,6 +131,17 @@
 <script>
   $("#address").submit((e) => {
     e.preventDefault();
+    let total = $("#total").text()
+    if(total <= 0){
+      Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: "The cart is empty",
+        }).then((state) => {
+          state.isConfirmed ? location.href = '/cart' : null;
+        })
+        return false;
+    }
     $.ajax({
       url: "/checkStock",
       data: {},
@@ -150,11 +161,9 @@
     })
   })
 function changeQuantity(cartId, productId, userId, count) {
-    let val =
-        document.getElementById(productId).value;
+    let val = document.getElementById(productId).value;
     val = parseInt(val);
-    count =
-        Number(count);
+    count = Number(count);
     $.ajax({
         url: "/cart/changeQuantity",
         data: {
@@ -166,9 +175,10 @@ function changeQuantity(cartId, productId, userId, count) {
         method: "POST",
         success: function(data) {
           console.log(data )
-            $("#price").text(`₹${data.total.total_max}`);
-            $("#total").text(`₹${data.total.total_amount}`);
-            $("#discount").text(`₹${data.total.total_discount}`);
+            //$("#sub_total").text(data.total.total_max);
+            //$("#total").text(data.total.total_amount);
+            //$("#discount").text(data.total.total_discount);
+            getTotalAmount()
             val = val + count;
             document.getElementById(productId).value = val;
             if (val <= 1) {
@@ -196,7 +206,9 @@ function removeFromCart(cartId, productId) {
         },
         method: "POST",
         success: function(data) {
-          removeFromWishlist(productId);
+          //removeFromWishlist(productId);
+          $(`#div${productId}`).remove();
+          getTotalAmount()
           toastr.success('Product removed successfully.');
         },
         error: function(err) {}
@@ -211,7 +223,21 @@ function removeFromCart(cartId, productId) {
       },
       success: function(data) {
         console.log(data);
-        $(`#div${productId}`).remove();
+      },
+      error: function(data) {
+        console.log(data);
+      }
+    })
+  }
+ function getTotalAmount() {
+    $.ajax({
+      type: "GET",
+      url: "/cart/total",
+      success: function(data) {
+        $("#sub_total").text(data.total_max)
+        $("#discount").text(data.total_discount)
+        $("#total").text(data.total_amount)
+        console.log(data);
       },
       error: function(data) {
         console.log(data);

@@ -1,4 +1,5 @@
-const { Types } = require("mongoose");
+const createHttpError = require("http-errors");
+const { Types, default: mongoose } = require("mongoose");
 const {
   USER_COLLECTION,
   ORDER_ADDRESS_COLLECTION,
@@ -55,7 +56,9 @@ module.exports = {
   },
   getOrderDetails: (orderId) => {
     return new Promise((resolve, reject) => {
-      console.log(orderId);
+      if (!mongoose.Types.ObjectId.isValid(orderId)) {
+        reject(createHttpError.NotFound()); //If the provided userId is not a valid ObjectId
+      }
       order_model
         .aggregate([
           {
@@ -99,9 +102,6 @@ module.exports = {
               productDetails : {$sortArray: { input: "$productDetails", sortBy: { _id: 1 } }}
             }
           },
-          // {
-          //   $sort: { }
-          // }
         ])
         .then((data) => {
           // console.log(data[0])
@@ -231,7 +231,7 @@ module.exports = {
         { $sort: { _id: 1} }
       ]).then((data) => {
         console.log("stats date count",data)
-        resolve(data?.[0].count ? data[0].count : 0);
+        resolve(data?.[0] ? data[0]?.count : 0);
       })
     })
   },
@@ -247,7 +247,7 @@ module.exports = {
         { $sort: { _id: 1} }
       ]).then((data) => {
         console.log("stats date count",data)
-        resolve(data?.[0].count ? data[0].count : 0);
+        resolve(data?.[0] ? data[0]?.count : 0);
       })
     })
   },
@@ -285,4 +285,54 @@ module.exports = {
       })
     })
   },
+  salesReport: () => {
+    return new Promise((resolve, reject) => {
+      order_model
+        .aggregate([
+          {
+            $lookup: {
+              from: ORDER_ADDRESS_COLLECTION,
+              localField: "deliveryDetails",
+              foreignField: "_id",
+              as: "address",
+            },
+          },
+          {
+            $lookup: {
+              from: PRODUCT_COLLECTION,
+              localField: "products.productId",
+              foreignField: "_id",
+              as: "productDetails",
+            },
+          },
+          {
+            $set: {
+              date: {
+                $dateToString: {
+                  format: "%d/%m/%Y -- %H:%M",
+                  date: "$date",
+                  timezone: "+05:30",
+                },
+              },
+            },
+          },
+          {
+            $set: {
+              productDetails: {
+                $sortArray: { input: "$productDetails", sortBy: { _id: 1 } },
+              },
+            },
+          },
+          {
+            $sort: { date: -1 },
+          },
+          
+        ])
+        .then((data) => {
+          console.log("sales reports ",data[0]);
+          resolve(data);
+        });
+    });
+  },
+
 };

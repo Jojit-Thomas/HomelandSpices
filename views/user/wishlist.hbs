@@ -79,7 +79,7 @@
                         >{{this.product.title}}</h5></a>
                         <p
                           class="text-muted mb-0 desc"
-                        >{{this.product.desc}} <br>Purchased On : {{this.date}}</p>
+                        >{{this.product.desc}}</p>
                       </div>
                       <div class="col-sm-2 col-md-4 col-lg-4 col-xl-2 my-auto "
                       >
@@ -92,7 +92,7 @@
                       >Remove</button>
                       </div>
                       <div class="col-sm-2 col-md-4 col-lg-4 col-xl-2 my-auto ">
-                        <div onclick="addToCart('{{this.product._id}}')" class="cart btn bg-btn text-white text-uppercase">cart +</div>
+                        <div onclick="addToCart('{{this.product._id}}','{{this.product.stocks}}')" class="cart btn bg-btn text-white text-uppercase">cart +</div>
                       </div>
                     <img class="d-none d-sm-none removeIcon col-sm-1 my-auto" onclick="removeFromWishlist('{{this.product._id}}')" src="/images/icons/remove.svg" width="18px" height="18px"  alt="">
                     </div>
@@ -116,7 +116,8 @@
 </div>
 
 
-
+{{!-- sweet alert cdn link  --}}
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
   function removeFromWishlist(productId) {
@@ -137,7 +138,15 @@
       }
     })
   }
-  function addToCart(productId) {
+  function addToCart(productId, stocks) {
+    if(stocks <= 0 ) {
+       Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: "Product is currently unavailable. Please try again later.",
+          timer: 3000
+        })
+    } else {
     $.ajax({
       type: "POST",
       url: "/cart/add",
@@ -151,7 +160,8 @@
       },
       error: function(data) {
         console.log(data);
-      }
+      } 
     })
+    }
   }
 </script>

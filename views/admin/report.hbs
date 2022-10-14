@@ -1,0 +1,140 @@
+<style>
+  .table> :not(:last-child)> :last-child>* {
+    border: none !important;
+  }
+
+  .h6-none {
+    margin: 0 !important;
+  }
+
+  .nos {
+    font-size: 0.625rem;
+    font-weight: 500;
+  }
+
+  .search {
+    width: 70%;
+    border-radius: 0.4rem;
+    border: 1px solid #5541db;
+  }
+
+  #search {
+    border: none;
+    background-color: transparent;
+    resize: none;
+    outline: none;
+  }
+
+  table {
+    display: table;
+    border-spacing: 0px 0.2rem;
+    border-collapse: separate;
+  }
+
+  table .desc ,
+  table .title {
+    width: 25%;
+  }
+
+  .table-container {
+    width: 100%;
+    overflow: scroll;
+  }
+</style>
+
+<section class="container-fluid">
+    <h3>Report Page</h3>
+  <div class="table-container">
+    <table class="table mt-4 p-4" id="table">
+      <thead class="bg-white">
+        <tr>
+          <th scope="col" class="m-auto text-center align-middle">S.no</th>
+
+          <th scope="col" class="d-flex justify-content-center">
+          Name
+          </th>
+          {{!-- <th scope="col" class="m-auto text-center align-middle">Name</th> --}}
+          <th scope="col" class="m-auto text-center align-middle ">Date</th>
+          <th scope="col" class="m-auto text-center align-middle">Total Price</th>
+          <th scope="col" class="m-auto text-center align-middle">Total Discount</th>
+          <th scope="col" class="m-auto text-center align-middle">Total Final Price</th>
+          <th scope="col" class="m-auto text-center align-middle">Products</th>
+          <th scope="col" class="m-auto text-center align-middle">
+            Payment Method
+          </th>
+          <th scope="col" class="m-auto text-center align-middle">Payment Status</th>
+        </tr>
+      </thead>
+      <tbody class="mt-3 m-auto text-center align-middle" id="table">
+        {{#each sales}}
+        <tr class="bg-white" id="product{{this._id}}">
+          <th class="" scope="row">{{inc @index}}</th>
+          <td class="title">{{this.address.[0].name}}</td>
+          <td class="">{{this.date}}</td>
+          <td class="">{{this.total_max}}</td>
+          <td class="">{{this.total_discount}}</td>
+          <td class="">{{this.total_amount}}</td>
+          <td class="">
+            {{#each this.products}}
+            {{index_of ../productDetails @index "title"}},
+            {{/each}}</td>
+          <td class="">{{this.payment_method}}</td>
+          <td class="">{{this.payment_status}}</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<link rel="stylesheet" href="//cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+<script src="//cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script src="//cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="//cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+<script src="//cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+     $('#table').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'print', {
+            extend: 'pdf',
+            text: 'Pdf',
+            filename: 'Homeland-Spices',
+            title: 'Homeland Spices Sales Report',
+        }
+        ]
+    });
+  });
+  $(document).ready(function () {$(".dt-button").addClass("btn btn-primary")});
+  function deleteProduct(id, name) {
+    let title = name ? name : 'Delete Product'
+     Swal.fire({
+    icon: 'error',
+    title: title,
+    text: "Are you sure want to move this product to draft?",
+    showDenyButton: true,
+  }).then((state) => {
+    if(state.isConfirmed) {
+      $.ajax({
+      url: `/admin/product/delete/${id}`,
+      method: "DELETE",
+      data: {},
+      success: function(data) {
+        $(`#product${id}`).remove();
+      },
+      error: function(err) {}
+    })
+    } else if (state.isDenied) {
+      Swal.close();
+    }
+  })
+  }
+</script>
+

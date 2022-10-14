@@ -15,7 +15,7 @@ const {
   findUserByRefralCode,
 } = require("../../helpers/user/authentication");
 const { generateBcrypt } = require("../../helpers/bcrypt");
-const { addToWallet } = require("../../helpers/common");
+const { addToWallet, addWalletTransaction } = require("../../helpers/common");
 const client = new twilio(
   process.env.TWILIO_ACCOUNT_SID,
   process.env.TWILIO_AUTH_TOKEN
@@ -107,9 +107,10 @@ module.exports = {
       if(referer) {
         refral_valid = true;
         await addToWallet(referer._id, 100)
+        await addWalletTransaction(referer._id, `₹100 Added for refering ${req.body.name}`, 100)
       }
     }
-    let response = await doSignUp(req.body, refral_valid)
+    let response = await doSignUp(req.body)
       if (response.status) {
         res.status(200).redirect("/signin");
       }

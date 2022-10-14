@@ -1,4 +1,4 @@
-w<link rel="stylesheet" href="/stylesheets/user/home.css" />
+<link rel="stylesheet" href="/stylesheets/user/home.css" />
 <div
   class="bannerSec container-fluid vh-100 d-flex "
   style="background-image:url('/banners/{{banner.img_name}}.{{banner.img_ext}}');"
@@ -45,12 +45,6 @@ w<link rel="stylesheet" href="/stylesheets/user/home.css" />
 <section class="bg-white">
   <div class="container mt-5 vh-100 ">
     <div class="row g-3 d-flex">
-      {{!-- {{#each wishlist.wishlistItems}}
-          <h1>{{this}}</h1>
-          {{#ifEquals ../id "{{this}}"}}
-          <h1>In wishlist{{this}}</h1>
-          {{/ifEquals}}
-          {{/each}} --}}
       {{#each products}}
         <div class="card col-10 col-sm-6 col-md-4 col-lg-3">
           <a href="/product/{{this._id}}" class="h-75">
@@ -64,15 +58,11 @@ w<link rel="stylesheet" href="/stylesheets/user/home.css" />
           <p class="pro-text">{{this.title}}</p>
           <div class="d-flex justify-content-between">
             <span class="pro-price my-auto">From :₹{{this.cd_price}}</span>
-            <img
-             onclick="addToWishlist('{{this._id}}')"
-                src="/images/icons/heart.svg"
-                loading="lazy"
-                width="20px"
-                height="20px"
-                class="me-3 mb-3"
-                alt=""
-              />
+            {{#if this.wishlist}}
+              <i onclick="removeFromWishlist('{{this._id}}')" id="wish_icon_{{this._id}}" class="fa-solid fa-heart fs-5 me-3 text-danger"></i>
+            {{else}}
+              <i onclick="addToWishlist('{{this._id}}')" id="wish_icon_{{this._id}}" class="fa-regular fa-heart fs-5 me-3"></i>
+            {{/if}}
           </div>
         </div>
       {{/each}}
@@ -89,13 +79,13 @@ w<link rel="stylesheet" href="/stylesheets/user/home.css" />
 
 
 <script>
-  function addToWishlist(productId){
-    toastr.options = {
+  toastr.options = {
       "progressBar": true,
       "positionClass": "toast-bottom-center",
       "timeOut": "2000",
       "hideDuration": "1",
     }
+  function addToWishlist(productId){
     $.ajax({
       url: "/wishlist/add",
       method: "POST",
@@ -104,8 +94,30 @@ w<link rel="stylesheet" href="/stylesheets/user/home.css" />
       },
       success: function(data){
         toastr.success('Successfully added to the Wishlist')
+        //window.location.reload();
+        $(`#wish_icon_${productId}`).removeClass()
+        $(`#wish_icon_${productId}`).addClass("fa-solid fa-heart fs-5 me-3 text-danger")
+        $(`#wish_icon_${productId}`).attr("onclick",`removeFromWishlist('${productId}')`);
       },error: function (err) {
         console.log(err);
+      }
+    })
+  }
+  function removeFromWishlist(productId) {
+    $.ajax({
+      type: "POST",
+      url: "/wishlist/remove",
+      data: {
+        productId: productId
+      },
+      success: function(data) {
+        toastr.success('Successfully removed from Wishlist')
+        $(`#wish_icon_${productId}`).removeClass()
+        $(`#wish_icon_${productId}`).addClass("fa-regular fa-heart fs-5 me-3 ")
+        $(`#wish_icon_${productId}`).attr("onclick",`addToWishlist('${productId}')`);
+      },
+      error: function(data) {
+        console.log(data);
       }
     })
   }

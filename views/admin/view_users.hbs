@@ -80,7 +80,7 @@ table .title {
             <span class="count">(10)</span></a>
         </li>
         <li class="nav-item mx-3">
-          <a href="/admin/addUser" class="my-4"><div
+          <a href="/admin/user/add" class="my-4"><div
             class="float-end btn text-white"
             style="background-color: var(--blurple);"
           >Add User</div></a>
@@ -147,12 +147,12 @@ table .title {
                 </a>
                 {{#if this.isAllowed}}<a
                   class='btn btn-danger m-1'
-                  href='/admin/blockUser/{{this._id}}'
+                  href='/admin/user/block/{{this._id}}'
                   onclick="return confirm('Are you sure you want to block {{this.name}} user?');"
                 >Block</a>
               {{else}}<a
                   class='btn btn-success m-1'
-                  href='/admin/blockUser/{{this._id}}'
+                  href='/admin/user/block/{{this._id}}'
                   onclick="return confirm('Are you sure you want to unblock {{this.name}} user?');"
                 >Unblock</a>{{/if}}
               </td>

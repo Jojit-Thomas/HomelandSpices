@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-const { getUser, updateUser, changePassword } = require("../../helpers/common");
+const { getUser, updateUser, changePassword, getAllWalletTransactions } = require("../../helpers/common");
 const { getAddress } = require("../../helpers/user/address");
 const { generateBcrypt } = require("../../helpers/bcrypt");
 const createHttpError = require("http-errors");
@@ -42,4 +42,11 @@ module.exports = {
       res.status(401).json({ message: "You'r old password is wrong" });
     }
   },
+  getWalletHistory: async (req, res) => {
+    let user = req.cookies.user ? req.cookies.user : null;
+    console.log(user)
+    let wallet = await getAllWalletTransactions(user.userId);
+    console.log(wallet)
+    res.render("user/wallet_history", {user: user, wallet : wallet});
+  }
 };

@@ -1,4 +1,4 @@
-const { getStats, userStatsCount, orderStatsCount, orderPendingDeliveryStatsCount, orderPendingdispatchStatsCount, getStatsWeekly } = require("../../helpers/admin/orders");
+const { getStats, userStatsCount, orderStatsCount, orderPendingDeliveryStatsCount, orderPendingdispatchStatsCount, getStatsWeekly, salesReport } = require("../../helpers/admin/orders");
 module.exports = {
   getHome: async (req, res) => {
     // res.send('asdf')
@@ -31,5 +31,9 @@ module.exports = {
       var count = await orderPendingDeliveryStatsCount()
     }
     res.status(200).json(count);
+  },
+  getReportPage: async (req, res) => {
+    let sales = await salesReport();
+    res.render("admin/report", {admin: true, sales: sales});
   }
 };

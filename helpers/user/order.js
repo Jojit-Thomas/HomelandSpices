@@ -203,6 +203,16 @@ module.exports = {
           },
           {
             $set: {
+              productDetails: {
+                $sortArray: { input: "$productDetails", sortBy: { _id: 1 } },
+              },
+            },
+          },
+          {
+            $sort: { date: -1 },
+          },
+          {
+            $set: {
               date: {
                 $dateToString: {
                   format: "%d/%m/%Y -- %H:%M",
@@ -212,17 +222,6 @@ module.exports = {
               },
             },
           },
-          {
-            $set: {
-              productDetails: {
-                $sortArray: { input: "$productDetails", sortBy: { _id: 1 } },
-              },
-            },
-          },
-          {
-            $sort: { date: -1 },
-          },
-          
         ])
         .then((data) => {
           console.log(data);
@@ -230,7 +229,6 @@ module.exports = {
         });
     });
   },
-
   getOrderDetails: (orderId, productId) => {
     return new Promise((resolve, reject) => {
       order_model

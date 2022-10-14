@@ -13,7 +13,6 @@ const {
   postGetOtp,
   postVerifyOtp,
   verifyLogin,
-  sendMail,
   getForgotPasswordPage,
   forgotPassword,
   resetForgotPasswordPage,
@@ -25,12 +24,14 @@ const {
   getCartChangeQuantity,
   getRemoveFromCart,
   getCheckStock,
+  getCartTotalAmount,
 } = require("../controllers/user/cart");
 const {
   getHome,
   getProductPage,
   getSortCategory,
   getShopPage,
+  validateWallet,
 } = require("../controllers/user/main");
 const router = express.Router();
 
@@ -41,7 +42,7 @@ const {
   getCancelProduct,
 } = require("../controllers/user/orders");
 const { getPaymentPage, verifyPayment } = require("../controllers/user/payment");
-const { getProfilePage, postEditUser, postChangePassword, getChangePassword } = require("../controllers/user/user");
+const { getProfilePage, postEditUser, postChangePassword, getChangePassword, getWalletHistory } = require("../controllers/user/user");
 const {
   getAddToWishlist,
   getWishlistPage,
@@ -73,18 +74,20 @@ router.post("/password/forgot", forgotPassword);
 router.get("/password/forgot/:token", resetForgotPasswordPage)
 router.post("/password/forgot/reset", resetForgotPassword)
 //=========================MAIN ROUTES =========================
-router.get("/", verifyLogin, getHome);
-router.get("/product/:id", verifyLogin, getProductPage);
+router.get("/", getHome);
+router.get("/product/:id", getProductPage);
 router.get("/shop", verifyLogin, getShopPage)
 router.get("/user/profile", verifyLogin, getProfilePage)
 router.post("/user/edit", verifyLogin, postEditUser)
 router.get("/user/password/reset", verifyLogin, getChangePassword)
 router.post("/user/password/reset", verifyLogin, postChangePassword)
+router.get("/wallet/history", verifyLogin, getWalletHistory)
 //=========================CART ROUTES =========================
 router.get("/cart", verifyLogin, getCartPage);
 router.post("/cart/add", verifyLogin, getAddToCart);
 router.post("/cart/remove", verifyLogin, getRemoveFromCart);
 router.post("/cart/changeQuantity", verifyLogin, getCartChangeQuantity);
+router.get("/cart/total", verifyLogin, getCartTotalAmount)
 router.get("/categories/:categoryId", verifyLogin, getSortCategory); 
 router.get("/checkStock", verifyLogin, getCheckStock);
 //=========================WISHLIST ROUTES =========================
@@ -106,8 +109,7 @@ router.get("/payment", verifyLogin, getPaymentPage)
 router.post("/checkout", verifyLogin, postCheckout);
 router.post("/payment/verify", verifyLogin, verifyPayment);
 router.get("/coupon/validate/:couponId", verifyLogin, validateCoupon)
-  
-
+router.get("/wallet/validate", verifyLogin, validateWallet)
 
 router.post("/api/orders", async (req, res) => {
   try {

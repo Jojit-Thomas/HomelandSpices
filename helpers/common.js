@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const products_model = require("../model/products_model");
 const category_model = require("../model/category_model");
 const coupon_model = require("../model/coupon_model");
+const wallet_model = require("../model/wallet_model");
 const user_model = require("../model/user_model");
 const { generateBcrypt } = require("./bcrypt");
 const createHttpError = require("http-errors");
@@ -12,7 +13,7 @@ module.exports = {
   getProduct: (productId) => {
     return new Promise((resolve, reject) => {
       if (!mongoose.Types.ObjectId.isValid(productId)) {
-        reject(createHttpError.BadRequest()); //If the provided productId is not a valid ObjectId
+        reject(createHttpError.NotFound()); //If the provided productId is not a valid ObjectId return an error not found
       }
       products_model
         .aggregate([
@@ -42,7 +43,6 @@ module.exports = {
           },
         ])
         .then((product) => {
-          console.log(product[0]);
           product?.[0]
             ? resolve(product?.[0])
             : reject(createHttpError.NotFound()); //
@@ -60,17 +60,6 @@ module.exports = {
         .aggregate([
           { $match: { isDeleted: { $ne: true } } },
           {
-            $set: {
-              date: {
-                $dateToString: {
-                  format: "%d/%m/%Y",
-                  date: "$date",
-                  timezone: "+05:30",
-                },
-              },
-            },
-          },
-          {
             $lookup: {
               from: CATEGORIES_COLLECTION,
               localField: "category",
@@ -86,10 +75,20 @@ module.exports = {
           },
           {
             $limit: limit
-          }
+          },
+          {
+            $set: {
+              date: {
+                $dateToString: {
+                  format: "%d/%m/%Y",
+                  date: "$date",
+                  timezone: "+05:30",
+                },
+              },
+            },
+          },
         ])
         .then((products) => {
-          // console.log(products);
           resolve(products);
         });
     });
@@ -131,13 +130,13 @@ module.exports = {
           user ? resolve(user) : reject(createHttpError.NotFound()); // If the user does not exist, reject the request
         });
       } else {
-        reject(createHttpError.BadRequest()); //If the provided userId is not a valid ObjectId, reject the request
+        reject(createHttpError.NotFound()); //If the provided userId is not a valid ObjectId, reject the request
       }
     });
   },
   updateUser: (id, body) => {
     return new Promise(async (resolve, reject) => {
-      let { name, email, phone, password } = body;
+      let { name, email, phone, password, wallet } = body;
       let response = {};
       let user = await user_model.findOne({
         $and: [{ _id: { $ne: Types.ObjectId(id) } }, { email: email }],
@@ -161,6 +160,7 @@ module.exports = {
                 email: email,
                 phone: phone,
                 password: password,
+                wallet: Number(wallet),
                 isAllowed: true,
               },
             }
@@ -175,7 +175,7 @@ module.exports = {
   changePassword: (userId, password) => {
     return new Promise((resolve, reject) => {
       if (!mongoose.Types.ObjectId.isValid(userId)) {
-        reject(createHttpError.BadRequest()); //If the provided userId is not a valid ObjectId
+        reject(createHttpError.NotFound()); //If the provided userId is not a valid ObjectId
       }
       user_model
         .updateOne(
@@ -196,7 +196,7 @@ module.exports = {
   addToWallet: (userId, amount) => {
     return new Promise((resolve, reject) => {
       if (!mongoose.Types.ObjectId.isValid(userId)) {
-        reject(createHttpError.BadRequest()); //If the provided userId is not a valid ObjectId
+        reject(createHttpError.NotFound()); //If the provided userId is not a valid ObjectId
       }
       user_model
         .updateOne(
@@ -214,8 +214,7 @@ module.exports = {
     //parameters must be in uppercase letters
     return new Promise((resolve, reject) => {
       coupon_model.findOne({ coupon_code: coupon }).then((coupon) => {
-        console.log(coupon);
-        coupon ? resolve(coupon) : reject(createHttpError.Unauthorized());
+        coupon ? resolve(coupon) : reject(createHttpError.Unauthorized("Invalid coupon code"));
       });
     });
   },
@@ -238,4 +237,80 @@ module.exports = {
         })
     });
   },
+  getAllWalletTransactions: (userId) => {
+    return new Promise((resolve, reject) => {
+      wallet_model.aggregate([
+        {
+          $match : {
+            userId : Types.ObjectId(userId)
+          }
+        },
+        {
+          $set: {
+            wallet : {
+              $sortArray: {
+                input: "$wallet",
+                sortBy: {date : -1}
+              }
+            },
+          }
+        },
+        // {
+        //   $set: {
+        //     wallet: {
+        //       date: {
+        //         $dateToString: {
+        //           format: "%d/%m/%Y",
+        //           date: "$date",
+        //           timezone: "+05:30",
+        //         },
+        //       },
+        //     }
+        //   }
+        // },
+      ]).then((wallet) => {
+        console.log(wallet);
+        if(wallet[0]){
+          total_credit = 0;
+          total_debit = 0;
+          wallet[0].wallet.forEach(wallet_history => {
+            if(wallet_history.amount > 0) {
+              total_credit += parseInt(wallet_history.amount)
+            } else {
+              total_debit += parseInt(wallet_history.amount)
+            }
+          });
+          wallet[0].total_credit = total_credit;
+          wallet[0].total_debit = total_debit;
+          wallet[0].current_balance = total_credit - total_debit;
+        }
+        resolve(wallet[0]);
+      })
+    })
+  },
+  addWalletTransaction: (userId, title, amount) => {
+    return new Promise(async (resolve, reject) => {
+      let data = {
+        title : title, 
+        amount : Number(amount),
+        date : new Date()
+      }
+      let wallet = await wallet_model.findOne({userId : Types.ObjectId(userId)})
+      if(!wallet) {
+        await wallet_model.create({userId: Types.ObjectId(userId), wallet : [data], date: new Date()})
+        resolve();
+      } else {
+        await wallet_model.updateOne({userId: Types.ObjectId(userId)}, {
+          $push: { wallet : data }
+        })
+        resolve();
+      }
+    })
+  },
+  getWalletBalance: (userId) => {
+    return new Promise(async (resolve, reject) => {
+      let wallet = await user_model.findOne({_id: Types.ObjectId(userId)},{wallet : 1})
+      resolve(wallet);
+    })
+  }
 };

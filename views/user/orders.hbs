@@ -23,11 +23,10 @@
                 </div>
                 <hr class="my-4" />
                 {{#with orders.[0]}}
-                  
                   {{! ==========================================ORDER DETAILS ========================================== }}
                   {{/with}}
                   {{#each orders}}
-                  <div class="border border-dark m-4">
+                  <div class="border m-4" style="border-color: rgb(38, 36, 36);">
                     {{#each productDetails}}
                     <div class="d-flex">
                       <div
@@ -61,15 +60,15 @@
                           ><p
                               class="text-muted mb-0 desc"
                             >{{this.desc}}</p></a>
-                          <small class="text-muted mb-0 desc">Expected delivery
-                            on : 06-OCT-2023</small>
+                          <small class="text-muted mb-0 desc">Ordered
+                            on : {{../date}}</small>
                         </div>
                         <div
                           class="col-sm-2 col-md-4 col-lg-4 col-xl-2 my-auto d-none d-lg-block"
                         >
                         <div class="d-flex">
                           {{#ifCond (index_of ../products @index "cd_price") '<' (index_of ../products @index "max_price")}}
-                            <h6 class="mb-3">₹{{ ../total_amount}}</h6>
+                            <h6 class="mb-3">₹{{ index_of ../products @index "cd_price"}}</h6>
                             <h6 class="mb-3 ms-3"><del>₹{{index_of ../products @index "max_price"}}</del></h6>
                             {{else}}
                             <h6 class="mb-3 ">₹{{index_of ../products @index  "max_price"}}</h6>
@@ -86,7 +85,7 @@
                         <i
                           class="fa-solid fa-angle-right d-block d-lg-none col-sm-2 col-md-2 col-lg-2 col-xl-2 my-auto"
                         ></i>
-                        <div class="d-flex justify-content-center">
+                        <div class="d-flex justify-content-center me-3">
                             <a
                               href="/orders/details/{{../_id}}/{{this._id}}"
                               class="btn btn-primary m-auto"
@@ -96,7 +95,7 @@
                         </div>
                       </div>
                     </div>
-                    <hr class="my-4" />
+                    <hr class="mt-4 mb-0" />
                   {{/each}}
                   </div>
                   {{/each}}

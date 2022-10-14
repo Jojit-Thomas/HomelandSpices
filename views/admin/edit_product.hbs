@@ -27,7 +27,7 @@
         placeholder="Description" />
       <label for="" class="ms-2">Category</label>
       <select class="w-100 p-2 m-2 form-select" name="category" aria-label="Default select example">
-        <option selected value="{{category_details.[0]._id}}">{{category_details.[0].Description}}</option>
+        <option selected value="{{category_details.[0]._id}}">{{category_details.[0].title}}</option>
         {{#each ../categories}}
         <option value="{{this._id}}">{{this.title}}</option>
         {{/each}}
@@ -35,23 +35,27 @@
       <input required hidden type="number" class="w-100 p-2 m-2 form-control" value="{{pd_price}}" name="price"
         placeholder="Price" />
       <label for="" class="ms-2">MRP</label>
-      <input required type="number" class="w-100 p-2 m-2 form-control" value="{{max_price}}" name="max_price"
+      <input required type="number" class="w-100 p-2 m-2 form-control" id="price" value="{{max_price}}" name="max_price"
         placeholder="Max Retail Price" />
       <label for="" class="ms-2">Discount</label>
-      <input required type="number" class="w-100 p-2 m-2 form-control" value="{{discount}}" name="discount"
+      <input required type="number" class="w-100 p-2 m-2 form-control" id="discount" value="{{discount}}" name="discount"
         placeholder="Discount" />
+        <span id="discount_error" class="text-danger"></span><br>
       <label for="" class="ms-2">Stocks</label>
       <input required type="number" class="w-100 p-2 m-2 form-control" value="{{stocks}}" name="stocks"
         placeholder="Total Stocks" />
+        <div class="d-flex">
+
+        </div>
       {{#times '1' '4'}}
-      <div class="d-flex">
+      <div class="d-flex">  
         <input accept="image/*" type="file" class="w-100 p-1 m-1 form-control" name="image{{this}}"
           id="id_image{{this}}" />
         <input type="button" value="Crop Image" class="btn btn-primary p-1 m-1" data-bs-toggle="modal"
           data-bs-target="#modal{{this}}">
       </div>
       {{/times}}
-      <input type="submit" value="Submit" class="btn btn-success p-2 m-2 float-end" />
+      <input id="submit_form" type="submit" value="Submit" class="btn btn-success p-2 m-2 float-end" />
     </form>
   </div>
 </div>
@@ -99,6 +103,22 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.js"
   integrity="sha512-ZK6m9vADamSl5fxBPtXw6ho6A4TuX89HUbcfvxa2v2NYNT/7l8yFGJ3JlXyMN4hlNbz0il4k6DvqbIW5CCwqkw=="
   crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+    $("#discount").change(function() {
+    let price = $("#price").val()
+    let discount = $("#discount").val()
+    console.log(price, discount)
+    if(parseInt(price) < parseInt(discount)) {
+      $("#submit_form").prop('disabled', true);
+      $("#discount_error").text("The discount must be less than the MRP")
+    } else {
+      $("#submit_form").prop('disabled', false);
+      $("#discount_error").text("")
+    }
+    })
+</script>
+
 
 <script>
   function changeImg(event) {

@@ -85,6 +85,10 @@
       <div class="d-flex justify-content-between">
         <h5 class="text-uppercase">My wallet</h5>
         {{! <div class="btn btn-outline-primary"  onclick="editUser()">Edit</div> }}
+        <div ><a
+                class="btn btn-outline-primary"
+                href="/wallet/history"
+              >Wallet history</a></div>
       </div>
       <hr class="my-3" />
       <div
@@ -106,6 +110,7 @@
               >Add to wallet</a></div>
       </div>
       <hr class="my-2" />
+      
     </section>
   <!-- ========================================================================================================== -->
     <section class="my-5">
@@ -166,14 +171,21 @@
               >Change Password</a></div>
           </div>
           <hr class="my-2" />
-
+  <div
+        class="d-flex justify-content-between col-12 col-sm-9-col-md-8 col-lg-6 col-xl-4"
+      >
+        <small class="text-uppercase align-middle my-auto">Refral Code :
+        </small>
+        <span style="width: 45%;">{{refral_code}}</span>
+        </div>
+      <hr class="my-2" />
         </form>
       {{/with}}
     </section>
   <!-- ========================================================================================================== -->
     <section class="my-5">
       <div class="d-flex justify-content-between">
-        <h5 class="text-uppercase">Order history</h5>
+        <h5 class="text-uppercase">Address</h5>
         {{! <div class="btn btn-outline-primary"  onclick="editUser()">Edit</div> }}
       </div>
       <hr class="my-3" />

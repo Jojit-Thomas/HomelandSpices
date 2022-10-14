@@ -188,7 +188,7 @@ module.exports = {
           ])
           .then((data) => {
             console.log(data[0]);
-            let val = data[0] ? data[0] : { total: 0 };
+            let val = data[0] ? data[0] : { total_max : 0, total_amount : 0, total_discount : 0 };
             resolve(val);
           });
       } catch (error) {
