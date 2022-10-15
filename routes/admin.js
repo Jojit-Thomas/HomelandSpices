@@ -4,7 +4,7 @@ const {
   postSignIn,
   adminAuth,
   stopAuthenticate,
-} = require("../Controllers/Admin/Authentication");
+} = require("../controllers/admin/authentication");
 const {
   getBannerPage,
   getAddBanner,
