@@ -1,38 +1,120 @@
 <link rel="stylesheet" href="/stylesheets/user/product_detail.css" />
 <link rel="stylesheet" href="/stylesheets/button.css">
 
+<!-- Link Swiper's CSS -->
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css"
+/>
+
+<style>
+  html,
+  body {
+    position: relative;
+    height: 100%;
+  }
+  body {
+    background: #eee;
+    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    color: #000;
+    margin: 0;
+    padding: 0;
+  }
+  .swiper {
+    width: 100%;
+    height: 100%;
+  }
+  .swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    background: #fff;
+    /* Center slide text vertically */
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+  }
+  .swiper-slide img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .swiper {
+    width: 100%;
+    height: 300px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .swiper-slide {
+    background-size: cover;
+    background-position: center;
+  }
+  .mySwiper2 {
+    height: 80%;
+    width: 100%;
+  }
+  .mySwiper {
+    height: 20%;
+    box-sizing: border-box;
+    padding: 10px 0;
+  }
+  .mySwiper .swiper-slide {
+    width: 25%;
+    height: 100%;
+    opacity: 0.4;
+  }
+  .mySwiper .swiper-slide-thumb-active {
+    opacity: 1;
+  }
+  .swiper-slide img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+</style>
+
 
 {{#with product}}
   <div class="row vh-100">
     <div class="outer col-md-6 h-100">
       <div class="padding m-auto h-75 w-75">
         <div class="two-box w-100 h-100 d-flex justify-content-center">
-          <div class="box-one w-75 w-md-50 h-75 m-auto" id="img-container">
-            <img
-              class=" hero-image"
-              id="zoom"
-              src="/product_images/{{_id}}-1.{{img_ext}}"
-              alt=""
-            />
-
+          <div class="box-one w-75 w-md-50 h-75 m-auto swiper mySwiper2" id="img-container">
+            <div class="swiper-wrapper">
+              {{#times '1' '4'}}
+              <img
+                class="hero-image swiper-slide"
+                id="zoom-{{this}}"
+                src="/product_images/{{../_id}}-{{this}}.{{../img_ext}}"
+                alt=""
+              />
+              {{/times}}
+            </div>
           </div>
         </div>
-        <div class="pro-img d-flex justify-content-center">
-          <div class="small"><img
-              class=" hero-image"
-              src="/product_images/{{_id}}-2.{{img_ext}}" 
-              alt=""
-            /></div>
-          <div class="small"><img
-              class=" hero-image"
-              src="/product_images/{{_id}}-3.{{img_ext}}"
-              alt=""
-            /></div>
-          <div class="small"><img
-              class=" hero-image"
-              src="/product_images/{{_id}}-4.{{img_ext}}"
-              alt=""
-            /></div>
+        <div class="pro-img d-flex justify-content-center swiper mySwiper">
+          <div class="swiper-wrapper">
+            {{#times '1' '4'}}
+              <div class="small swiper-slide">
+                <img
+                  class=" hero-image"
+                  src="/product_images/{{../_id}}-{{this}}.{{../img_ext}}" 
+                  alt=""
+                />
+              </div>
+            {{/times}}
+          </div>
         </div>
       </div>
     </div>
@@ -91,10 +173,18 @@
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 {{!-- sweet alert cdn link  --}}
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
   $(document).ready(function() {
-    $("#zoom").imagezoomsl({});
+    for(let i = 1; i <= 4; i ++) {
+      $(`#zoom-${i}`).imagezoomsl({});
+    }
   });
+</script>
+
+
+
+<script>
     function addToCart(productId, stocks) {
        toastr.options = {
       "progressBar": true,
@@ -130,3 +220,30 @@
 </script>
 
 <script src="/javascripts/user/count_button.js"></script>
+
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+
+<!-- Initialize Swiper -->
+<script>
+  var swiper = new Swiper(".mySwiper", {
+    spaceBetween: 10,
+    slidesPerView: 4,
+    freeMode: true,
+    watchSlidesProgress: true,
+  });
+  var swiper2 = new Swiper(".mySwiper2", {
+    spaceBetween: 10,
+    autoplay: {
+      delay: 2500,
+      disableOnInteraction: false,
+    },
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
+    thumbs: {
+      swiper: swiper,
+    },
+  });
+</script>
