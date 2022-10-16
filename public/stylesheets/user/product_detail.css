@@ -17,16 +17,11 @@
   object-fit: cover;
 }
 
-.box-two {
-  /* width: 12.5rem;
-  height: 15.625rem; */
-  /* background: #e0c1af; */
+.box-one {
+  margin: 1rem auto !important;
+  width: 80% !important;
+  height: 85% !important;
 }
-/* 
-.box-one div  {
-  width: 20rem !important;
-} */
-
 
 .pro-img { 
   margin-top: 2rem;
@@ -45,7 +40,7 @@
     display: none;
   }
   .outer{
-    height: 75% !important;
+    height: 50% !important;
   }
   .padding{
     height: 100% !important;
@@ -69,22 +64,12 @@
   font-weight: 400;
   font-size: 2.125rem;
   line-height: 2.688rem;
-  /* identical to box height */
-
-  /* Dark */
-
   color: #17183b;
 }
 
-.lorem {
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
+.description {
+  font-size: 1rem;
   line-height: 24px;
-  /* or 150% */
-
-  /* Dark */
-
   color: #17183b;
 }
 
@@ -94,12 +79,43 @@
   font-size: 0.875rem;
   background: #9155fd;
   border-radius: 2px;
-  margin-left: 1rem;
   padding: 0.5rem 2rem;
   border: none;
-  /* identical to box height */
-
   text-transform: uppercase;
-
   color: #ffffff;
+}
+
+.padding {
+  margin-top: 2rem!important;
+  height: 65vh;
+}
+.swiper-pagination-bullet-active {
+  background-color: #000 !important;
+}
+.swiper-pagination-bullets-dynamic{
+  transform: translateX(0%) !important;
+  bottom: 0 !important;
+}
+
+@media screen and (max-width: 576px){
+  .padding {
+    width: 95% !important;
+    margin-top: 0rem;
+  }
+  .pro-img {
+    margin-top: 0rem !important;
+  }
+  .product_details {
+    margin: 3rem auto !important;
+  }
+  .breadcrumb {
+    padding: 0rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  .box-one {
+    margin: 1rem auto !important;
+  }
+  /* .outer_container {
+    height: 200vh !important;
+  } */
 }

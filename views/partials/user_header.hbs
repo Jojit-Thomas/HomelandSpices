@@ -4,8 +4,8 @@
       <img
         src="/images/logo.png"
         alt=""
-        width="25"
-        height="25"
+        width="30"
+        height="30"
         class="d-inline-block align-text-top rounded-circle mx-3"
         style="transform: scale(1.5);"
       />
@@ -52,21 +52,23 @@
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         <li class="nav-item">
           <a
-            class="nav-link active text-uppercase fs-7"
+            class="nav-link active text-uppercase fs-7 d-none d-md-block"
             aria-current="page"
             href="/shop"
           ><img src="/images/icons/search.svg" width="25px" alt="" /></a>
+          <a class="nav-link text-uppercase f-500 d-block d-md-none" href="/shop">shop</a>
         </li>
         <li class="nav-item">
           <a
-            class="nav-link text-uppercase fs-7"
+            class="nav-link text-uppercase fs-7 d-none d-md-block"
             href="/cart"
           ><img src="/images/icons/cart.svg" width="25px" alt="" /></a>
+          <a class="nav-link text-uppercase f-500 d-block d-md-none" href="/cart">cart</a>
         </li>
           {{#if user}}
-        <li class="nav-item d-flex justify-content-center " data-bs-toggle="dropdown"
+        <li class="nav-item d-flex mt-3 m-md-0" data-bs-toggle="dropdown"
           aria-expanded="false">
-            <div class=" d-flex m-auto align-items-center">
+            <div class=" d-flex profile">
               <div id="avatar" class="d-flex justify-content-center" style="height: 2rem;width:2rem;" >
                 <img
                 src="/images/logo.png"
@@ -78,7 +80,7 @@
               <div class="w-75 d-flex">
                 <p class="m-auto text-center" style="width: 7rem;" >{{user.username}}</p>
                 <img
-                  class="mx-3"
+                  class="mx-3 m-auto"
                   width="18px"
                   height="18px"
                   src="/images/icons/up_arrow.svg"
@@ -86,6 +88,12 @@
                 />
               </div>
             </div>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+              <li><a class="dropdown-item" href="/user/profile">Profile</a></li>
+              <li><a class="dropdown-item" href="/orders">My Orders</a></li>
+              <li><a class="dropdown-item" href="/wishlist">Wishlist</a></li>
+              <li><a class="dropdown-item" href="/logout">Logout</a></li>
+            </ul>
         </li>
           {{else}}
             <li class="nav-item">
@@ -104,13 +112,7 @@
         >
           Dropdown button
         </button> --}}
-        <ul class="dropdown-menu " aria-labelledby="dropdownMenuButton1">
-          <li><a class="dropdown-item" href="/user/profile">Profile</a></li>
-          <li><a class="dropdown-item" href="/orders">My Orders</a></li>
-          <li><a class="dropdown-item" href="/wishlist">Wishlist</a></li>
-          <li><a class="dropdown-item" href="/logout">Logout</a></li>
-          {{!-- <li><a class="dropdown-item" href="#">Something else here</a></li> --}}
-        </ul>
+        
         {{! <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Dropdown

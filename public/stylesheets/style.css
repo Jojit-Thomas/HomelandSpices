@@ -74,15 +74,26 @@
   border: #5541d8 !important;
   color: #5541d8 !important;
 } */
-
+  
 * {
   font-family: sans-serif;
 }
 .fs-48 {
   font-size: 3rem;
 }
+
+.dropdown-menu[data-bs-popper] {
+  left: 85vw!important;
+}
+
 @media only screen and (max-width: 270px) {
   a {
     font-size: 0.7rem !important;
+  }
+}
+
+@media screen and (max-width: 576px){
+  .profile {
+    align-items: start !important;
   }
 }
