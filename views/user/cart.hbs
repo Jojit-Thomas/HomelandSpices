@@ -1,91 +1,162 @@
 <link rel="stylesheet" href="/stylesheets/user/cart.css" />
 <link rel="stylesheet" href="/stylesheets/button.css" />
 
+
+
+ 
+<style>
+hr {
+  margin-top: 1.5rem !important;
+  margin-bottom: 1.5rem !important;
+}
+@media screen and (max-width: 960px) {
+.order_summary {
+  margin-top: 0rem !important;
+  padding: 1rem !important;
+}
+.outer {
+  padding: 1rem !important;
+}
+}
+@media screen and (min-width: 768px) {
+.outer {
+  padding: 3rem;
+}
+}
+@media screen and (max-width: 768px) {
+  .outer {
+    padding: 0.3rem !important;
+  }
+  .proImg {
+    width: 70% !important;
+    margin-left: 10% !important;
+    height: auto;
+    object-fit: cover;
+  }
+  .innner_order_summary {
+    padding: 0.5rem!important;
+  }
+  .title {
+    font-size: 1rem;
+    word-wrap: break-word;
+  }
+
+  .desc {
+    font-size: 0.8rem;
+    word-wrap: break-word;
+  }
+  .cart{
+    padding: 0.1rem !important;
+  }
+}
+@media screen and (max-width: 368px) {
+  .removeText {
+    display: none !important ;
+  }
+  .removeIcon {
+    display: block !important;
+  }
+  .order_summary {
+    margin-top: 0rem !important;
+    padding: 0.4rem !important;
+  }
+  .outer {
+    padding: 0.15rem !important;
+  }
+  .proImg {
+    width: 80% !important;
+  }
+  .image_container {
+    width: 100vw !important;
+  }
+  .pro_details_container {
+    margin: 0.5rem auto !important;
+    width: 80% !important;
+  }
+  .desc {
+    width: 110% !important;
+  }
+  hr {
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
+  }
+}
+</style>
+
 <div class="container-fluid h-100">
   <div class="row d-flex justify-content-center align-items-center h-100">
     <div class="col-12">
       <div class="card border border-0">
         <div class="card-body p-0">
           <div class="row g-0">
-            <div class="col-lg-9 col-sm-12 col-12 py-3 px-5">
-              <div class="p-5">
+            <div class="col-lg-9 col-sm-12 col-12 py-3 px-5 outer">
+              <div class="outer">
                 <div
                   class="d-flex justify-content-between align-items-center mb-5"
                 >
                   <h1 class="fw-bold mb-0 text-black">Cart</h1>
                   <h6 class="mb-0 text-muted">{{data.length}} items</h6>
                 </div>
-
                 <hr class="my-4" />
                 {{#each data}}
-                
                   <div id="div{{this.product._id}}">
+                    <div class="d-flex flex-wrap" >
                     <div
-                    class="row mb-4 g-0 d-flex justify-content-between align-items-center"
-                  >
-                    <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 ">
+                      class="col-sm-4 col-md-4 col-lg-4 col-xl-3 col-4 m-auto image_container"
+                    >
                       <img
                         src="/product_images/{{this.product._id}}-1.{{this.product.img_ext}}"
-                        class="imgCrop m-auto ms-4"
-                        width="50px"
-                        height="auto"
+                        class="imgCrop m-auto ms-4 proImg"
                         class="card-img-bottom"
-                        alt="..."
+                        alt="product Image"
                       />
                     </div>
-                    <div class="col-sm-4 col-md-4 col-lg-4 col-xl-3 ">
-                      <a href="/product/{{this.product._id}}" class="text-muted h5">{{this.product.title}}</a>
-                      <p class="text-black mb-0">{{this.product.desc}}</p>
-                      <div class="d-flex my-4">
-                        <button
-                          class="input-number-decrement"
-                          id="{{this.product._id}}{{this._id}}"
-                          onclick='changeQuantity("{{this._id}}","{{this.product._id}}","{{this.userId}}","-1")'
-                        >–</button><input required
-                          class="input-number"
-                          id="{{this.product._id}}"
-                          type="text"
-                          value="{{this.cartItems.quantity}}"
-                          min="0"
-                          disabled
-                        />
-                        <button
-                          class="input-number-increment"
-                          onclick='changeQuantity("{{this._id}}","{{this.product._id}}","{{this.userId}}","1")'
-                        >+</button>
+                    <div class="d-flex justify-content-between col-8 col-sm-8 col-lg-8 flex-wrap my-auto pro_details_container"
+                    >
+                      <div class="col-11 col-sm-12 col-md-10 col-lg-10 col-xl-5 my-auto"
+                      >
+                        <a href="/product/{{this.product._id}}" class="text-decoration-none"><h5
+                          class="text-dark  title"
+                        >{{this.product.title}}</h5></a>
+                        <p
+                          class="text-muted mb-0 desc"
+                        >{{this.product.desc}}</p>
                       </div>
-                    </div>
-                    <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2  ">
-                      <h6 class="mb-0">₹{{this.product.cd_price}}</h6>
-                    </div>
-                    <div class="col-sm-2 col-md-2 col-lg-0 col-xl-2 d-sm-none d-lg-block ">
+                      <div class="col-sm-2 col-md-4 col-lg-4 col-xl-2 my-auto "
+                      >
+                        <h6 class="mb-0">₹{{this.product.cd_price}}</h6>
+                      </div>
+                      <div class="col-sm-2 col-md-2 col-lg-0 col-xl-2 my-auto ">
                       <button
-                        class="text-center my-2 align-items-end d-flex text-danger btn-none "
+                        class="text-center m-auto align-items-end d-flex text-danger btn-none removeText"
                         onclick="removeFromCart('{{this._id}}','{{this.product._id}}')"
                       >Remove</button>
+                      </div>
+                      <div class="col-sm-2 col-md-4 col-lg-4 col-xl-2 my-auto ">
+                        {{#if this.wishlist}}
+                          <i onclick="removeFromWishlist('{{this.product._id}}')" id="wish_icon_{{this.product._id}}" class="fa-solid fa-heart fs-5 me-3 text-danger"></i>
+                        {{else}}
+                          <i onclick="addToWishlist('{{this.product._id}}')" id="wish_icon_{{this.product._id}}" class="fa-regular fa-heart fs-5 me-3"></i>
+                        {{/if}}
+                      </div>
+                    <img class="d-none d-sm-none removeIcon col-sm-1 my-auto" onclick="removeFromCart('{{this._id}}','{{this.product._id}}')" src="/images/icons/remove.svg" width="18px" height="18px"  alt="">
                     </div>
-                    <div class="col-sm-1 col-md-1  d-lg-none d-none d-sm-block">
-                      <button
-                        class="text-center  align-items-end d-flex text-danger btn-none"
-                        
-                      >X</button>
-                    </div>
-                    
                   </div>
-                  <hr class="my-4" />
+                  <hr />
                   </div>
                 {{/each}}
 
-                <div class="pt-5">
-                  <h6 class="mb-0"><a href="/" class="text-body"><i
-                        class="fas fa-long-arrow-alt-left me-2"
-                      ></i>Back to shop</a></h6>
+                <div class="pt-5 d-none d-lg-block">
+                  <a href="/" class="text-body">
+                    <i class="fas fa-long-arrow-alt-left me-2"></i>
+                    Back to shop
+                  </a>
                 </div>
               </div>
             </div>
-
-            <div class="col-lg-3 col-sm-12 col-12 p-4 mt-5 border border-1" style="height: 400px;">
-        <h3 class="mb-4">Order Summary</h3>
+            <div class="col-lg-3 col-sm-12 col-12 mt-5 order_summary" style="height: 400px;">
+        <div class="border border-1 p-4 innner_order_summary">
+          <h3 class="mb-4">Order Summary</h3>
         <div class="d-flex justify-content-between w-100">
           <p>Price</p>
           <p>₹<span id="sub_total">{{order.total_max}}</span></p>
@@ -114,6 +185,7 @@
             CONTINUE TO SHIPPING
           </button>
         </form>
+        </div>
       </div>
           </div>
         </div>
@@ -129,6 +201,12 @@
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
+  toastr.options = {
+      "progressBar": true,
+      "positionClass": "toast-bottom-center",
+      "timeOut": "2000",
+      "hideDuration": "1",
+    }
   $("#address").submit((e) => {
     e.preventDefault();
     let total = $("#total").text()
@@ -214,7 +292,25 @@ function removeFromCart(cartId, productId) {
         error: function(err) {}
     })
 }
- function removeFromWishlist(productId) {
+ function addToWishlist(productId){
+    $.ajax({
+      url: "/wishlist/add",
+      method: "POST",
+      data: {
+        productId: productId
+      },
+      success: function(data){
+        toastr.success('Successfully added to the Wishlist')
+        //window.location.reload();
+        $(`#wish_icon_${productId}`).removeClass()
+        $(`#wish_icon_${productId}`).addClass("fa-solid fa-heart fs-5 me-3 text-danger")
+        $(`#wish_icon_${productId}`).attr("onclick",`removeFromWishlist('${productId}')`);
+      },error: function (err) {
+        console.log(err);
+      }
+    })
+  }
+  function removeFromWishlist(productId) {
     $.ajax({
       type: "POST",
       url: "/wishlist/remove",
@@ -222,7 +318,10 @@ function removeFromCart(cartId, productId) {
         productId: productId
       },
       success: function(data) {
-        console.log(data);
+        toastr.success('Successfully removed from Wishlist')
+        $(`#wish_icon_${productId}`).removeClass()
+        $(`#wish_icon_${productId}`).addClass("fa-regular fa-heart fs-5 me-3 ")
+        $(`#wish_icon_${productId}`).attr("onclick",`addToWishlist('${productId}')`);
       },
       error: function(data) {
         console.log(data);

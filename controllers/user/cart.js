@@ -8,6 +8,7 @@ const {
   checkStock,
   cartProducts,
 } = require("../../helpers/user/cart");
+const { getAllWishlist } = require("../../helpers/user/wishlist");
 
 module.exports = {
   getAddToCart: (req, res) => {
@@ -17,16 +18,26 @@ module.exports = {
       res.status(200).json("success")
     });
   },
-  getCartPage: (req, res) => {
+  getCartPage: async (req, res) => {
     console.log(req.params.userId)
     let user = req.cookies.user ? req.cookies.user : null;
-    getCart(user.userId).then((data) => {
-      let user = req.cookies.user ? req.cookies.user : null;
-      getTotalAmount(user.userId).then((amount) => {
-        console.log(amount)
-        res.render("user/cart", { data: data, order: amount, user: user });
+    let data = await getCart(user.userId);
+    let wishlist = await getAllWishlist(user.userId);
+    console.log(wishlist);
+    if(wishlist[0]) {
+      data.forEach(product => {
+        wishlist[0].wishlistItems.forEach(wishlistItem => {
+          if(product.cartItems.productId.toString() == wishlistItem.toString()) {
+            product.wishlist = true;
+            console.log(product)
+          }
+        });
       });
-    });
+    }
+    console.log(data);
+    let amount = await getTotalAmount(user.userId)
+    console.log(amount)
+      res.render("user/cart", { data: data, order: amount, user: user });
   },  
   getCartChangeQuantity: (req, res) => {
     const { cart, product, user, count } = req.body;

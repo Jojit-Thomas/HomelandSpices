@@ -88,12 +88,6 @@
                 />
               </div>
             </div>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-              <li><a class="dropdown-item" href="/user/profile">Profile</a></li>
-              <li><a class="dropdown-item" href="/orders">My Orders</a></li>
-              <li><a class="dropdown-item" href="/wishlist">Wishlist</a></li>
-              <li><a class="dropdown-item" href="/logout">Logout</a></li>
-            </ul>
         </li>
           {{else}}
             <li class="nav-item">
@@ -112,7 +106,12 @@
         >
           Dropdown button
         </button> --}}
-        
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+              <li><a class="dropdown-item" href="/user/profile">Profile</a></li>
+              <li><a class="dropdown-item" href="/orders">My Orders</a></li>
+              <li><a class="dropdown-item" href="/wishlist">Wishlist</a></li>
+              <li><a class="dropdown-item" href="/logout">Logout</a></li>
+            </ul>
         {{! <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Dropdown

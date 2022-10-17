@@ -85,7 +85,7 @@
           <div id="wallet" class="accordion-collapse collapse" aria-labelledby="headingTwo"
             data-bs-parent="#accordionExample">
             <div class="accordion-body">
-              <h6>HomelandSpices Wallet</h6>
+              <h6>Selected HomelandSpices Wallet</h6>
             </div>
           </div>
         </div>
@@ -99,7 +99,7 @@
           <div id="cashOnDelivery" class="accordion-collapse collapse show" aria-labelledby="headingOne"
             data-bs-parent="#accordionExample">
             <div class="accordion-body">
-              <h6>Cash on Delivery</h6>
+              <h6>Selected Cash on Delivery</h6>
             </div>
           </div>
         </div>
@@ -113,7 +113,7 @@
           <div id="razorPay" class="accordion-collapse collapse" aria-labelledby="headingTwo"
             data-bs-parent="#accordionExample">
             <div class="accordion-body">
-              <h6>Razor Pay</h6>
+              <h6>Selected Razor Pay</h6>
             </div>
           </div>
         </div>
@@ -177,7 +177,6 @@
   $("#coupon").change(function () {
     let coupon = $("#coupon").val()
     coupon = coupon.trim()
-    console.log("changing")
     if (coupon !== "") {
       $.ajax({
         url: `/coupon/validate/${coupon}`,
@@ -185,7 +184,6 @@
         data: '',
         success: function (data) {
           couponValid = true;
-          console.log(couponValid)
           $("#coupon_msg").removeClass()
           $("#coupon_msg").addClass("text-success text-center mt-2")
           $("#coupon_msg").text("Coupon is valid");
