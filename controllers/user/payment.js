@@ -3,6 +3,7 @@ const { changePaymentStatus } = require("../../helpers/user/payment");
 const Razorpay = require("razorpay");
 const { getTotalAmount } = require("../../helpers/user/cart");
 const cart_model = require("../../model/cart_model");
+const createHttpError = require("http-errors");
 require("dotenv").config();
 var instance = new Razorpay({
   key_id: "rzp_test_8JLZOZRODQ9Mpc",
@@ -10,10 +11,14 @@ var instance = new Razorpay({
 });
 
 module.exports = {
-  getPaymentPage: async (req, res) => {
+  getPaymentPage: async (req, res, next) => {
     let user = req.cookies.user ? req.cookies.user : null;
     let amount = await getTotalAmount(user.userId);
-    res.render("user/payment", { user: user, order: amount });
+    if(amount.total_amount <= 0) {
+      next(createHttpError.BadRequest("Cart is empty."))
+    } else {
+      res.render("user/payment", { user: user, order: amount });
+    }
   },
   generateRazorpay: (orderId, totalAmount) => {
     return new Promise((resolve, reject) => {

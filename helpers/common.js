@@ -49,16 +49,17 @@ module.exports = {
         });
     });
   },
-  getAllProducts: (offset = 0, limit = 100, sort = 1, sortValue = "date") => {
+  getAllProducts: (offset = 0, limit = 100, sort = 1, sortValue = "date", deleted) => {
     return new Promise((resolve, reject) => {
       limit = parseInt(limit);
       offset = parseInt(offset);
       sort = parseInt(sort);
       let query = {};
       query[ sortValue.toLowerCase() ] = sort
+      console.log(Boolean(deleted))
       products_model
         .aggregate([
-          { $match: { isDeleted: { $ne: true } } },
+          { $match: { isDeleted: Boolean(deleted) } },
           {
             $lookup: {
               from: CATEGORIES_COLLECTION,
@@ -311,6 +312,14 @@ module.exports = {
     return new Promise(async (resolve, reject) => {
       let wallet = await user_model.findOne({_id: Types.ObjectId(userId)},{wallet : 1})
       resolve(wallet);
+    })
+  },
+  getSearchProduct:async (keyword) => {
+    return new Promise(async (resolve, reject) => {
+      keyword = {$regex:'.*'+keyword+'.*',$options:'i'}
+      let products = await products_model.find({title: keyword})
+      console.log(products)
+      resolve(products);
     })
   }
 };

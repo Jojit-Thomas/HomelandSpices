@@ -32,6 +32,7 @@ const {
   getSortCategory,
   getShopPage,
   validateWallet,
+  getSearch,
 } = require("../controllers/user/main");
 const router = express.Router();
 
@@ -82,6 +83,7 @@ router.post("/user/edit", verifyLogin, postEditUser)
 router.get("/user/password/reset", verifyLogin, getChangePassword)
 router.post("/user/password/reset", verifyLogin, postChangePassword)
 router.get("/wallet/history", verifyLogin, getWalletHistory)
+router.get("/search", getSearch)
 //=========================CART ROUTES =========================
 router.get("/cart", verifyLogin, getCartPage);
 router.post("/cart/add", verifyLogin, getAddToCart);
@@ -110,6 +112,7 @@ router.post("/checkout", verifyLogin, postCheckout);
 router.post("/payment/verify", verifyLogin, verifyPayment);
 router.get("/coupon/validate/:couponId", verifyLogin, validateCoupon)
 router.get("/wallet/validate", verifyLogin, validateWallet)
+
 
 router.post("/api/orders", async (req, res) => {
   try {

@@ -4,6 +4,7 @@ const {
   getAllCategories,
   getCategoryProduct,
   getWalletBalance,
+  getSearchProduct,
 } = require("../../helpers/common");
 const { getAddress } = require("../../helpers/user/address");
 const { getBannerImage } = require("../../helpers/user/banners");
@@ -108,5 +109,26 @@ module.exports = {
   } else {
     res.status(200).json("Wallet amount validation success")
   }
+ },
+ getSearch: async (req, res) => {
+  let user = req.cookies.user ? req.cookies.user : null;
+  let products = await  getSearchProduct(req.query.search)
+  let categories = await getAllCategories()
+    let wishlist;
+    if(user) {
+      wishlist = await getAllWishlist(user.userId);
+      console.log(wishlist);
+      if(wishlist[0]) {
+        products.forEach(product => {
+          wishlist[0].wishlistItems.forEach(wishlistItem => {
+            if(product._id.toString() == wishlistItem.toString()) {
+              product.wishlist = true;
+              console.log(product)
+            }
+          });
+        });
+      }
+    }
+  res.render("user/shop", { user: user, products: products, categories: categories });
  }
 };

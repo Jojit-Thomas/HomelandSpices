@@ -10,14 +10,14 @@ const {
 const { getAllProducts, getProduct, getAllCategories } = require("../../helpers/common");
 module.exports = {
   getProducts: async (req, res) => {
-  let {limit = 10, page = 1, sort = -1, sortValue = 'date'} = req.query;
+  let {limit = 10, page = 1, sort = -1, sortValue = 'date', deleted = false} = req.query;
   let orderCount = await getProductCount()//get the total number of documents ordered
   orderCount = (orderCount < 1) ? 1 : orderCount;
   let pageLimit = Math.ceil(orderCount / limit)//divide total number of order document / limit 
   page = (page < 1) ? 1 : (page > pageLimit) ? pageLimit : page; // if the page is less than 1 then make it 1 and if the page is greater than pageLimit then make it pageLimit
   const offset = (page - 1) * limit;//the start index of the document
   console.log(page, offset, limit)
-  let products = await getAllProducts(offset, limit, sort, sortValue)//fetch document from the server
+  let products = await getAllProducts(offset, limit, sort, sortValue, deleted)//fetch document from the server
     res.render("admin/view_products", { admin: true, products: products, pageLimit : pageLimit, currentPage: page,limit : limit });
   },
   getAddProducts: (req, res) => {

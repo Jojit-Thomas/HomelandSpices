@@ -38,14 +38,40 @@ body {
   background-color: var(--white_lilac) !important;
 }
 </style>
+<style>
+  @media screen and (max-width: 580px ) {
+    .card_container {
+      height: 28rem !important;
+    }
+    .info_card_container {
+      margin: 0.4rem 0rem !important;
+    }
+    .flexible_container {
+      padding: 1rem !important;
+    }
+  }
+  @media screen and (min-width: 768px) {
+    .chart_container {
+      width: 48% !important;
+    }
+    .super_chart_container {
+      padding-right: 5rem !important;
+    }
+  }
+</style>
 
 <section class="container-fluid">
   <h1 class="text-center mb-5">Wallet History</h1>
   <div class="table-container">
-    <div class="d-flex">
-      <h1 class="mx-5">Total Credit : {{wallet.total_credit}}</h1>
-      <h1 class="mx-5">Total Debit : {{wallet.total_debit}}</h1>
-      <h1 class="mx-5">Current Balance : {{wallet.current_balance}}</h1>
+    <div class="pe-5 mb-3 flexible_container  mt-4">
+      <div class="row ge-5 card_container justify-content-between" style="height: 10rem;">
+        <div class="col-12 col-lg-4 col-sm-4  info_card_container mt-4 mt-sm-0"><div style="background-color: #56AAF2;" class="card h-100"><div class="d-flex h-100"><div class="w-50 d-flex flex-column justify-content-center text-white"><i class="fa-solid fa-cart-shopping fs-4 ps-3"></i><span class="ps-3 mt-3 fs-5">Total Credit</span></div>
+        <div class="w-50 text-white d-flex flex-column justify-content-center"><span class="m-auto" id="order_count" style="font-size: 4rem;">{{wallet.total_credit}}</span></div></div></div></div>
+        <div class="col-12 col-lg-4 col-sm-4  info_card_container mt-4 mt-sm-0"><div style="background-color: #F5A752;" class="card h-100"><div class="d-flex h-100"><div class="w-50 d-flex flex-column justify-content-center text-white"><i class="fa-solid fa-truck fs-4 ps-3"></i><span class="ps-3 mt-3 fs-5">Total Debit</span></div>
+        <div class="w-50 text-white d-flex flex-column justify-content-center"><span class="m-auto" id="dispatch_count" style="font-size: 4rem;">{{wallet.total_debit}}</span></div></div></div></div>
+        <div class="col-12 col-lg-4 col-sm-4  info_card_container mt-4 mt-sm-0"><div style="background-color: #77CEBB;" class="card h-100"><div class="d-flex h-100"><div class="w-50 d-flex flex-column justify-content-center text-white"><i class="fa-solid fa-user fs-4 ps-3"></i><span class="ps-3 mt-3 fs-5">Current Balance</span></div>
+        <div class="w-50 text-white d-flex flex-column justify-content-center"><span class="m-auto" id="user_count" style="font-size: 4rem;">{{wallet.current_balance}}</span></div></div></div></div>
+      </div>
     </div>
     <table class="table mt-4 p-4">
       <thead class="bg-white">
