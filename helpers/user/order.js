@@ -201,13 +201,13 @@ module.exports = {
               as: "productDetails",
             },
           },
-          {
-            $set: {
-              productDetails: {
-                $sortArray: { input: "$productDetails", sortBy: { _id: 1 } },
-              },
-            },
-          },
+          // {
+          //   $set: {
+          //     productDetails: {
+          //       $sortArray: { input: "$productDetails", sortBy: { _id: -1 } },
+          //     },
+          //   },
+          // },
           {
             $sort: { date: -1 },
           },
@@ -245,13 +245,13 @@ module.exports = {
               as: "productDetails",
             },
           },
-          {
-            $set: {
-              productDetails: {
-                $sortArray: { input: "$productDetails", sortBy: { _id: 1 } },
-              },
-            },
-          },
+          // {
+          //   $set: {
+          //     productDetails: {
+          //       $sortArray: { input: "$productDetails", sortBy: { _id: 1 } },
+          //     },
+          //   },
+          // },
           {
             $lookup: {
               from: ORDER_ADDRESS_COLLECTION,
