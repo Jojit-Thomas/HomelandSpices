@@ -177,7 +177,7 @@ module.exports = {
   },
   getOrders: (userId) => {
     return new Promise((resolve, reject) => {
-      console.log(userId);
+      console.log("in order helper page : ", userId);
       order_model
         .aggregate([
           {
@@ -224,7 +224,6 @@ module.exports = {
           },
         ])
         .then((data) => {
-          console.log(data);
           resolve(data);
         });
     });
