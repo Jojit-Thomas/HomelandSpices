@@ -101,17 +101,17 @@ module.exports = {
   },
   postSignUp: async (req, res) => {
     try{
-    let refral_valid ;
-    if(req.body.refral_code) {
-      let referer = await findUserByRefralCode(req.body.refral_code)
-      if(referer) {
-        refral_valid = true;
-        await addToWallet(referer._id, 100)
-        await addWalletTransaction(referer._id, `₹100 Added for refering ${req.body.name}`, 100)
-      }
-    }
     let response = await doSignUp(req.body)
       if (response.status) {
+      let refral_valid ;
+      if(req.body.refral_code) {
+        let referer = await findUserByRefralCode(req.body.refral_code)
+        if(referer) {
+          refral_valid = true;
+          await addToWallet(referer._id, 100)
+          await addWalletTransaction(referer._id, `₹100 Added for refering ${req.body.name}`, 100)
+        }  
+      }
         res.status(200).redirect("/signin");
       }
     }catch(err) {

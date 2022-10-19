@@ -246,16 +246,16 @@ module.exports = {
             userId : Types.ObjectId(userId)
           }
         },
-        {
-          $set: {
-            wallet : {
-              $sortArray: {
-                input: "$wallet",
-                sortBy: {date : -1}
-              }
-            },
-          }
-        },
+        // {
+        //   $set: {
+        //     wallet : {
+        //       $sortArray: {
+        //         input: "$wallet",
+        //         sortBy: {date : -1}
+        //       }
+        //     },
+        //   }
+        // },
         // {
         //   $set: {
         //     wallet: {
@@ -274,7 +274,11 @@ module.exports = {
         if(wallet[0]){
           total_credit = 0;
           total_debit = 0;
+          wallet[0].wallet.sort(function (a, b) {
+            return b.date - a.date ;
+          })
           wallet[0].wallet.forEach(wallet_history => {
+            console.log("wallet history",wallet_history);
             if(wallet_history.amount > 0) {
               total_credit += parseInt(wallet_history.amount)
             } else {

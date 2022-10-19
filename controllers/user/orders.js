@@ -96,9 +96,11 @@ module.exports = {
    }
   },
   getOrderPage: (req, res) => {
+    console.log("in order page")
     let user = req.cookies.user ? req.cookies.user : null;
+    console.log("user is : " + user);
     getOrders(user.userId).then((orders) => {
-      console.log(orders);
+      console.log("orders are : ",orders);
       res.render("user/orders", {
         orders: orders,
         user: user,
