@@ -14,9 +14,13 @@ const { getAllWishlist } = require("../../helpers/user/wishlist");
 module.exports = {
   getHome: async (req, res) => {
     let user = req.cookies.user ? req.cookies.user : null;
+    console.log("user", user);
     let products = await getAllProducts();
+    console.log("products", products);
     let banner = await getBannerImage();
+    console.log("banner", banner);
     let categories = await getAllCategories();
+    console.log("categories", categories);
     // for(x in products) //On^2
     //   if(x in wishlist)
     let wishlist;
@@ -32,8 +36,10 @@ module.exports = {
             }
           });
         });
+        console.log("wishlist", wishlist);
       }
     }
+    console.log("all set")
       // console.log(wishlist[0]);
     res.render("user/home", {
       title: "Homeland Spices",

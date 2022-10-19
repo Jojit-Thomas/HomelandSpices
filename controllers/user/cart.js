@@ -22,6 +22,7 @@ module.exports = {
     console.log(req.params.userId)
     let user = req.cookies.user ? req.cookies.user : null;
     let data = await getCart(user.userId);
+    console.log("data received: ",data)
     let wishlist = await getAllWishlist(user.userId);
     console.log(wishlist);
     if(wishlist[0]) {
