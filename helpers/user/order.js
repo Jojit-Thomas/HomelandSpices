@@ -121,6 +121,7 @@ module.exports = {
               item.cartItems.cd_price = item.cart.cd_price;
               item.cartItems.max_price = item.cart.max_price;
               item.cartItems.total_discount = item.cart.total_discount;
+              //item.cartItems.weight = item.cartItems.weight;
               item.cartItems.status = "Order Placed";
             });
             let products = [];
@@ -202,6 +203,9 @@ module.exports = {
             },
           },
           // {
+          //   $unwind: "$productDetails.weight"
+          // },
+          // {
           //   $set: {
           //     productDetails: {
           //       $sortArray: { input: "$productDetails", sortBy: { _id: -1 } },
@@ -224,6 +228,17 @@ module.exports = {
           },
         ])
         .then((data) => {
+          data.forEach((item) => {
+            item.productDetails.sort(function (a, b) {
+              return a.cd_price - b.cd_price;
+            })
+            item.products.sort(function (a, b) {
+              return a.cd_price - b.cd_price;
+            })
+            if(item.products.length > 1) {
+              console.log(item.products)
+            }
+          })
           resolve(data);
         });
     });
@@ -246,6 +261,9 @@ module.exports = {
             },
           },
           // {
+          //   $unwind: "$productDetails"
+          // },
+          // {
           //   $set: {
           //     productDetails: {
           //       $sortArray: { input: "$productDetails", sortBy: { _id: 1 } },
@@ -260,9 +278,22 @@ module.exports = {
               as: "address",
             },
           },
+          // {
+          //   $unwind: "$productDetails"
+          // },
         ])
         .then((data) => {
-          console.log(data[0]);
+          data.forEach((item) => {
+            item.productDetails.sort(function (a, b) {
+              return a.cd_price - b.cd_price;
+            })
+            item.products.sort(function (a, b) {
+              return a.cd_price - b.cd_price;
+            })
+            if(item.products.length > 1) {
+              console.log(item.products)
+            }
+          })
           resolve(data[0]);
         });
     });
