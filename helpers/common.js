@@ -91,7 +91,9 @@ module.exports = {
         ])
         .then((products) => {
           resolve(products);
-        });
+        }).catch((err) => {
+          console.error(err);
+        })
     });
   },
   getAllCategories: () => {

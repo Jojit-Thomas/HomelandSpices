@@ -97,14 +97,17 @@ module.exports = {
               },
             },
           },
-          {
-            $set: {
-              productDetails : {$sortArray: { input: "$productDetails", sortBy: { _id: 1 } }}
-            }
-          },
         ])
         .then((data) => {
-          // console.log(data[0])
+          console.log(data)
+          data.forEach((item) => {
+            item.productDetails.sort(function (a, b) {
+              return a.cd_price - b.cd_price;
+            })
+            item.products.sort(function (a, b) {
+              return a.cd_price - b.cd_price;
+            })
+          })
           resolve(data[0]);
         });
     });
