@@ -62,11 +62,11 @@
                   </div>
                   <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-2 col-xxl-2 my-auto payment">
                     <h6 class="mb-0"><strong>Payment Method:</strong>
-                      <br />{{payment_method}}</h6>
+                      <br/>{{payment_method}}</h6>
                   </div>
                   <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-2 col-xxl-2 my-auto payment">
                     <h6 class="mb-0"><strong>Payment Status:</strong></h6>
-                    <span>{{payment_status}}</span>
+                    <span id="payment_status">{{payment_status}}</span>
                   </div>
                 </div>
                 <hr class="my-4" />
@@ -81,7 +81,7 @@
                   <div class="d-flex justify-content-between col-8 col-sm-8 flex-wrap my-auto">
                     <div class="col-10 col-sm-8 col-md-10 col-lg-10 col-xl-5 my-auto">
                       <a href="/product/{{this._id}}" class="text-decoration-none">
-                        <h5 class="text-dark title">{{this.title}}</h5>
+                        <h5 class="text-dark title"><span id="title-{{this._id}}">{{this.title}}</span></h5>
                       </a>
                       <a href="/product/{{this._id}}" class="text-decoration-none">
                         <p class="text-muted mb-0 desc">{{this.desc}}</p>
@@ -101,17 +101,18 @@
                       <h6 class="mb-0">Qty : {{index_of ../products @index "quantity"}}</h6>
                     </div>
                     <div class="col-sm-2 col-md-4 col-lg-4 col-xl-2 my-auto d-none d-lg-block">
-                      <h6 class="mb-0">{{index_of ../products @index "status"}}</h6>
+                      <h6 class="mb-0"><span id="status-{{this._id}}">{{index_of ../products @index "status"}}</span></h6>
                     </div>
                     <i
                       class="fa-solid fa-angle-right d-block d-lg-none col-sm-2 col-md-2 col-lg-2 col-xl-2 my-auto"></i>
                     <div class="d-flex justify-content-center">
-                      {{#ifEquals products.status "cancelled"}}
+                      {{#ifEquals (index_of ../products @index "status") "cancelled"}}
                       <a href="#" class="btn btn-primary m-auto" style="opacity: 0.5;">Cancel</a>
                       {{else}}
-                      <a href="/orders/cancel/{{../_id}}/{{this._id}}" class="btn btn-primary m-auto"
+                      <button class="btn btn-primary m-auto"
                         style="height: 2rem;"
-                        onclick="return confirm('Do you sure want to cancel this order?');">Cancel</a>
+                        id="cancel_btn-{{this._id}}"
+                        onclick="cancelProduct('{{../_id}}','{{this._id}}')">Cancel</button>
                       {{/ifEquals}}
                     </div>
                   </div>
@@ -163,26 +164,39 @@
       </div>
     </div>
   </div>
-
+{{!-- Swal cdn link --}}
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
-    function changeStatus(orderId, productId) {
+    function cancelProduct(orderId, productId) {
       console.log(orderId, productId)
-      let val = $(`#status${productId}`).val();
-      console.log(val);
-      $.ajax({
-        type: "POST",
-        url: "/admin/order/changeStatus",
-        data: {
-          orderId: orderId,
-          productId: productId,
-          status: val,
-        },
-        success: function (data) {
-          console.log('success')
-          $(`#${productId}`).text(val)
-        },
-        error: function (error) {
-          console.log(error)
+      let payment_status = $("#payment_status").val()
+      console.log(payment_status)
+      console.log(`/orders/cancel/${orderId}/${productId}`)
+      Swal.fire({
+      icon: 'error',
+      title: $(`#title-${productId}`),
+      text: "Are you sure want to cancel the product?",
+      showDenyButton: true,
+      }).then((state) => {
+        if(state.isConfirmed) {
+          $.ajax({
+            method: "PATCH",
+            url: `/orders/cancel/${orderId}/${productId}`,
+            data: {
+              orderId: orderId,
+              productId: productId,
+            },
+            success: function (data) {
+              console.log('success')
+              $(`#status-${productId}`).text('cancelled')
+              $(`#cancel_btn-${productId}`).attr('disabled',true)
+            },
+            error: function (error) {
+              console.log(error)
+            }
+          })
+        } else {
+          Swal.close()
         }
       })
     }

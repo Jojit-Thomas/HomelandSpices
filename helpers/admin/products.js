@@ -56,6 +56,7 @@ module.exports = {
               cd_price: Number(cd_price),
               max_price: Number(max_price),
               discount: Number(discount),
+              total_discount: Number(total_discount),
             },
           }
         )

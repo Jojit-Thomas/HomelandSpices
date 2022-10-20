@@ -114,7 +114,7 @@
                         <div
                           class="col-sm-2 col-md-4 col-lg-4 col-xl-2 my-auto d-none d-lg-block"
                         >
-                          <select name="status" class="dropdown" {{#ifEquals (index_of ../products @index "status") "cancelled"}} disabled {{/ifEquals}} id="status{{index_of ../products @index "productId"}}" onchange="changeStatus('{{../_id}}','{{index_of ../products @index 'productId'}}')">
+                          <select name="status" class="dropdown" {{#ifEquals (index_of ../products @index "status") "cancelled"}} {{/ifEquals}} id="status{{index_of ../products @index "productId"}}" onchange="changeStatus('{{../_id}}','{{index_of ../products @index 'productId'}}')">
                              <option selected>
                               {{#ifEquals (index_of ../products @index "status") "cancelled"}}
                               Cancelled

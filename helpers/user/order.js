@@ -311,6 +311,7 @@ module.exports = {
             $set: {
               "products.$.status": "cancelled",
               "products.$.finalTotal": "0",
+              "payment_status" : "Refunded",
             },
           }
         )
@@ -328,6 +329,7 @@ module.exports = {
           "products.productId": Types.ObjectId(productId),
         })
         .then((data) => {
+          console.log(data)
           console.log("price is : " + data?.products?.[0])
           console.log(data.products[0].cd_price)
           resolve(data?.products?.[0]?.cd_price);

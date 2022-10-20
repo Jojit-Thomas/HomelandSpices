@@ -31,16 +31,6 @@ module.exports = {
           //     total_discount: {$sum : [ "$category_details.discount", "$discount"]} // this does not work
           //   }
           // },
-          {
-            $set: {
-              total_discount: { $sum: ["$category_details.discount"] },
-            },
-          },
-          {
-            $set: {
-              total_discount: { $sum: ["$discount", "$total_discount"] },
-            },
-          },
         ])
         .then((product) => {
           product?.[0]

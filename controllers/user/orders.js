@@ -120,12 +120,15 @@ module.exports = {
     const {orderId, productId} = req.params;
     let user = req.cookies.user ? req.cookies.user : null;
     let amount = await getOrderProductPrice(orderId, productId);
+    let {payment_status}= await getOrderDetails(orderId)
     let product = await getProduct(productId);
-    await addToWallet(user.userId, amount);
-    await addWalletTransaction(user.userId, `Refund for ${product.title}`, amount)
-    console.log("amount add to walllet")
+    console.log(payment_status)
+    if(payment_status === "Received") {
+      await addToWallet(user.userId, amount);
+      await addWalletTransaction(user.userId, `Refund for ${product.title}`, amount)
+    }
     cancelOrders(orderId, productId).then(() => {
-      res.redirect("/orders");
+      res.status(200).json(true)
     });
   },
 };

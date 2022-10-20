@@ -105,7 +105,7 @@ router.post("/address/add", verifyLogin, postNewAddress);
 router.delete("/address/delete/:id", verifyLogin, getDeleteAddress)
 //=========================ORDER ROUTES =========================
 router.get("/orders", verifyLogin, getOrderPage);
-router.get("/orders/cancel/:orderId/:productId", verifyLogin, getCancelProduct);
+router.patch("/orders/cancel/:orderId/:productId", verifyLogin, getCancelProduct);
 router.get("/orders/details/:orderId/:productId", verifyLogin, getOrderDetailsPage);
 router.get("/payment", verifyLogin, getPaymentPage)
 router.post("/checkout", verifyLogin, postCheckout);

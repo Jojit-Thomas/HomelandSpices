@@ -32,8 +32,8 @@ module.exports = {
     req.body.pd_price = Math.round(max_price - ( pd_discount / 100) * max_price)//calculating the price && pd_price - product discount 
     let { discount } = await getCategoryById(category)// Fetching the discount value of category
     req.body.cd_price = Math.round(req.body.pd_price - (discount / 100) * req.body.pd_price)//this is the final price && pd_price - category discount
-    // req.body.discount = discount + parseInt(pd_discount)//THis is the total discount && product discount + category discount
-    // console.log(pd_discount , " == ", discount, " == ", req.body.discount )
+    let one_per_cent = Number(max_price) / 100//calculates the one per cent of the mrp
+    total_discount = Math.round(( Number(max_price) - Number(req.body.cd_price) ) / Number(one_per_cent))
     let img_ext = req.files.image1.name.split(".").pop(); // to get the extension of the file
     AddProduct(req.body, img_ext).then((result) => {
       for(let i = 1; i <= 4; i++) {
@@ -100,7 +100,8 @@ module.exports = {
     req.body.pd_price = Math.round(max_price - ( pd_discount / 100) * max_price)//calculating the price && pd_price - product discount 
     let { discount } = await getCategoryById(category)// Fetching the discount value of category
     req.body.cd_price = Math.round(req.body.pd_price - (discount / 100) * req.body.pd_price)//this is the final price && pd_price - category discount
-    // req.body.discount = discount + parseInt(discount)//THis is the total discount && product discount + category discount
+    let one_per_cent = Number(max_price) / 100
+    total_discount = Math.round(( Number(max_price) - Number(req.body.cd_price) ) / Number(one_per_cent))
     updateProduct(req.params.id, req.body, img_ext).then((result) => {
       if (result) {
         // if image is changed add new image to the folder

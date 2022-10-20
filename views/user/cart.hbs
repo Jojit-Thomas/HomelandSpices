@@ -39,6 +39,24 @@
                         <p
                           class="text-muted mb-0 desc"
                         >{{this.product.desc}}</p>
+                        <div class="d-flex my-4">
+                        <button
+                          class="input-number-decrement"
+                          id="{{this.product._id}}{{this._id}}"
+                          onclick='changeQuantity("{{this._id}}","{{this.product._id}}","{{this.userId}}","-1")'
+                        >–</button><input required
+                          class="input-number"
+                          id="{{this.product._id}}"
+                          type="text"
+                          value="{{this.cartItems.quantity}}"
+                          min="0"
+                          disabled
+                        />
+                        <button
+                          class="input-number-increment"
+                          onclick='changeQuantity("{{this._id}}","{{this.product._id}}","{{this.userId}}","1")'
+                        >+</button>
+                      </div>
                       </div>
                       <div class="col-sm-2 col-md-4 col-lg-4 col-xl-2 my-auto "
                       >
@@ -160,6 +178,10 @@ function changeQuantity(cartId, productId, userId, count) {
     let val = document.getElementById(productId).value;
     val = parseInt(val);
     count = Number(count);
+    if(val <= 1 && count == -1) {
+      $(`#${productId}${cartId}`).attr("disabled", true);
+      return false;
+    }
     $.ajax({
         url: "/cart/changeQuantity",
         data: {
@@ -170,13 +192,12 @@ function changeQuantity(cartId, productId, userId, count) {
         },
         method: "POST",
         success: function(data) {
-          console.log(data )
             //$("#sub_total").text(data.total.total_max);
             //$("#total").text(data.total.total_amount);
             //$("#discount").text(data.total.total_discount);
             getTotalAmount()
             val = val + count;
-            document.getElementById(productId).value = val;
+            $(`#${productId}`).val(val);
             if (val <= 1) {
                 //document.getElementById(`${productId}${cartId}`).disabled = true;
                 $(`#${productId}${cartId}`).attr("disabled", true);
@@ -254,7 +275,6 @@ function removeFromCart(cartId, productId) {
         $("#sub_total").text(data.total_max)
         $("#discount").text(data.total_discount)
         $("#total").text(data.total_amount)
-        console.log(data);
       },
       error: function(data) {
         console.log(data);

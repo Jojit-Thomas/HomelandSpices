@@ -104,7 +104,8 @@ module.exports = {
         cd_price = Math.round(
           Number(products.pd_price - (products.pd_price * discount) / 100)
         ); // calculating the final discounted price by subtracting the discount% from the product discounted price
-        total_discount = Number(discount) + Number(products.discount); // Category discount % + Product discount %
+        let one_per_cent = Number(products.max_price) / 100// One per cent of MRP 
+        total_discount = Math.round(( Number(products.max_price) - Number(cd_price) ) / Number(one_per_cent))// (MRP - Category discount price) / one per cent of MRP
         //productId :  new ObjectId("6321cb3cc29016ee2b12dfa3") cd_price :  94 total_discount :  6
         //productId :  new ObjectId("6321cb48c29016ee2b12dfa8") cd_price :  48 total_discount :  5
         //productId :  new ObjectId("6321cb5dc29016ee2b12dfad") cd_price :  128 total_discount :  8
