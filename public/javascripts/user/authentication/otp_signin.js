@@ -33,7 +33,7 @@ $(document).ready(function () {
     const phone = $("#phone").val();
     console.log("sendOtp clicked");
     $.ajax({
-      url: "/otp/get",
+      url: "/otp",
       data: {
         phone: phone,
       },

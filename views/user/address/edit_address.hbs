@@ -1,5 +1,6 @@
 <div class="container-fluid">
   <div class="container">
+    {{#with address}}
     <form action="" id="checkout-form" method="post" class="loginBox">
       <div class="d-flex">
         <input
@@ -8,6 +9,7 @@
           class="w-100 p-2 m-2 form-control"
           name="name"
           placeholder="Name"
+          value="{{name}}"
         />
         <input
           required
@@ -15,6 +17,7 @@
           class="w-100 p-2 m-2 form-control"
           name="phone"
           placeholder="Phone"
+          value="{{phone}}"
         />
       </div>
       <div class="d-flex">
@@ -24,6 +27,7 @@
           class="w-100 p-2 m-2 form-control"
           name="pincode"
           placeholder="Pin Code"
+          value="{{pincode}}"
         />
         <input
           required
@@ -31,11 +35,12 @@
           class="w-100 p-2 m-2 form-control"
           name="locality"
           placeholder="Locality"
+          value="{{locality}}"
         />
       </div>
       <div class="d-flex">
-        <select class="form-select w-100 p-2 m-2" name="state">
-          <option selected>State</option>
+        <select class="form-select w-100 p-2 m-2" name="State">
+          <option selected value="{{state}}">{{state}}</option>
           <option value="Kerala">Kerala</option>
           <option value="Tamil Nadu">Tamil Nadu</option>
         </select>
@@ -45,6 +50,7 @@
           class="w-100 p-2 m-2 form-control"
           name="city"
           placeholder="City"
+          value="{{city}}"
         />
       </div>
       <div class="d-flex">
@@ -54,6 +60,7 @@
           class="w-100 p-2 m-2 form-control"
           name="houseName"
           placeholder="House Name"
+          value="{{houseName}}"
         />
         <input
           required
@@ -61,6 +68,7 @@
           class="w-100 p-2 m-2 form-control"
           name="landmark"
           placeholder="Landmark "
+          value="{{landmark}}"
         />
       </div>
       <div class="d-flex">
@@ -70,9 +78,11 @@
           class="w-100 p-2 m-2 form-control"
           name="postOffice"
           placeholder="Post Office"
+          value="{{postOffice}}"
         />
       </div>
       <div class="d-flex mt-2">
+        <input type="text" id="addressId" hidden value="{{_id}}">
         <input required type="reset" class="btn btn-danger p-2 m-2 w-100" />
         <input
           required
@@ -82,5 +92,25 @@
         />
       </div>
     </form>
+    {{/with}}
   </div>
 </div>
+
+<script>
+ $('#checkout-form').submit(function(e) {
+  e.preventDefault();
+  let addressId = $("#addressId").val()
+  $.ajax({
+    url: `/address/edit/${addressId}`,
+    type: 'POST',
+    data: $('#checkout-form').serialize(),
+    success: function(data) {
+      console.log('success');
+      window.location.href = "/address";
+    },
+    error: function(err) {
+      console.log(err);
+    }
+  })
+})
+</script>

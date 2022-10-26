@@ -21,62 +21,18 @@ module.exports = {
   },
   addAddress: (body, userId) => {
     return new Promise((resolve, reject) => {
-      const {
-        name,
-        phone,
-        locality,
-        city,
-        pincode,
-        state,
-        houseName,
-        landmark,
-        postOffice
-      } = body;
-      let addressObj = {
-        userId: userId,
-        name: name,
-        phone: phone,
-        locality: locality,
-        city: city,
-        state: state,
-        pincode: Number(pincode),
-        houseName: houseName,
-        landmark: landmark,
-        postOffice: postOffice,
-      };
-      address_model.create(addressObj).then((state) => {
+      body.pincode = Number(body.pincode)
+      body.userId = Types.ObjectId(userId);
+      address_model.create(body).then((state) => {
         resolve(state);
       });
     });
   },
   addCheckoutAddress: (address) => {
+    address.pincode = Number(address.pincode)
     console.log("address is : ", address);
-    const {
-      name,
-      phone,
-      locality,
-      city,
-      pincode,
-      state,
-      houseName,
-      landmark,
-      userId,
-      postOffice,
-    } = address;
-    let addressObj = {
-      userId: userId,
-      name: name,
-      phone: phone,
-      locality: locality,
-      city: city,
-      state: state,
-      pincode: Number(pincode),
-      houseName: houseName,
-      landmark: landmark,
-      postOffice: postOffice,
-    };
     return new Promise((resolve, reject) => {
-      order_address_model.create(addressObj).then((state) => {
+      order_address_model.create(address).then((state) => {
         resolve(state);
       });
     });
@@ -92,6 +48,14 @@ module.exports = {
     return new Promise((resolve, reject) => {
       address_model.find({userId: Types.ObjectId(userId)}).count().then((count)=> {
         resolve(count)
+      })
+    })
+  },
+  updateAddress: (addressId, addressDetails) => {
+    return new Promise ((resolve, reject) => {
+      address_model.updateOne({_id: Types.ObjectId(addressId)}, {$set: addressDetails}).then((data) => {
+        console.log(data);
+        resolve();
       })
     })
   }

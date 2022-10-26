@@ -1,5 +1,5 @@
 const express = require("express");
-const { getNewAddressPage, getAddressPage, postAddressSelection, postNewAddress, getDeleteAddress, getNewUserAddressPage } = require("../controllers/user/address");
+const { getNewAddressPage, getAddressPage, postAddressSelection, postNewAddress, getDeleteAddress, getNewUserAddressPage, getEditAddressPage, postEditAddress } = require("../controllers/user/address");
 
 const {
   getSignIn,
@@ -62,18 +62,14 @@ router.use((req, res, next) => {
 
 //=========================AUTHENTICATION ROUTES =========================
 router.get("/logout", verifyLogin, getLogout);
-router.get("/signup", stopAuthenticate, getSignUp);
-router.post("/signup", stopAuthenticate, postSignUp);
-router.get("/signin", stopAuthenticate, getSignIn);
-router.post("/signin", stopAuthenticate, postSignIn);
 router.get("/blocked", stopAuthenticate, getBlocked);
-router.get("/otp", stopAuthenticate, getOtpSigninPage);
-router.post("/otp/get", stopAuthenticate, postGetOtp);
 router.post("/otp/verify", stopAuthenticate, postVerifyOtp);
-router.get("/password/forgot", getForgotPasswordPage);
-router.post("/password/forgot", forgotPassword);
 router.get("/password/forgot/:token", resetForgotPasswordPage)
 router.post("/password/forgot/reset", resetForgotPassword)
+router.route('/password/forgot').get(getForgotPasswordPage).post(forgotPassword);
+router.route('/signin').get(stopAuthenticate, getSignIn).post(stopAuthenticate, postSignIn)
+router.route('/signup').get(stopAuthenticate ,getSignUp).post(stopAuthenticate ,postSignUp);
+router.route('/otp').get(stopAuthenticate, getOtpSigninPage).post(stopAuthenticate, postGetOtp);
 //=========================MAIN ROUTES =========================
 router.get("/", getHome);
 router.get("/product/:id", getProductPage);
@@ -97,12 +93,11 @@ router.get("/wishlist", verifyLogin, getWishlistPage);
 router.post("/wishlist/add", verifyLogin, getAddToWishlist); 
 router.post("/wishlist/remove", verifyLogin, getRemoveFromWishlist);
 //=========================ADDRESS ROUTES =========================
-router.get("/address", verifyLogin, getAddressPage);
-router.post("/address", verifyLogin, postAddressSelection);
-router.get("/address/add", verifyLogin, getNewAddressPage);
 router.get("/user/address/add", verifyLogin, getNewUserAddressPage);
-router.post("/address/add", verifyLogin, postNewAddress);
 router.delete("/address/delete/:id", verifyLogin, getDeleteAddress)
+router.route('/address').get(verifyLogin, getAddressPage).post(verifyLogin, postAddressSelection);
+router.route('/address/add').get(verifyLogin, getNewAddressPage).post(verifyLogin, postNewAddress)
+router.route('/address/edit/:addressId').get(verifyLogin, getEditAddressPage).post(verifyLogin, postEditAddress)
 //=========================ORDER ROUTES =========================
 router.get("/orders", verifyLogin, getOrderPage);
 router.patch("/orders/cancel/:orderId/:productId", verifyLogin, getCancelProduct);
